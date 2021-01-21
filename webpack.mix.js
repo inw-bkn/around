@@ -6,9 +6,8 @@ mix.js('resources/js/app.js', 'public/js').vue({ version: 3 })
         require('tailwindcss'),
     ]);
 
-// mix new alias api
 mix.alias({
-    '@': path.resolve('resources/js'),
+    '@': path.join(__dirname, 'resources/js'),
 });
 
 mix.webpackConfig(webpack => {

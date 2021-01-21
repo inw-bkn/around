@@ -2,6 +2,9 @@
 
 import { createApp, h } from 'vue';
 import { App, plugin } from '@inertiajs/inertia-vue3';
+import { InertiaProgress } from '@inertiajs/progress';
+
+InertiaProgress.init();
 
 const el = document.getElementById('app');
 

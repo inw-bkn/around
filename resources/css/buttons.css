@@ -1,0 +1,11 @@
+.btn {
+    @apply p-4 font-medium text-lg text-gray-200 shadow transition-all duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-blue {
+    @apply bg-blue-500 hover:bg-blue-400 disabled:bg-blue-500;
+}
+
+.btn-red {
+    @apply bg-red-500 hover:bg-red-400 disabled:bg-red-500;
+}

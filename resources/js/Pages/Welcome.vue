@@ -75,16 +75,26 @@
                 @autosave="autosave('name')"
             />
         </div>
+        <div>
+            <form-select
+                label="gameConsole"
+                name="gameConsole"
+                v-model="gameConsole"
+                :options="['PS1', 'PS2', 'PS3', 'PS4', 'PS5']"
+            />
+        </div>
     </div>
 </template>
 
 <script>
 import FormInput from '@/Components/Controls/FormInput';
+import FormSelect from '@/Components/Controls/FormSelect';
 export default {
-    components: { FormInput },
+    components: { FormInput, FormSelect },
     data () {
         return {
-            name: ''
+            name: '',
+            gameConsole: ''
         };
     },
     methods: {

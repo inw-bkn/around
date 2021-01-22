@@ -83,18 +83,41 @@
                 :options="['PS1', 'PS2', 'PS3', 'PS4', 'PS5']"
             />
         </div>
+        <div>
+            <form-checkbox
+                v-model="preOrder"
+                label="pre order"
+            />
+            <form-checkbox
+                v-model="postOrder"
+                label="post order"
+            />
+        </div>
+        <div>
+            <spinner-button
+                @click="submitting = true"
+                :spin="submitting"
+            >
+                Submit
+            </spinner-button>
+        </div>
     </div>
 </template>
 
 <script>
 import FormInput from '@/Components/Controls/FormInput';
 import FormSelect from '@/Components/Controls/FormSelect';
+import FormCheckbox from '@/Components/Controls/FormCheckbox.vue';
+import SpinnerButton from '@/Components/Controls/SpinnerButton.vue';
 export default {
-    components: { FormInput, FormSelect },
+    components: { FormInput, FormSelect, FormCheckbox, SpinnerButton },
     data () {
         return {
             name: '',
-            gameConsole: ''
+            gameConsole: '',
+            preOrder: false,
+            postOrder: true,
+            submitting: false
         };
     },
     methods: {

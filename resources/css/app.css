@@ -1,6 +1,7 @@
 @tailwind base;
 
 @tailwind components;
-@import 'buttons';
+@import 'button';
+@import 'form';
 
 @tailwind utilities;

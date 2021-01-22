@@ -10,9 +10,10 @@ module.exports = {
     },
     variants: {
         extend: {
-            opacity: ['disabled'],
+            backgroundColor: ['hover', 'disabled'],
+            borderColor: ['hover', 'focus', 'disabled'],
             cursor: ['hover', 'focus', 'disabled'],
-            backgroundColor: ['hover', 'disabled']
+            opacity: ['disabled'],
         },
     },
     plugins: [],

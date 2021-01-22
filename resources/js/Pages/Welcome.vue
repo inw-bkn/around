@@ -67,5 +67,30 @@
                 <span class="ml-4 text-lg">check me นะจ๊ะคนดี</span>
             </label>
         </div>
+        <div>
+            <form-input
+                label="name"
+                name="name"
+                v-model="name"
+                @autosave="autosave('name')"
+            />
+        </div>
     </div>
 </template>
+
+<script>
+import FormInput from '@/Components/Controls/FormInput';
+export default {
+    components: { FormInput },
+    data () {
+        return {
+            name: ''
+        };
+    },
+    methods: {
+        autosave (name) {
+            console.log(this[name]);
+        }
+    }
+};
+</script>

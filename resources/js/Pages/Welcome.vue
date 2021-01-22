@@ -101,6 +101,13 @@
                 Submit
             </spinner-button>
         </div>
+        <div>
+            <form-datetime
+                label="reserve date"
+                v-model="reserveDate"
+                name="reserveDate"
+            />
+        </div>
     </div>
 </template>
 
@@ -109,15 +116,17 @@ import FormInput from '@/Components/Controls/FormInput';
 import FormSelect from '@/Components/Controls/FormSelect';
 import FormCheckbox from '@/Components/Controls/FormCheckbox.vue';
 import SpinnerButton from '@/Components/Controls/SpinnerButton.vue';
+import FormDatetime from '@/Components/Controls/FormDatetime.vue';
 export default {
-    components: { FormInput, FormSelect, FormCheckbox, SpinnerButton },
+    components: { FormInput, FormSelect, FormCheckbox, SpinnerButton, FormDatetime },
     data () {
         return {
             name: '',
             gameConsole: '',
             preOrder: false,
             postOrder: true,
-            submitting: false
+            submitting: false,
+            reserveDate: ''
         };
     },
     methods: {

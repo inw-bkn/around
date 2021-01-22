@@ -64,7 +64,7 @@
                     type="checkbox"
                     class="shadow-xs text-gray-600 h-6 w-6 transition-all duration-200 ease-in-out appearance-none color inline-block align-middle border select-none flex-shrink-0 rounded cursor-pointer focus:outline-none"
                 >
-                <span class="ml-4 text-lg">check me</span>
+                <span class="ml-4 text-lg">check me นะจ๊ะคนดี</span>
             </label>
         </div>
     </div>

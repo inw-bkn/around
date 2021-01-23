@@ -1,5 +1,35 @@
 <template>
-    <div>
+    <div v-if="toggler">
+        <!-- Toggle Button -->
+        <label
+            class="inline-flex items-center cursor-pointer"
+        >
+            <!-- toggle -->
+            <div class="relative">
+                <!-- input -->
+                <input
+                    type="checkbox"
+                    class="hidden"
+                    @change="change"
+                >
+                <!-- line -->
+                <div
+                    class="w-8 h-5 bg-gray-400 rounded-full shadow-inner transition-all duration-200 ease-in-out"
+                    :class="{ 'bg-blue-500' : modelValue }"
+                />
+                <!-- dot -->
+                <div
+                    class="absolute w-5 h-5 bg-white rounded-full shadow inset-y-0 left-0 transition-all duration-200 ease-in-out transform"
+                    :class="{ 'translate-x-3' : modelValue }"
+                />
+            </div>
+            <!-- label -->
+            <div class="ml-3 text-lg">
+                {{ label }}
+            </div>
+        </label>
+    </div>
+    <div v-else>
         <label class="inline-flex items-center cursor-pointer">
             <input
                 type="checkbox"
@@ -17,7 +47,8 @@ export default {
     emits: ['update:modelValue', 'autosave'],
     props: {
         modelValue: { type: Boolean },
-        label: { type: String, default: '' }
+        label: { type: String, default: '' },
+        toggler: { type: Boolean }
     },
     methods: {
         change () {

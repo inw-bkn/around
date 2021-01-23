@@ -108,6 +108,17 @@
                 name="reserveDate"
             />
         </div>
+        <div>
+            <form-checkbox
+                v-model="toggle"
+                label="toggle me"
+            />
+            <form-checkbox
+                v-model="toggle"
+                label="toggle me"
+                :toggler="true"
+            />
+        </div>
     </div>
 </template>
 
@@ -118,7 +129,13 @@ import FormCheckbox from '@/Components/Controls/FormCheckbox.vue';
 import SpinnerButton from '@/Components/Controls/SpinnerButton.vue';
 import FormDatetime from '@/Components/Controls/FormDatetime.vue';
 export default {
-    components: { FormInput, FormSelect, FormCheckbox, SpinnerButton, FormDatetime },
+    components: {
+        FormInput,
+        FormSelect,
+        FormCheckbox,
+        SpinnerButton,
+        FormDatetime,
+    },
     data () {
         return {
             name: '',
@@ -126,7 +143,8 @@ export default {
             preOrder: false,
             postOrder: true,
             submitting: false,
-            reserveDate: ''
+            reserveDate: '',
+            toggle: false
         };
     },
     methods: {

@@ -1,6 +1,15 @@
-html,
-body {
-    font-weight: 200;
-    margin: 0;
-    color: #4a5568;
+.font-sarabun {
+    font-family: 'Sarabun', sans-serif;
+}
+
+.font-nunito {
+    font-family: 'Nunito', sans-serif;
+}
+
+.font-lobster {
+    font-family: 'Lobster', cursive;
+}
+
+.font-staatliches {
+    font-family: 'Staatliches', cursive;
 }

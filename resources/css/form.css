@@ -1,9 +1,9 @@
 .form-label {
-    @apply block uppercase tracking-wide text-xs font-bold mb-2;
+    @apply block uppercase tracking-wide text-dark-theme-light text-xs lg:text-base font-semibold mb-2 truncate;
 }
 
 .form-input {
-    @apply font-thin appearance-none w-full py-2 px-3 bg-gray-100 shadow-sm rounded border border-white transition-all duration-200 ease-in-out focus:outline-none focus:bg-white focus:border-gray-500 hover:border-gray-500 hover:bg-white disabled:bg-gray-400 disabled:border-white disabled:cursor-not-allowed;
+    @apply font-thin appearance-none w-full py-1 px-2 lg:py-2 lg:px-3 bg-white shadow-sm rounded border-2 border-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:bg-yellow-50 focus:border-yellow-200 disabled:bg-gray-400 disabled:border-white disabled:cursor-not-allowed;
 }
 
 input[type="checkbox"] {

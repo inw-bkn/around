@@ -2,7 +2,7 @@
     <div class="w-full">
         <label
             v-if="label"
-            class="form-label truncate md:text-lg"
+            class="form-label"
             :for="name"
         >{{ label }} :</label>
         <input

@@ -2,7 +2,7 @@
     <div class="w-full">
         <label
             v-if="label"
-            class="form-label truncate md:text-lg"
+            class="form-label"
             :for="name"
         >{{ label }} :</label>
         <div class="relative">
@@ -92,7 +92,7 @@ export default {
     methods: {
         change () {
             this.$emit('update:modelValue', this.$refs.input.value);
-            console.log(this.modelValue);
+            console.log(this.$refs.input.value + ' selected');
             this.$emit('autosave');
         }
     }

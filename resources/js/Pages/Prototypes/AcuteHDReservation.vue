@@ -1,308 +1,306 @@
 <template>
-    <layout>
-        <template #default>
-            <div class="">
-                <h2 class="form-label italic">
-                    Reservation data
-                </h2>
-                <hr class="my-4 border-b-2 border-yellow-400">
-            </div>
-            <div class="grid gap-2 md:grid md:gap-4 md:grid-cols-2 xl:gap-8 xl:grid-cols-4">
-                <form-input
-                    v-model="order.patient_hn"
-                    name="patient_hn"
-                    label="hn"
-                    :readonly="true"
-                />
-                <form-input
-                    v-model="order.patient_name"
-                    name="patient_name"
-                    label="name"
-                    :readonly="true"
-                />
-                <form-input
-                    v-model="order.required_date_formatted"
-                    name="required_date_formatted"
-                    label="required date"
-                    :readonly="true"
-                />
-                <form-input
-                    v-model="prescription.ward"
-                    name="ward"
-                    label="ward"
-                    :readonly="true"
-                />
-                <form-input
-                    v-model="prescription.dialysis_type"
-                    name="dialysis_type"
-                    label="dialysis type"
-                    :readonly="true"
-                />
-                <form-input
-                    v-model="order.an"
-                    name="an"
-                    label="an"
-                    :readonly="true"
-                />
-            </div>
-            <div class="mt-6 md:mt-12 xl:mt-24">
-                <h2 class="form-label italic">
-                    Prescription
-                </h2>
-                <hr class="my-4 border-b-2 border-yellow-400">
-            </div>
-            <div class="grid gap-2 md:grid md:gap-4 md:grid-cols-2 xl:gap-8 xl:grid-cols-4">
-                <form-select
-                    v-model="prescription.dialyzer"
-                    name="dialyzer"
-                    label="dialyzer"
-                    :options="config.dialyzerOptions"
-                />
-                <form-select
-                    v-model="prescription.dialyzate"
-                    name="dialyzate"
-                    label="dialyzate"
-                    :options="config.dialyzateOptions"
-                />
-                <form-select
-                    v-model="prescription.dialyzate_flow"
-                    name="dialyzate_flow"
-                    label="dialyzate flow (ml/min)"
-                    :options="config.dialyzateFlowOptions"
-                />
-                <form-select
-                    v-model="prescription.blood_flow"
-                    name="blood_flow"
-                    label="blood flow (ml/min)"
-                    :options="config.bloodFlowOptions"
-                />
-                <!-- <form-select
+    <div>
+        <div class="">
+            <h2 class="form-label italic">
+                Reservation data
+            </h2>
+            <hr class="my-4 border-b-2 border-yellow-400">
+        </div>
+        <div class="grid gap-2 md:grid md:gap-4 md:grid-cols-2 xl:gap-8 xl:grid-cols-4">
+            <form-input
+                v-model="order.patient_hn"
+                name="patient_hn"
+                label="hn"
+                :readonly="true"
+            />
+            <form-input
+                v-model="order.patient_name"
+                name="patient_name"
+                label="name"
+                :readonly="true"
+            />
+            <form-input
+                v-model="order.required_date_formatted"
+                name="required_date_formatted"
+                label="required date"
+                :readonly="true"
+            />
+            <form-input
+                v-model="prescription.ward"
+                name="ward"
+                label="ward"
+                :readonly="true"
+            />
+            <form-input
+                v-model="prescription.dialysis_type"
+                name="dialysis_type"
+                label="dialysis type"
+                :readonly="true"
+            />
+            <form-input
+                v-model="order.an"
+                name="an"
+                label="an"
+                :readonly="true"
+            />
+        </div>
+        <div class="mt-6 md:mt-12 xl:mt-24">
+            <h2 class="form-label italic">
+                Prescription
+            </h2>
+            <hr class="my-4 border-b-2 border-yellow-400">
+        </div>
+        <div class="grid gap-2 md:grid md:gap-4 md:grid-cols-2 xl:gap-8 xl:grid-cols-4">
+            <form-select
+                v-model="prescription.dialyzer"
+                name="dialyzer"
+                label="dialyzer"
+                :options="config.dialyzerOptions"
+            />
+            <form-select
+                v-model="prescription.dialyzate"
+                name="dialyzate"
+                label="dialyzate"
+                :options="config.dialyzateOptions"
+            />
+            <form-select
+                v-model="prescription.dialyzate_flow"
+                name="dialyzate_flow"
+                label="dialyzate flow (ml/min)"
+                :options="config.dialyzateFlowOptions"
+            />
+            <form-select
+                v-model="prescription.blood_flow"
+                name="blood_flow"
+                label="blood flow (ml/min)"
+                :options="config.bloodFlowOptions"
+            />
+            <!-- <form-select
                     v-model="prescription.session_length"
                     name="session_length"
                     label="session length (hrs.)"
                     :disabled="true"
                     :options="config.sessionLengthOptions"
                 /> -->
+            <form-select
+                v-model="prescription.dialyzate_temperature"
+                name="dialyzate_temperature"
+                label="dialyzate temperature (℃)"
+                :options="config.dialyzateTemperatureOptions"
+            />
+            <form-select
+                v-model="prescription.sodium_profile"
+                name="sodium_profile"
+                label="sodium profile"
+                :options="config.sodiumProfileOptions"
+            />
+            <form-select
+                v-model="prescription.anticoagulant"
+                name="anticoagulant"
+                label="anticoagulant"
+                :options="config.anticoagulantOptions"
+            />
+            <transition-group name="slide-fade">
                 <form-select
-                    v-model="prescription.dialyzate_temperature"
-                    name="dialyzate_temperature"
-                    label="dialyzate temperature (℃)"
-                    :options="config.dialyzateTemperatureOptions"
+                    v-if="prescription.anticoagulant == 'Heparin'"
+                    v-model="prescription.heparin_loading"
+                    name="heparin_loading"
+                    label="heparin loading"
+                    :options="config.anticoagulantLoadingOptions"
                 />
                 <form-select
-                    v-model="prescription.sodium_profile"
-                    name="sodium_profile"
-                    label="sodium profile"
-                    :options="config.sodiumProfileOptions"
+                    v-if="prescription.anticoagulant == 'Heparin'"
+                    v-model="prescription.heparin_loading_unit"
+                    name="heparin_loading_unit"
+                    label="heparin loading unit"
+                    :options="config.anticoagulantLoadingUnitOptions"
                 />
                 <form-select
-                    v-model="prescription.anticoagulant"
-                    name="anticoagulant"
-                    label="anticoagulant"
-                    :options="config.anticoagulantOptions"
+                    v-if="prescription.anticoagulant == 'Heparin'"
+                    v-model="prescription.heparin_maintenance"
+                    name="heparin_maintenance"
+                    label="heparin maintenance"
+                    :options="config.anticoagulantMaintenanceOptions"
                 />
-                <transition-group name="slide-fade">
-                    <form-select
-                        v-if="prescription.anticoagulant == 'Heparin'"
-                        v-model="prescription.heparin_loading"
-                        name="heparin_loading"
-                        label="heparin loading"
-                        :options="config.anticoagulantLoadingOptions"
-                    />
-                    <form-select
-                        v-if="prescription.anticoagulant == 'Heparin'"
-                        v-model="prescription.heparin_loading_unit"
-                        name="heparin_loading_unit"
-                        label="heparin loading unit"
-                        :options="config.anticoagulantLoadingUnitOptions"
-                    />
-                    <form-select
-                        v-if="prescription.anticoagulant == 'Heparin'"
-                        v-model="prescription.heparin_maintenance"
-                        name="heparin_maintenance"
-                        label="heparin maintenance"
-                        :options="config.anticoagulantMaintenanceOptions"
-                    />
-                    <form-select
-                        v-if="prescription.anticoagulant == 'Heparin'"
-                        v-model="prescription.heparin_maintenance_unit"
-                        name="heparin_maintenance_unit"
-                        label="heparin maintenance unit"
-                        :options="config.anticoagulantMaintenanceUnitOptions"
-                    />
-                    <form-input
-                        v-show="prescription.anticoagulant == 'Citrate'"
-                        v-model="prescription.anticoagulant_dose"
-                        name="anticoagulant_dose"
-                        label="anticoagulant dose"
-                        type="number"
-                    />
-                    <form-input
-                        v-if="prescription.anticoagulant == 'Other'"
-                        v-model="prescription.anticoagulant_dose"
-                        name="anticoagulant_dose"
-                        label="anticoagulant dose"
-                        placeholder="type anticoagulant and dose here"
-                    />
-                    <form-select
-                        v-if="prescription.anticoagulant == 'None'"
-                        v-model="prescription.nss_flush"
-                        name="nss_flush"
-                        label="nss flush (optional)"
-                        :options="config.NSSFlush"
-                    />
-                </transition-group>
+                <form-select
+                    v-if="prescription.anticoagulant == 'Heparin'"
+                    v-model="prescription.heparin_maintenance_unit"
+                    name="heparin_maintenance_unit"
+                    label="heparin maintenance unit"
+                    :options="config.anticoagulantMaintenanceUnitOptions"
+                />
                 <form-input
-                    pattern="\d*"
-                    label="uf (ml.)"
-                    v-model="prescription.ultrafiltration"
-                    name="ultrafiltration"
+                    v-show="prescription.anticoagulant == 'Citrate'"
+                    v-model="prescription.anticoagulant_dose"
+                    name="anticoagulant_dose"
+                    label="anticoagulant dose"
                     type="number"
                 />
                 <form-input
-                    label="dry weight (kg.)"
-                    v-model="prescription.dry_weight"
-                    name="dry_weight"
-                    type="number"
+                    v-if="prescription.anticoagulant == 'Other'"
+                    v-model="prescription.anticoagulant_dose"
+                    name="anticoagulant_dose"
+                    label="anticoagulant dose"
+                    placeholder="type anticoagulant and dose here"
                 />
                 <form-select
-                    label="50% Glucose 50 cc IV"
-                    v-model="prescription.glucose_iv"
-                    name="glucose_iv"
-                    :options="config.glucoseIVOptions"
+                    v-if="prescription.anticoagulant == 'None'"
+                    v-model="prescription.nss_flush"
+                    name="nss_flush"
+                    label="nss flush (optional)"
+                    :options="config.NSSFlush"
                 />
-                <form-select
-                    label="nutrition iv"
-                    v-model="prescription.nutrition_iv"
-                    name="nutrition_iv"
-                    :options="config.nutritionIVOptions"
-                />
-
-                <!-- transfustion -->
-                <form-select
-                    label="transfustion"
-                    v-model="prescription.transfustion"
-                    name=":transfustion"
-                    :options="['Yes', 'No']"
-                />
-                <transition-group name="slide-fade">
-                    <form-select
-                        v-if="prescription.transfustion == 'Yes'"
-                        name="prc"
-                        label="prc"
-                        v-model="prescription.prc"
-                        :options="config.prcOptions"
-                    />
-                    <form-select
-                        v-if="prescription.transfustion == 'Yes'"
-                        name="ffp"
-                        label="ffp"
-                        v-model="prescription.ffp"
-                        :options="config.ffpOptions"
-                    />
-                    <form-select
-                        v-if="prescription.transfustion == 'Yes'"
-                        name="platelet"
-                        label="platelet"
-                        v-model="prescription.platelet"
-                        :options="config.plateletOptions"
-                    />
-                </transition-group>
-
-                <form-select
-                    label="inotrope"
-                    v-model="prescription.inotrope"
-                    name="inotrope"
-                    :options="config.inotropeOptions"
-                />
-                <form-select
-                    label="o2 rx"
-                    v-model="prescription.o2_rx"
-                    name="o2_rx"
-                    :options="['Yes', 'No']"
-                />
-                <form-input
-                    label="cannula l/min (optional)"
-                    v-model="prescription.cannula_rate"
-                    name="cannula_rate"
-                />
-                <form-select
-                    label="ekg"
-                    v-model="prescription.ekg"
-                    name="ekg"
-                    :options="config.ekgOptions"
-                />
-                <form-select
-                    label="access type"
-                    v-model="prescription.access_type"
-                    name="access_type"
-                    :options="config.accessTypeOptions"
-                />
-                <form-select
-                    label="access site coagulant"
-                    v-model="prescription.access_site_coagulant"
-                    name="access_site_coagulant"
-                    :options="config.accessSiteOptions"
-                />
-                <form-select
-                    label="Observe chest pain"
-                    v-model="prescription.observe_chest_pain"
-                    name="observe_chest_pain"
-                    :options="['Yes', 'No']"
-                />
-                <form-select
-                    label="Observe neuro sign"
-                    v-model="prescription.observe_neuro_sign"
-                    name="observe_neuro_sign"
-                    :options="['Yes', 'No']"
-                />
-                <form-select
-                    label="Keep MAP > 65 mmHg"
-                    v-model="prescription.maintain_MAP_over_65"
-                    name="maintain_MAP_over_65"
-                    :options="['Yes', 'No']"
-                />
-                <form-select
-                    label="Prime 20%  albumin 100 cc"
-                    v-model="prescription.prime_20percent_albumin_100cc"
-                    name="prime_20percent_albumin_100cc"
-                    :options="['Yes', 'No']"
-                />
-            </div>
+            </transition-group>
             <form-input
-                class="mt-2 md:bt-4 xl:mt-8"
-                label="spacial order"
-                name="spacial"
-                v-model="prescription.spacial"
+                pattern="\d*"
+                label="uf (ml.)"
+                v-model="prescription.ultrafiltration"
+                name="ultrafiltration"
+                type="number"
             />
-            <div class="mt-6 md:mt-12 xl:mt-24">
-                <h2 class="form-label italic">
-                    Pre-Dialysis Labs Request
-                </h2>
-                <hr class="my-4 border-b-2 border-yellow-400">
-            </div>
-            <div class="grid grid-cols-2 gap-2 md:gap-4 xl:gap-8 xl:grid-cols-4">
-                <form-checkbox
-                    v-for="(lab, key) in config.labs"
-                    :key="key"
-                    :label="lab"
-                    :name="lab"
-                    v-model="labs[lab]"
-                />
-            </div>
-            <div class="mt-6 md:mt-12 xl:mt-24">
-                <h2 class="form-label italic">
-                    Pre-Dialysis Treatments Request
-                </h2>
-                <hr class="my-4 border-b-2 border-yellow-400">
-            </div>
             <form-input
-                class="mt-2 md:bt-4 xl:mt-8"
-                name="treatments"
-                v-model="treatments"
+                label="dry weight (kg.)"
+                v-model="prescription.dry_weight"
+                name="dry_weight"
+                type="number"
             />
-        </template>
-    </layout>
+            <form-select
+                label="50% Glucose 50 cc IV"
+                v-model="prescription.glucose_iv"
+                name="glucose_iv"
+                :options="config.glucoseIVOptions"
+            />
+            <form-select
+                label="nutrition iv"
+                v-model="prescription.nutrition_iv"
+                name="nutrition_iv"
+                :options="config.nutritionIVOptions"
+            />
+
+            <!-- transfustion -->
+            <form-select
+                label="transfustion"
+                v-model="prescription.transfustion"
+                name=":transfustion"
+                :options="['Yes', 'No']"
+            />
+            <transition-group name="slide-fade">
+                <form-select
+                    v-if="prescription.transfustion == 'Yes'"
+                    name="prc"
+                    label="prc"
+                    v-model="prescription.prc"
+                    :options="config.prcOptions"
+                />
+                <form-select
+                    v-if="prescription.transfustion == 'Yes'"
+                    name="ffp"
+                    label="ffp"
+                    v-model="prescription.ffp"
+                    :options="config.ffpOptions"
+                />
+                <form-select
+                    v-if="prescription.transfustion == 'Yes'"
+                    name="platelet"
+                    label="platelet"
+                    v-model="prescription.platelet"
+                    :options="config.plateletOptions"
+                />
+            </transition-group>
+
+            <form-select
+                label="inotrope"
+                v-model="prescription.inotrope"
+                name="inotrope"
+                :options="config.inotropeOptions"
+            />
+            <form-select
+                label="o2 rx"
+                v-model="prescription.o2_rx"
+                name="o2_rx"
+                :options="['Yes', 'No']"
+            />
+            <form-input
+                label="cannula l/min (optional)"
+                v-model="prescription.cannula_rate"
+                name="cannula_rate"
+            />
+            <form-select
+                label="ekg"
+                v-model="prescription.ekg"
+                name="ekg"
+                :options="config.ekgOptions"
+            />
+            <form-select
+                label="access type"
+                v-model="prescription.access_type"
+                name="access_type"
+                :options="config.accessTypeOptions"
+            />
+            <form-select
+                label="access site coagulant"
+                v-model="prescription.access_site_coagulant"
+                name="access_site_coagulant"
+                :options="config.accessSiteOptions"
+            />
+            <form-select
+                label="Observe chest pain"
+                v-model="prescription.observe_chest_pain"
+                name="observe_chest_pain"
+                :options="['Yes', 'No']"
+            />
+            <form-select
+                label="Observe neuro sign"
+                v-model="prescription.observe_neuro_sign"
+                name="observe_neuro_sign"
+                :options="['Yes', 'No']"
+            />
+            <form-select
+                label="Keep MAP > 65 mmHg"
+                v-model="prescription.maintain_MAP_over_65"
+                name="maintain_MAP_over_65"
+                :options="['Yes', 'No']"
+            />
+            <form-select
+                label="Prime 20%  albumin 100 cc"
+                v-model="prescription.prime_20percent_albumin_100cc"
+                name="prime_20percent_albumin_100cc"
+                :options="['Yes', 'No']"
+            />
+        </div>
+        <form-input
+            class="mt-2 md:bt-4 xl:mt-8"
+            label="spacial order"
+            name="spacial"
+            v-model="prescription.spacial"
+        />
+        <div class="mt-6 md:mt-12 xl:mt-24">
+            <h2 class="form-label italic">
+                Pre-Dialysis Labs Request
+            </h2>
+            <hr class="my-4 border-b-2 border-yellow-400">
+        </div>
+        <div class="grid grid-cols-2 gap-2 md:gap-4 xl:gap-8 xl:grid-cols-4">
+            <form-checkbox
+                v-for="(lab, key) in config.labs"
+                :key="key"
+                :label="lab"
+                :name="lab"
+                v-model="labs[lab]"
+            />
+        </div>
+        <div class="mt-6 md:mt-12 xl:mt-24">
+            <h2 class="form-label italic">
+                Pre-Dialysis Treatments Request
+            </h2>
+            <hr class="my-4 border-b-2 border-yellow-400">
+        </div>
+        <form-input
+            class="mt-2 md:bt-4 xl:mt-8"
+            name="treatments"
+            v-model="treatments"
+        />
+    </div>
 </template>
 
 <script>
@@ -311,11 +309,11 @@ import FormInput from '@/Components/Controls/FormInput.vue';
 import FormSelect from '@/Components/Controls/FormSelect.vue';
 import Layout from '@/Components/Layouts/Layout.vue';
 export default {
+    layout: Layout,
     components: {
         FormCheckbox,
         FormInput,
         FormSelect,
-        Layout,
     },
     computed: {
         anticoagulantOtherThanHeparin () {

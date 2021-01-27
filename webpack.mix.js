@@ -24,8 +24,8 @@ mix.webpackConfig(webpack => {
     };
 });
 
-if (mix.inProduction()) {
-    mix.version();
-} else {
+mix.version();
+
+if (! mix.inProduction()) {
     mix.sourceMaps();
 }

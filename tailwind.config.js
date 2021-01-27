@@ -9,7 +9,8 @@ module.exports = {
         extend: {
             colors: {
                 'soft-theme-light': '#FDF6E3',
-                'bitter-theme-light': '#ff0',
+                'alt-theme-light': '#EEE9D5',
+                'bitter-theme-light': '#AD9C68',
                 'thick-theme-light': '#586E75',
                 'dark-theme-light': '#465C62',
             }

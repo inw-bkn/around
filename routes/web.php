@@ -46,3 +46,7 @@ Route::post('/logout', function () {
 Route::get('/preferences', function () {
     return Redirect::to('/prototypes/Preferences');
 });
+
+Route::post('/session-timeout', function () {
+    return ['active' => true];
+});

@@ -155,6 +155,15 @@ export default {
             mobileMenuVisible: false
         };
     },
+    setup () {
+        const endpoint = document.querySelector('meta[name=base-url]').content + '/session-timeout';
+        window.addEventListener('focus', () => {
+            axios.post(endpoint)
+                .catch(() => {
+                    location.reload();
+                });
+        });
+    },
     methods: {
         url() {
             return location.pathname.substr(1);

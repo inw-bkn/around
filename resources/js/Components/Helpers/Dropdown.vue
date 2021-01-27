@@ -16,7 +16,7 @@
         </button>
         <transition :name="dropup ? 'fade-appear-above':'fade-appear'">
             <div
-                class="origin-top-right absolute right-0 w-56 rounded-md shadow-lg z-20"
+                class="origin-top-right absolute right-0 w-auto rounded-md shadow-lg z-20"
                 :class="{' -translate-y-full': dropup}"
                 v-if="show"
             >

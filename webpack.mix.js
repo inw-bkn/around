@@ -22,10 +22,6 @@ mix.webpackConfig(webpack => {
             chunkFilename: 'js/[name].js?id=[chunkhash]'
         }
     };
-});
-
-if (mix.inProduction()) {
-    mix.version();
-} else {
-    mix.sourceMaps();
-}
+})
+    .sourceMaps(false)
+    .version();

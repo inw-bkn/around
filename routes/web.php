@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -19,5 +20,33 @@ Route::get('/', function () {
 });
 
 Route::get('/prototypes/{page}', function ($page) {
+    switch ($page) {
+        case 'AcuteHDReservation':
+            $title = 'Acute HD Order / Mr. Ronald Duck';
+            break;
+
+        default:
+            $title = $page;
+            break;
+    }
+
+    request()->session()->flash('page-title', $title);
+
     return Inertia::render('Prototypes/'.$page);
+});
+
+Route::get('/home', function () {
+    return Redirect::to('/prototypes/Home');
+});
+
+Route::post('/logout', function () {
+    return Redirect::to('/');
+});
+
+Route::get('/preferences', function () {
+    return Redirect::to('/prototypes/Preferences');
+});
+
+Route::post('/session-timeout', function () {
+    return ['active' => true];
 });

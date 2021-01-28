@@ -3,6 +3,9 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Session;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -37,7 +40,46 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request)
     {
         return array_merge(parent::share($request), [
-            //
+            'app' => [
+                'baseUrl' => url(''),
+                // 'photoPath' => config('app.PHOTO_PATH'),
+                'session_lifetime' => ((int) Config::get('session.lifetime') * 60 * 60), // in seconds
+            ],
+            // 'title' => Session::get('page-title', 'super page'),
+            'flash' => function () use ($request) {
+                return [
+                    // 'success' => Session::get('success'),
+                    // 'error' => Session::get('error'),
+                    // 'data' => Session::get('data'),
+                    'title' => $request->session()->get('page-title', 'super page'),
+                ];
+            },
+            'user' => function () {
+                // if (! Auth::user()) {
+                //     return;
+                // }
+                // return [
+                //     'id' => Auth::id(),
+                //     'name' => Auth::user()->name,
+                //     'configs' => [
+                //         'hideRichTextTools' => true,
+                //     ],
+                //     'abilities' => Auth::user()->abilities(),
+                // ];
+                return [
+                    'id' => 1,
+                    'name' => 'timarok',
+                    'configs' => [
+                        'hideRichTextTools' => true,
+                    ],
+                    'mainMenuLinks' => [
+                        ['icon' => 'patient', 'label' => 'Patients', 'route' => 'prototypes/PatientsIndex'],
+                        ['icon' => 'clinic', 'label' => 'Clinics', 'route' => 'prototypes/ClinicsIndex'],
+                        ['icon' => 'procedure', 'label' => 'Procedures', 'route' => 'prototypes/ProceduresIndex'],
+                    ],
+                    // 'abilities' => Auth::user()->abilities(),
+                ];
+            },
         ]);
     }
 }

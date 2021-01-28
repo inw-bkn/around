@@ -143,11 +143,8 @@ export default {
     watch: {
         '$page.props.flash': {
             immediate: true,
-            handler() {
-                console.log(this.$page.props.flash.title);
-                document.title = this.$page.props.flash.title;
-            },
             deep: true,
+            handler() { document.title = this.$page.props.flash.title; }
         },
     },
     data () {
@@ -156,12 +153,16 @@ export default {
         };
     },
     setup () {
+        var lastTimeCheckSessionTimeout = Date.now();
         const endpoint = document.querySelector('meta[name=base-url]').content + '/session-timeout';
+        const sessionLifetimeSeconds = parseInt(document.querySelector('meta[name=session-lifetime-seconds]').content);
         window.addEventListener('focus', () => {
-            axios.post(endpoint)
-                .catch(() => {
-                    location.reload();
-                });
+            let timeDiff = Date.now() - lastTimeCheckSessionTimeout;
+            if ( (timeDiff) > (sessionLifetimeSeconds) ) {
+                axios.post(endpoint)
+                    .then(() => lastTimeCheckSessionTimeout = Date.now())
+                    .catch(() => location.reload());
+            }
         });
     },
     methods: {

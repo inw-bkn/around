@@ -2,7 +2,7 @@
     <div>
         <div class="mb-4">
             <inertia-link
-                class="flex items-center group py-2"
+                class="flex items-center group py-2 outline-none"
                 :href="`${$page.props.app.baseUrl}/${link.route}`"
                 v-for="(link, key) in $page.props.user.mainMenuLinks"
                 :key="key"

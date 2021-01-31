@@ -133,6 +133,7 @@
 import Dropdown from '@/Components/Helpers/Dropdown.vue';
 import Icon from '@/Components/Helpers/Icon.vue';
 import MainMenu from '@/Components/Helpers/MainMenu.vue';
+import { onMounted } from 'vue';
 export default {
     components: {
         Dropdown,
@@ -161,6 +162,13 @@ export default {
                 axios.post(endpoint)
                     .then(() => lastTimeCheckSessionTimeout = Date.now())
                     .catch(() => location.reload());
+            }
+        });
+
+        onMounted (() => {
+            const pageLoadingIndicator = document.getElementById('page-loading-indicator');
+            if (pageLoadingIndicator) {
+                pageLoadingIndicator.remove();
             }
         });
     },

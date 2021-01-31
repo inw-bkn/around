@@ -8,15 +8,21 @@
                 @round.
             </inertia-link>
             <small class="block text-dark-theme-light tracking-widest md:font-semibold mt-5">around 🤲🏻 about 🙌🏻 arrange</small>
-            <small class="block text-white font-semibold tracking-wide mt-5 animate-pulse md:hidden">app ...ที่เราเคยคุยกัน</small>
+            <small class="block text-white tracking-wide mt-6 lg:hidden">app ...ที่เราเคยคุยกัน</small>
         </div>
     </div>
 </template>
 
 <script>
+import { onMounted } from 'vue';
 export default {
-    data () {
-        return {};
+    setup () {
+        onMounted (() => {
+            const pageLoadingIndicator = document.getElementById('page-loading-indicator');
+            if (pageLoadingIndicator) {
+                pageLoadingIndicator.remove();
+            }
+        });
     }
 };
 </script>

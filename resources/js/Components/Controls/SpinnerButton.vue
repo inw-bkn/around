@@ -1,7 +1,7 @@
 <template>
     <button
         type="button"
-        class="inline-flex items-center btn btn-blue"
+        class="inline-flex justify-center items-center btn"
         @click="$emit('click')"
         :disabled="disabled || spin"
     >

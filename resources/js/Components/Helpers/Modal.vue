@@ -39,6 +39,7 @@
 <script>
 import Icon from '@/Components/Helpers/Icon.vue';
 export default {
+    emits: ['closed'],
     components: { Icon },
     props: {
         widthMode: { type: String, default: 'document' }
@@ -61,6 +62,7 @@ export default {
         },
         animate (animate) {
             if (! animate) {
+                this.$emit('closed');
                 this.doubleRequestAnimationFrame(() => {
                     setTimeout(() => this.show = false, 200);
                 });

@@ -43,7 +43,7 @@ class HandleInertiaRequests extends Middleware
             'app' => [
                 'baseUrl' => url(''),
                 // 'photoPath' => config('app.PHOTO_PATH'),
-                'session_lifetime' => ((int) Config::get('session.lifetime') * 60 * 60), // in seconds
+                // 'session_lifetime' => ((int) Config::get('session.lifetime') * 60), // in seconds
             ],
             // 'title' => Session::get('page-title', 'super page'),
             'flash' => function () use ($request) {
@@ -51,7 +51,7 @@ class HandleInertiaRequests extends Middleware
                     // 'success' => Session::get('success'),
                     // 'error' => Session::get('error'),
                     // 'data' => Session::get('data'),
-                    'title' => $request->session()->get('page-title', 'super page'),
+                    'title' => $request->session()->get('page-title', 'MISSING'),
                 ];
             },
             'user' => function () {
@@ -68,9 +68,9 @@ class HandleInertiaRequests extends Middleware
                 // ];
                 return [
                     'id' => 1,
-                    'name' => 'timarok',
+                    'name' => 'username',
                     'configs' => [
-                        'hideRichTextTools' => true,
+                        // 'hideRichTextTools' => true,
                     ],
                     'mainMenuLinks' => [
                         ['icon' => 'patient', 'label' => 'Patients', 'route' => 'prototypes/PatientsIndex'],

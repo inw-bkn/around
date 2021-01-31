@@ -1,7 +1,7 @@
 <template>
     <div class="w-full">
         <label
-            class="form-label md:text-lg"
+            class="form-label"
             :for="name"
         >{{ label }} :</label>
         <input
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import 'flatpickr/dist/themes/dark.css';
+import 'flatpickr/dist/themes/light.css';
 import flatpickr from 'flatpickr';
 export default {
     emits: ['autosave', 'update:modelValue'],
@@ -70,3 +70,21 @@ export default {
     },
 };
 </script>
+
+<style>
+    .calendar-event {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        border-radius: 150px;
+        bottom: 3px;
+        left: calc(50% - 1.5px);
+        content: "•";
+        display: block;
+        background: #3d8eb9;
+    }
+
+    .calendar-event.busy {
+        background: #f64747;
+    }
+</style>

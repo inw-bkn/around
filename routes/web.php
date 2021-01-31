@@ -50,3 +50,16 @@ Route::get('/preferences', function () {
 Route::post('/session-timeout', function () {
     return ['active' => true];
 });
+
+Route::post('/admissions', function () {
+    sleep(2);
+    $gender = rand() >= 7.5 ? 'male' : 'female';
+    $faker = Faker\Factory::create();
+
+    return [
+        'hn' => ((int) request()->an) - 7777777,
+        'name' => ($gender == 'female' ? $faker->firstNameFemale : $faker->firstNameMale).' '.$faker->lastName,
+        'gender' => $gender,
+        'age' => $faker->numberBetween(20, 100).' Yo',
+    ];
+});

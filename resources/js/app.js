@@ -8,7 +8,10 @@ import { createApp, h } from 'vue';
 import { App, plugin } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 
-InertiaProgress.init();
+InertiaProgress.init({
+    delay: 200,
+    color: '#AD9C68'
+});
 
 const el = document.getElementById('app');
 

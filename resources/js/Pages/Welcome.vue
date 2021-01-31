@@ -3,20 +3,26 @@
         <div class="my-auto text-center">
             <inertia-link
                 :href="`${$page.props.app.baseUrl}/home`"
-                class="font-lobster text-6xl md:text-9xl text-bitter-theme-light block floating-logo"
+                class="outline-none font-lobster px-4 text-6xl md:text-9xl text-bitter-theme-light block floating-logo"
             >
                 @round.
             </inertia-link>
             <small class="block text-dark-theme-light tracking-widest md:font-semibold mt-5">around 🤲🏻 about 🙌🏻 arrange</small>
-            <small class="block text-white tracking-wide md:hidden mt-4 animate-pulse">app ...ที่เราเคยคุยกัน</small>
+            <small class="block text-white tracking-wide mt-6 lg:hidden">app ...ที่เราเคยคุยกัน</small>
         </div>
     </div>
 </template>
 
 <script>
+import { onMounted } from 'vue';
 export default {
-    data () {
-        return {};
+    setup () {
+        onMounted (() => {
+            const pageLoadingIndicator = document.getElementById('page-loading-indicator');
+            if (pageLoadingIndicator) {
+                pageLoadingIndicator.remove();
+            }
+        });
     }
 };
 </script>

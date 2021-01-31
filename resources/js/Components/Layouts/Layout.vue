@@ -1,12 +1,11 @@
 <template>
     <div>
-        <div id="portal" />
         <!-- main contailner, flex makes its childs extend full h -->
         <div class="md:h-screen md:flex md:flex-col">
             <!-- this is navbar, with no shrink (fixed width) -->
             <div class="md:flex md:flex-shrink-0 sticky top-0 z-30">
                 <!-- left navbar on desktop and full bar on mobile -->
-                <div class="bg-dark-theme-light text-white md:flex-shrink-0 md:w-56 px-4 py-2 flex items-center justify-between md:justify-center">
+                <div class="bg-dark-theme-light text-white md:flex-shrink-0 md:w-56 xl:w-64 px-4 py-2 flex items-center justify-between md:justify-center">
                     <!-- the logo -->
                     <inertia-link
                         class=" inline-block"
@@ -44,11 +43,11 @@
                     <dropdown>
                         <template #default>
                             <div class="flex items-center cursor-pointer select-none group">
-                                <div class="group-hover:text-yellow-500 focus:text-yellow-500 mr-1 whitespace-no-wrap">
+                                <div class="group-hover:text-bitter-theme-light focus:text-bitter-theme-light mr-1 whitespace-no-wrap">
                                     <span>{{ $page.props.user.name }}</span>
                                 </div>
                                 <icon
-                                    class="w-4 h-4 group-hover:text-yellow-500 focus:text-yellow-500"
+                                    class="w-4 h-4 group-hover:text-bitter-theme-light focus:text-bitter-theme-light"
                                     name="double-down"
                                 />
                             </div>
@@ -115,11 +114,11 @@
                 <!-- this is sidebar menu on desktop -->
                 <main-menu
                     :url="url()"
-                    class="hidden md:block bg-thick-theme-light flex-shrink-0 w-56 p-12 overflow-y-auto"
+                    class="hidden md:block bg-thick-theme-light flex-shrink-0 w-56 xl:w-64 py-12 px-6 overflow-y-auto"
                 />
                 <!-- this is main page -->
                 <div
-                    class="w-full p-4 md:overflow-y-auto lg:p-8 xl:py-8 xl:px-10"
+                    class="w-full p-4 md:overflow-y-auto md:py-12 lg:px-8 xl:px-10"
                     scroll-region
                 >
                     <!-- <flash-messages /> -->
@@ -134,6 +133,7 @@
 import Dropdown from '@/Components/Helpers/Dropdown.vue';
 import Icon from '@/Components/Helpers/Icon.vue';
 import MainMenu from '@/Components/Helpers/MainMenu.vue';
+import { onMounted } from 'vue';
 export default {
     components: {
         Dropdown,
@@ -162,6 +162,13 @@ export default {
                 axios.post(endpoint)
                     .then(() => lastTimeCheckSessionTimeout = Date.now())
                     .catch(() => location.reload());
+            }
+        });
+
+        onMounted (() => {
+            const pageLoadingIndicator = document.getElementById('page-loading-indicator');
+            if (pageLoadingIndicator) {
+                pageLoadingIndicator.remove();
             }
         });
     },

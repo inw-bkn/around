@@ -1,11 +1,31 @@
 <template>
-    <div>
-        <div class="">
-            <h2 class="form-label italic">
-                Reservation data
-            </h2>
-            <hr class="my-4 border-b-2 border-yellow-400">
-        </div>
+    <div class="md:pb-12">
+        <h1 class="font-semibold text-2xl text-gray-400">
+            <inertia-link
+                class="text-bitter-theme-light"
+                :href="`${$page.props.app.baseUrl}/prototypes/ProceduresIndex`"
+            >
+                Procedures /
+            </inertia-link>
+            <inertia-link
+                class="text-dark-theme-light"
+                :href="`${$page.props.app.baseUrl}/prototypes/AcuteHDIndex`"
+            >
+                Acute HD /
+            </inertia-link>
+            <inertia-link
+                class="text-thick-theme-light"
+                :href="`${$page.props.app.baseUrl}/prototypes/AcuteHDCaseEdit`"
+            >
+                Adelbert Mohr /
+            </inertia-link>
+            Friday, 29 Jan 2021
+        </h1>
+        <hr class="my-4 border-b-2 border-bitter-theme-light">
+        <h2 class="form-label italic mt-6 md:mt-12 xl:mt-24">
+            Reservation data
+        </h2>
+        <hr class="my-4 border-b border-thick-theme-light">
         <div class="grid gap-2 md:grid md:gap-4 md:grid-cols-2 xl:gap-8 xl:grid-cols-4">
             <form-input
                 v-model="order.patient_hn"
@@ -44,12 +64,10 @@
                 :readonly="true"
             />
         </div>
-        <div class="mt-6 md:mt-12 xl:mt-24">
-            <h2 class="form-label italic">
-                Prescription
-            </h2>
-            <hr class="my-4 border-b-2 border-yellow-400">
-        </div>
+        <h2 class="form-label italic mt-6 md:mt-12 xl:mt-24">
+            Prescription
+        </h2>
+        <hr class="my-4 border-b border-thick-theme-light">
         <div class="grid gap-2 md:grid md:gap-4 md:grid-cols-2 xl:gap-8 xl:grid-cols-4">
             <form-select
                 v-model="prescription.dialyzer"
@@ -274,12 +292,10 @@
             name="spacial"
             v-model="prescription.spacial"
         />
-        <div class="mt-6 md:mt-12 xl:mt-24">
-            <h2 class="form-label italic">
-                Pre-Dialysis Labs Request
-            </h2>
-            <hr class="my-4 border-b-2 border-yellow-400">
-        </div>
+        <h2 class="form-label italic mt-6 md:mt-12 xl:mt-24">
+            Pre-Dialysis Labs Request
+        </h2>
+        <hr class="my-4 border-b border-thick-theme-light">
         <div class="grid grid-cols-2 gap-2 md:gap-4 xl:gap-8 xl:grid-cols-4">
             <form-checkbox
                 v-for="(lab, key) in config.labs"
@@ -289,12 +305,10 @@
                 v-model="labs[lab]"
             />
         </div>
-        <div class="mt-6 md:mt-12 xl:mt-24">
-            <h2 class="form-label italic">
-                Pre-Dialysis Treatments Request
-            </h2>
-            <hr class="my-4 border-b-2 border-yellow-400">
-        </div>
+        <h2 class="form-label italic mt-6 md:mt-12 xl:mt-24">
+            Pre-Dialysis Treatments Request
+        </h2>
+        <hr class="my-4 border-b border-thick-theme-light">
         <form-input
             class="mt-2 md:bt-4 xl:mt-8"
             name="treatments"
@@ -373,8 +387,8 @@ export default {
         return {
             order: {
                 patient_hn: '50164826',
-                patient_name: 'Ronald Duck',
-                required_date_formatted: 'Friday, 29',
+                patient_name: 'Adelbert Mohr',
+                required_date_formatted: 'Friday, 5',
                 an: '57584629',
             },
             prescription: {

@@ -14,8 +14,8 @@
                 >
                 <!-- line -->
                 <div
-                    class="w-8 h-5 bg-gray-400 rounded-full shadow-inner transition-all duration-200 ease-in-out"
-                    :class="{ 'bg-blue-500' : modelValue }"
+                    class="w-8 h-5 bg-gray-200 rounded-full shadow-inner transition-all duration-200 ease-in-out"
+                    :class="{ 'bg-bitter-theme-light' : modelValue }"
                 />
                 <!-- dot -->
                 <div

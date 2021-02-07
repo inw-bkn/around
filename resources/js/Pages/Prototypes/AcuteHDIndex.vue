@@ -99,9 +99,16 @@
             Acute HD
         </h1>
         <hr class="my-4 border-b-2 border-bitter-theme-light">
-        <div class="flex justify-end mb-2">
+        <!-- search tool & create case -->
+        <div class="flex flex-col-reverse md:flex-row justify-between items-center mb-4">
+            <search-index
+                :scopes="['active', 'discharged', 'all']"
+                :form="searchForm"
+                @search-changed="(val) => searchForm.search = val"
+                @scope-changed="(val) => searchForm.scope = val"
+            />
             <button
-                class="btn btn-bitter w-full md:w-auto md:px-4"
+                class="btn btn-bitter w-full mb-4 md:w-auto md:px-4 md:mb-0"
                 @click="$refs.modal.open()"
             >
                 Create New Case
@@ -197,16 +204,19 @@
 
 <script>
 import Layout from '@/Components/Layouts/Layout';
-import Icon from '@/Components/Helpers/Icon.vue';
-import Modal from '@/Components/Helpers/Modal.vue';
-import FormInput from '@/Components/Controls/FormInput.vue';
-import SpinnerButton from '@/Components/Controls/SpinnerButton.vue';
+import Icon from '@/Components/Helpers/Icon';
+import Modal from '@/Components/Helpers/Modal';
+import FormInput from '@/Components/Controls/FormInput';
+import SpinnerButton from '@/Components/Controls/SpinnerButton';
+// import Dropdown from '@/Components/Helpers/Dropdown';
+import SearchIndex from '@/Components/Helpers/SearchIndex';
 export default {
     components: {
         Icon,
         Modal,
         FormInput,
-        SpinnerButton
+        SpinnerButton,
+        SearchIndex,
     },
     layout: Layout,
     data () {
@@ -226,6 +236,10 @@ export default {
                 name: '',
                 gender: '',
                 age: '',
+            },
+            searchForm: {
+                search: '',
+                scope: ''
             }
         };
     },

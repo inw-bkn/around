@@ -19,7 +19,7 @@
             <div class="flex justify-between items-center">
                 <div><slot name="header" /></div>
                 <button
-                    @click="animate = false"
+                    @click="close()"
                     class="block p-2 rounded-full hover:bg-white bg-soft-theme-light transition-colors ease-in-out duration-200"
                 >
                     <icon
@@ -50,31 +50,18 @@ export default {
             animate: false,
         };
     },
-    watch: {
-        show (show) {
-            if (show) {
-                this.doubleRequestAnimationFrame(() => {
-                    this.animate = true;
-                    setTimeout(() => this.$emit('opened'), 200);
-                });
-            } else {
-                this.animate = false;
-            }
-        },
-        animate (animate) {
-            if (! animate) {
-                this.$emit('closed');
-                this.doubleRequestAnimationFrame(() => {
-                    setTimeout(() => this.show = false, 200);
-                });
-            }
-        }
-    },
     methods: {
         open () {
+            document.addEventListener('transitionend', this.openTransitionEnd);
             this.show = true;
+
+            // wait for dom ready
+            this.doubleRequestAnimationFrame(() => {
+                this.animate = true;
+            });
         },
         close () {
+            document.addEventListener('transitionend', this.closeTransitionEnd);
             this.animate = false;
         },
         doubleRequestAnimationFrame (callback) {
@@ -82,6 +69,19 @@ export default {
                 requestAnimationFrame(callback);
             });
         },
+        openTransitionEnd (event) {
+            if (event.target.tagName == 'DIV' && event.propertyName == 'transform') {
+                this.$emit('opened');
+                document.removeEventListener('transitionend', this.openTransitionEnd);
+            }
+        },
+        closeTransitionEnd (event) {
+            if (event.target.tagName == 'DIV' && event.propertyName == 'transform') {
+                this.$emit('closed');
+                this.show = false;
+                document.removeEventListener('transitionend', this.closeTransitionEnd);
+            }
+        }
     }
 };
 </script>

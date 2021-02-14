@@ -23,7 +23,7 @@
                 class="form-input border-r-0 rounded-r-none"
                 :class="{ 'border-red-400': errors.length }"
             >
-            <div class="w-auto flex items-center px-2 border-2 border-gray-200 rounded border-l-0 rounded-l-none bg-gray-50 whitespace-nowrap">
+            <div class="w-auto flex items-center px-2 border-2 border-gray-200 rounded shadow-sm border-l-0 rounded-l-none bg-gray-50">
                 <label class="inline-flex items-center">
                     <input
                         type="checkbox"
@@ -31,7 +31,7 @@
                         :checked="modelCheckbox"
                         @change="change"
                     >
-                    <span class="ml-4 text-lg whitespace-nowrap">{{ switchLabel }}</span>
+                    <span class="ml-4 text-lg cursor-pointer whitespace-nowrap">{{ switchLabel }}</span>
                 </label>
             </div>
         </div>

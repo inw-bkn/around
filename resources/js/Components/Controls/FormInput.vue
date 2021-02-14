@@ -5,7 +5,38 @@
             class="form-label"
             :for="name"
         >{{ label }} :</label>
+        <div
+            v-if="switchLabel"
+            class="flex"
+        >
+            <input
+                :id="name"
+                :name="name"
+                ref="input"
+                @input="$emit('update:modelValue', $refs.input.value)"
+                @change="$emit('autosave')"
+                :type="type"
+                :placeholder="placeholder"
+                :pattern="pattern"
+                :readonly="readonly"
+                :value="modelValue"
+                class="form-input border-r-0 rounded-r-none"
+                :class="{ 'border-red-400': errors.length }"
+            >
+            <div class="w-auto flex items-center px-2 border-2 border-gray-200 rounded border-l-0 rounded-l-none bg-gray-50 whitespace-nowrap">
+                <label class="inline-flex items-center">
+                    <input
+                        type="checkbox"
+                        class="shadow-xs h-6 w-6 transition-all duration-200 ease-in-out appearance-none color inline-block align-middle border border-gray-400 select-none flex-shrink-0 rounded cursor-pointer focus:outline-none"
+                        :checked="modelCheckbox"
+                        @change="change"
+                    >
+                    <span class="ml-4 text-lg whitespace-nowrap">{{ switchLabel }}</span>
+                </label>
+            </div>
+        </div>
         <input
+            v-else
             :id="name"
             :name="name"
             ref="input"
@@ -30,21 +61,27 @@
 
 <script>
 export default {
-    emits: ['autosave', 'update:modelValue'],
+    emits: ['autosave', 'update:modelValue', 'update:modelCheckbox'],
     props: {
         modelValue: { type: String, required: true },
+        modelCheckbox: { type: Boolean },
         name: { type: String, required: true },
         label: { type: String, default: '' },
         type: { type: String, default: 'text' },
         placeholder: { type: String, default: '' },
         pattern: { type: String, default: '' },
         readonly: { type: Boolean },
-        errors: { type: Array, default: () => [] }
+        errors: { type: Array, default: () => [] },
+        switchLabel: { type: String, default: '' }
     },
     methods: {
         focus () {
             this.$refs.input.focus();
-        }
+        },
+        change () {
+            this.$emit('update:modelCheckbox', !this.modelCheckbox);
+            this.$emit('autosave');
+        },
     }
 };
 </script>

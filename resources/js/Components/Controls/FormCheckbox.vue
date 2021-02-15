@@ -24,7 +24,7 @@
                 />
             </div>
             <!-- label -->
-            <div class="ml-3 text-lg">
+            <div class="ml-3 text-sm md:text-base xl:text-lg">
                 {{ label }}
             </div>
         </label>
@@ -37,7 +37,7 @@
                 :checked="modelValue"
                 @change="change"
             >
-            <span class="ml-4 text-lg">{{ label }}</span>
+            <span class="ml-4 text-sm md:text-base xl:text-lg">{{ label }}</span>
         </label>
     </div>
 </template>

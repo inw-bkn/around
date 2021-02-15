@@ -191,6 +191,12 @@
                         v-model="caseRecord[`indications_${disease.name}`]"
                     />
                 </div>
+                <form-input
+                    class="mt-2 md:mt-4 xl:mt-6"
+                    name="comorbidities_other"
+                    label="Other indications"
+                    v-model="caseRecord.indications_other"
+                />
             </div>
         </div>
 
@@ -248,7 +254,8 @@
         <form-select
             name="insurance"
             v-model="caseRecord.insurance"
-            :options="['เบิกจ่ายตรง', 'ประกันสังคม', '30 บาท']"
+            :options="config.insurances"
+            :allow-other="true"
         />
 
         <h3 class="form-label mt-4 md:mt-8 xl:mt-16">
@@ -301,13 +308,13 @@
                     label="dialysis at"
                     name="type"
                     v-model="order.type"
-                    :options="config.typeOptions"
+                    :options="config.wardOptions"
                 />
                 <form-select
                     label="dialysis type"
                     name="ward"
                     v-model="order.ward"
-                    :options="config.wardOptions"
+                    :options="config.typeOptions"
                 />
                 <form-datetime
                     label="required date"
@@ -388,6 +395,42 @@
                 RESERVE
             </inertia-link>
         </div>
+
+        <teleport to="body">
+            <modal
+                ref="modal"
+                width-mode="form-cols-1"
+                @opened="$refs.otherItem.focus()"
+                @closed="otherItemClosed"
+            >
+                <template #header>
+                    <div class="font-semibold text-thick-theme-light">
+                        Other insurance
+                    </div>
+                </template>
+                <template #body>
+                    <div class="py-4 my-2 md:py-6 md:my-4 border-t border-b border-bitter-theme-light">
+                        <form-input
+                            v-model="otherItem"
+                            name="otherItem"
+                            placeholder="please specify..."
+                            ref="otherItem"
+                        />
+                    </div>
+                </template>
+                <template #footer>
+                    <div class="flex justify-end items-center">
+                        <button
+                            class="btn btn-bitter px-5"
+                            @click="addOtherItem"
+                            :disabled="!otherItem"
+                        >
+                            ADD
+                        </button>
+                    </div>
+                </template>
+            </modal>
+        </teleport>
     </div>
 </template>
 
@@ -397,9 +440,21 @@ import FormSelect from '@/Components/Controls/FormSelect';
 import FormDatetime from '@/Components/Controls/FormDatetime';
 import FormInput from '@/Components/Controls/FormInput';
 import FormCheckbox from '@/Components/Controls/FormCheckbox';
+import Modal from '@/Components/Helpers/Modal';
 export default {
-    components: { FormSelect, FormDatetime, FormInput, FormCheckbox },
+    components: { FormSelect, FormDatetime, FormInput, FormCheckbox, Modal },
     layout: Layout,
+    watch: {
+        'caseRecord.insurance': {
+            handler: function (val) {
+                if (val === 'other') {
+                    this.otherItem = '';
+                    this.otherItemAdded = false;
+                    this.$refs.modal.open();
+                }
+            }
+        }
+    },
     data () {
         return {
             order: {
@@ -443,13 +498,14 @@ export default {
                 comorbidities_cirrhosis: false,
                 comorbidities_cancer: false,
                 comorbidities_other: '',
-                indeications_volume_overload: false,
-                indeications_metabolic_acidosis: false,
-                indeications_hyperkalemia: false,
-                indeications_toxin_removal: false,
-                indeications_initiate_HD: false,
-                indeications_maintain_HD: false,
-                indeications_change_from_PD: false,
+                indications_volume_overload: false,
+                indications_metabolic_acidosis: false,
+                indications_hyperkalemia: false,
+                indications_toxin_removal: false,
+                indications_initiate_HD: false,
+                indications_maintain_HD: false,
+                indications_change_from_PD: false,
+                indications_other: '',
                 HBsAg: '',
                 date_HBsAg: '',
                 anti_HCV: '',
@@ -463,6 +519,8 @@ export default {
                 patient_outcome: '',
                 cause_of_dead: '',
             },
+            otherItem: '',
+            otherItemAdded: false,
             config: {
                 enableDates: [
                     '2021-02-01',
@@ -502,6 +560,7 @@ export default {
                     { name: 'DN', label: 'DN' },
                     { name: 'HT', label: 'HT' },
                     { name: 'glomerular_disease', label: 'Glomerular disease' },
+                    { name: 'chronic_tubulointerstitial_nephritis', label: 'Chronic tubulointerstitial nephritis' },
                 ],
                 comorbidities: [
                     { name: 'DM', label: 'DM' },
@@ -521,7 +580,8 @@ export default {
                     { name: 'initiate_HD', label: 'Initiate HD' },
                     { name: 'maintain_HD', label: 'Maintain HD' },
                     { name: 'change_from_PD', label: 'Change from PD' },
-                ]
+                ],
+                insurances: ['เบิกจ่ายตรง', 'ประกันสังคม', '30 บาท'],
             }
         };
     },
@@ -535,6 +595,18 @@ export default {
                 }
             }
         },
+        addOtherItem () {
+            this.otherItemAdded = true;
+            this.$refs.modal.close();
+        },
+        otherItemClosed () {
+            if (! this.otherItemAdded) {
+                this.caseRecord.insurance = '';
+                return;
+            }
+            this.config.insurances.push(this.otherItem);
+            this.caseRecord.insurance = this.otherItem;
+        }
     }
 };
 </script>

@@ -43,6 +43,12 @@
                 >
                     {{ option }}
                 </option>
+                <option
+                    value="other"
+                    v-if="allowOther"
+                >
+                    Other
+                </option>
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <svg
@@ -71,7 +77,8 @@ export default {
         label: { type: String, default: '' },
         placeholder: { type: String, default: '' },
         disabled: { type: Boolean },
-        errors: { type: Array, default: () => [] }
+        errors: { type: Array, default: () => [] },
+        allowOther: { type:Boolean }
     },
     computed: {
         valueOptions () {
@@ -92,7 +99,6 @@ export default {
     methods: {
         change () {
             this.$emit('update:modelValue', this.$refs.input.value);
-            console.log(this.$refs.input.value + ' selected');
             this.$emit('autosave');
         }
     }

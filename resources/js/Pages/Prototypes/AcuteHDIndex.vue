@@ -240,13 +240,18 @@ export default {
             searchForm: {
                 search: '',
                 scope: ''
-            }
+            },
+            newCaseCreated: false,
         };
     },
     methods: {
         resetAdmission () {
             this.admission.hn = '',
             this.busy = false;
+            if (this.newCaseCreated) {
+                this.newCaseCreated = false;
+                this.$inertia.visit(`${this.$page.props.app.baseUrl}/prototypes/AcuteHDCaseEdit`);
+            }
         },
         searchAn () {
             this.busy = true;
@@ -261,9 +266,8 @@ export default {
                 });
         },
         createNewCase () {
+            this.newCaseCreated = true;
             this.$refs.modal.close();
-            // wait for modal backdrop removed
-            setTimeout(() => this.$inertia.visit(`${this.$page.props.app.baseUrl}/prototypes/AcuteHDCaseEdit`), 200);
         }
     }
 };

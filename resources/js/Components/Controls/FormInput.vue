@@ -48,7 +48,7 @@
             :readonly="readonly"
             :value="modelValue"
             class="form-input"
-            :class="{ 'border-red-400': errors.length }"
+            :class="{ 'border-red-400 text-red-400': errors.length }"
         >
         <div
             v-if="errors.length"

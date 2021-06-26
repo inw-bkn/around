@@ -21,7 +21,7 @@
                 :readonly="readonly"
                 :value="modelValue"
                 class="form-input border-r-0 rounded-r-none"
-                :class="{ 'border-red-400': errors.length }"
+                :class="{ 'border-red-400': error }"
             >
             <div class="w-auto flex items-center px-2 border-2 border-gray-200 rounded shadow-sm border-l-0 rounded-l-none bg-gray-50">
                 <label class="inline-flex items-center">
@@ -48,13 +48,13 @@
             :readonly="readonly"
             :value="modelValue"
             class="form-input"
-            :class="{ 'border-red-400 text-red-400': errors.length }"
+            :class="{ 'border-red-400 text-red-400': error }"
         >
         <div
-            v-if="errors.length"
+            v-if="error"
             class="text-red-700 mt-2 text-sm"
         >
-            {{ errors[0] }}
+            {{ error }}
         </div>
     </div>
 </template>
@@ -63,7 +63,7 @@
 export default {
     emits: ['autosave', 'update:modelValue', 'update:modelCheckbox'],
     props: {
-        modelValue: { type: String, required: true },
+        modelValue: { type: String, default: '' },
         modelCheckbox: { type: Boolean },
         name: { type: String, required: true },
         label: { type: String, default: '' },
@@ -71,7 +71,7 @@ export default {
         placeholder: { type: String, default: '' },
         pattern: { type: String, default: '' },
         readonly: { type: Boolean },
-        errors: { type: Array, default: () => [] },
+        error: { type: String, default: '' },
         switchLabel: { type: String, default: '' }
     },
     methods: {

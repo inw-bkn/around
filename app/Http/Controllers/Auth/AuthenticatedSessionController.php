@@ -30,19 +30,6 @@ class AuthenticatedSessionController extends Controller
             'password' => 'required|string',
         ]);
 
-        if (filter_var(Request::input('login'), FILTER_VALIDATE_EMAIL)) {
-            $credentials = Request::only('login', 'password');
-            if (Auth::attempt($credentials)) {
-                Request::session()->regenerate();
-
-                return Redirect::intended(Auth::user()->home_page);
-            }
-
-            return back()->withErrors([
-                'login' => __('auth.failed'),
-            ]);
-        }
-
         $data = $api->authenticate(Request::input('login'), Request::input('password'));
 
         if (! $data['found']) {
@@ -51,20 +38,16 @@ class AuthenticatedSessionController extends Controller
             ]);
         }
 
-        $user = User::where('login', Request::input('login')) // incase of database config to case sensitive 🤫
-                    ->orWhere('login', ucfirst(Request::input('login')))
-                    ->orWhere('login', strtolower(Request::input('login')))
-                    ->orWhere('login', ucfirst(strtolower(Request::input('login'))))
-                    ->first();
-        if (! $user) {
-            Session::put('profile', $data);
+        $user = User::whereLogin(Request::input('login'))->first();
+        if ($user = User::whereLogin(Request::input('login'))->first()) {
+            Auth::login($user);
 
-            return Redirect::route('register');
+            return Redirect::intended(route($user->home_page));
         }
 
-        Auth::login($user);
+        Session::put('profile', $data);
 
-        return Redirect::intended($user->home_page);
+        return Redirect::route('register');
     }
 
     public function destroy()

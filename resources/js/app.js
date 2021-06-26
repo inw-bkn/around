@@ -15,10 +15,11 @@ InertiaProgress.init({
 
 createInertiaApp({
     // resolve: name => require(`./Pages/${name}`), single file
-    resolve: name => import(`./Pages/${name}`), // split code:  extra request
+    resolve: name => import(`./Pages/${name}`), // split code: use extra request
     setup({ el, app, props, plugin }) {
         createApp({ render: () => h(app, props) })
             .use(plugin)
+            .mixin({ methods: { route: window.route } }) // enable route() on template
             .mount(el);
     },
 });

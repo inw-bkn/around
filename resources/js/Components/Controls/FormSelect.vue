@@ -71,7 +71,7 @@
 export default {
     emits: ['update:modelValue', 'autosave'],
     props: {
-        modelValue: { type: String, required: true },
+        modelValue: { type: String, default: '' },
         options: { type: Array, required: true },
         name: { type: String, required: true },
         label: { type: String, default: '' },
@@ -100,6 +100,12 @@ export default {
         change () {
             this.$emit('update:modelValue', this.$refs.input.value);
             this.$emit('autosave');
+        },
+        setOther (val) {
+            this.$nextTick(() => {
+                this.$refs.input.value = val;
+                this.change();
+            });
         }
     }
 };

@@ -43,8 +43,8 @@ class ToothpasteAPI implements PatientAPI, AuthenticationAPI
             'org_id' => $data['org_id'],
             'tel_no' => $data['tel_no'] ?? null,
             'document_id' => null,
-            'org_division_name' => $data['division_name'],
-            'org_position_title' => $data['position_name'],
+            'org_division_name' => $data['division_name'] ?? null,
+            'org_position_title' => $data['position_name'] ?? null,
             'remark' => $data['remark'],
             'password_expires_in_days' => $data['password_expires_in_days'],
         ];

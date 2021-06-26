@@ -41,7 +41,7 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'app' => [
-                'baseUrl' => url(''),
+                // 'baseUrl' => url(''),
                 // 'photoPath' => config('app.PHOTO_PATH'),
                 // 'session_lifetime' => ((int) Config::get('session.lifetime') * 60), // in seconds
             ],

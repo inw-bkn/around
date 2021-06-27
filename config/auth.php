@@ -38,7 +38,7 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => env('USER_PROVIDER', 'users'),
         ],
 
         'api' => [
@@ -71,10 +71,9 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'avatars' => [
+            'driver' => 'avatars',
+        ],
     ],
 
     /*
@@ -113,5 +112,10 @@ return [
     */
 
     'password_timeout' => 10800,
+
+    'avatars' => [
+        'url' => env('AVARTAR_USER_PROVIDER_URL'),
+        'token' => env('AVARTAR_USER_PROVIDER_TOKEN'),
+    ]
 
 ];

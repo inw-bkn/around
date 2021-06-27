@@ -44,7 +44,7 @@
                         <template #default>
                             <div class="flex items-center cursor-pointer select-none group">
                                 <div class="group-hover:text-bitter-theme-light focus:text-bitter-theme-light mr-1 whitespace-no-wrap">
-                                    <span>{{ $page.props.user.name }}</span>
+                                    <span>{{ $page.props.auth.user.name }}</span>
                                 </div>
                                 <icon
                                     class="w-4 h-4 group-hover:text-bitter-theme-light focus:text-bitter-theme-light"
@@ -84,7 +84,7 @@
                             class="flex flex-col text-center justify-center"
                             @click="mobileMenuVisible = false"
                         >
-                            <span class="inline-block py-1 text-white">{{ $page.props.user.name }}</span>
+                            <span class="inline-block py-1 text-white">{{ $page.props.auth.user.name }}</span>
                             <InertiaLink
                                 class="block py-1"
                                 :href="route('preferences')"

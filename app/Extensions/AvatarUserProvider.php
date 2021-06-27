@@ -2,16 +2,22 @@
 
 namespace App\Extensions;
 
+use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 
 class AvatarUserProvider implements UserProvider
 {
-    private $providerConfig;
+    private $providerUrl;
+    private $providerToken;
 
     public function __construct(array $config)
     {
-        $this->providerConfig = $config;
+        $this->providerUrl = $config['url'];
+        $this->providerToken = $config['token'];
     }
 
     public function retrieveById($identifier)
@@ -22,6 +28,14 @@ class AvatarUserProvider implements UserProvider
          * The Authenticatable implementation matching the ID
          * should be retrieved and returned by the method.
          */
+        $response = Http::withToken($identifier)->get($this->providerUrl.'/api/user');
+        $user = $response->json() ?? ['found' => false];
+        if (! ($response->ok() && $user['found'])) {
+            throw new Exception('provider service not available');
+        }
+        $user['avatar_token'] = $identifier;
+
+        return new AvatarUser($user);
     }
 
     public function retrieveByToken($identifier, $token)
@@ -44,6 +58,16 @@ class AvatarUserProvider implements UserProvider
          * This method should not attempt to do any password
          * validation or authentication.
          */
+        $response = Http::withHeaders(['token' => $this->providerToken])
+                        ->post($this->providerUrl.'/api/avatar-user', $credentials);
+        $user = $response->json() ?? ['found' => false];
+        if (! ($response->ok() && $user['found'])) {
+            return null;
+        }
+
+        $user['password'] = Hash::make($credentials['password']);
+
+        return new AvatarUser($user);
     }
 
     public function validateCredentials(Authenticatable $user, array $credentials)
@@ -55,5 +79,12 @@ class AvatarUserProvider implements UserProvider
          * the value of $credentials['password']. This method should return
          * true or false indicating whether the password is valid.
          */
+
+        if (! Hash::check($credentials['password'], $user->getAuthPassword())) {
+            return false;
+        }
+        Auth::login($user);
+
+        return true;
     }
 }

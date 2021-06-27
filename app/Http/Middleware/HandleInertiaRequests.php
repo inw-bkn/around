@@ -54,6 +54,9 @@ class HandleInertiaRequests extends Middleware
                     'title' => $request->session()->get('page-title', 'MISSING'),
                 ];
             },
+            'auth.user' => fn () => $request->user()
+                ? $request->user()
+                : null,
             'user' => function () {
                 // if (! Auth::user()) {
                 //     return;

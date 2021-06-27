@@ -30,6 +30,10 @@ class AuthenticatedSessionController extends Controller
             'password' => 'required|string',
         ]);
 
+        if (config('auth.guards.web.provider') === 'avatars') {
+            return $this->storeAvatarUser();
+        }
+
         $data = $api->authenticate(Request::input('login'), Request::input('password'));
 
         if (! $data['found']) {
@@ -59,5 +63,16 @@ class AuthenticatedSessionController extends Controller
         Request::session()->regenerateToken();
 
         return Redirect::route('login');
+    }
+
+    protected function storeAvatarUser()
+    {
+        if (Auth::attempt(Request::only(['login', 'password']), )) {
+            return Redirect::intended(route(Auth::user()->home_page));
+        }
+
+        return back()->withErrors([
+            'login' => __('auth.failed'),
+        ]);
     }
 }

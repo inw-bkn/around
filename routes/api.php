@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AvatarUsersController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,8 +13,8 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('/avatar-user', AvatarUsersController::class);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// auth
+Route::post('/avatar-user', [AvatarUsersController::class, 'store']);
+Route::get('/user', [AvatarUsersController::class, 'show'])
+     ->middleware('auth:sanctum');

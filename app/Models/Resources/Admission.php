@@ -29,9 +29,9 @@ class Admission extends Model
         return $this->belongsTo(Patient::class);
     }
 
-    public function referCase()
+    public function place()
     {
-        return $this->hasOne(ReferCase::class);
+        return $this->belongsTo('App\Models\Resources\Ward', 'ward_id', 'id');
     }
 
     public function getPatientAgeAtEncounterAttribute()
@@ -54,24 +54,9 @@ class Admission extends Model
         return 'MO';
     }
 
-    public function getPageTitleAttribute()
+    public function getPatientAgeAtEncounterTextAttribute()
     {
-        return implode(' ', [
-            'HN',
-            $this->patient->hn,
-            $this->patient->profile['first_name'],
-            ucwords($this->meta['type']),
-            $this->encountered_at->tz(Auth::user() ? Auth::user()->timezone : 'UTC')->format('d M Y'),
-        ]);
-    }
-
-    public function getPageTitleShortAttribute()
-    {
-        return implode(' ', [
-            'HN',
-            $this->patient->hn,
-            $this->patient->profile['first_name'],
-        ]);
+        return $this->patient_age_at_encounter.' '.$this->patient_age_at_encounter_unit;
     }
 
     public function getLengthOfStayAttribute()
@@ -97,12 +82,22 @@ class Admission extends Model
         return 0;
     }
 
-    public function encounteredAtRelativeToNow()
+    public function getEncounteredAtTextAttribute()
+    {
+        return $this->encountered_at->tz(Auth::user() ? Auth::user()->timezone : 'UTC')->format('d M Y H:i');
+    }
+
+    public function getEncounteredAtForHumansAttribute()
     {
         if (! $this->encountered_at) {
             return null;
         }
 
         return $this->encountered_at->longRelativeToNowDiffForHumans();
+    }
+
+    public function getPlaceNameAttribute()
+    {
+        return $this->place->name;
     }
 }

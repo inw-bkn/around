@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+var LiveReloadPlugin = require('webpack-livereload-plugin');
 
 mix.js('resources/js/app.js', 'public/js')
     .vue({ version: 3, runtimeOnly: true })
@@ -12,7 +13,8 @@ mix.js('resources/js/app.js', 'public/js')
                 new webpack.DefinePlugin({
                     '__VUE_OPTIONS_API__': true,
                     '__VUE_PROD_DEVTOOLS__': false
-                })
+                }),
+                new LiveReloadPlugin()
             ],
             output: { // use split code
                 chunkFilename: 'js/[name].js?id=[chunkhash]',
@@ -20,4 +22,5 @@ mix.js('resources/js/app.js', 'public/js')
         };
     })
     .sourceMaps(false)
-    .version();
+    .version()
+    .disableSuccessNotifications();

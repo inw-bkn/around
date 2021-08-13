@@ -97,7 +97,7 @@
                             <Link
                                 class="block py-1"
                                 :href="route('logout')"
-                                method="post"
+                                method="delete"
                                 as="button"
                                 type="button"
                             >

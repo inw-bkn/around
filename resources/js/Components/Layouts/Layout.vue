@@ -1,4 +1,7 @@
 <template>
+    <Head>
+        <title>{{ $page.props.flash.title }}</title>
+    </Head>
     <div>
         <!-- main contailner, flex makes its childs extend full h -->
         <div class="md:h-screen md:flex md:flex-col">
@@ -7,12 +10,12 @@
                 <!-- left navbar on desktop and full bar on mobile -->
                 <div class="bg-dark-theme-light text-white md:flex-shrink-0 md:w-56 xl:w-64 px-4 py-2 flex items-center justify-between md:justify-center">
                     <!-- the logo -->
-                    <inertia-link
+                    <Link
                         class=" inline-block"
-                        :href="`${$page.props.app.baseUrl}/home`"
+                        :href="route('home')"
                     >
                         <span class="font-lobster font-bold text-lg md:text-4xl">@round.</span>
-                    </inertia-link>
+                    </Link>
                     <!-- title display on mobile -->
                     <div class="text-soft-theme-light text-sm md:hidden">
                         {{ $page.props.flash.title }}
@@ -40,38 +43,38 @@
                         {{ $page.props.flash.title }}
                     </div>
                     <!-- username and menu -->
-                    <dropdown>
+                    <Dropdown>
                         <template #default>
-                            <div class="flex items-center cursor-pointer select-none group">
-                                <div class="group-hover:text-bitter-theme-light focus:text-bitter-theme-light mr-1 whitespace-no-wrap">
-                                    <span>{{ $page.props.user.name }}</span>
+                            <div class="cursor-pointer select-none group">
+                                <div class="flex items-center group-hover:text-bitter-theme-light focus:text-bitter-theme-light mr-1 whitespace-no-wrap transition-colors duration-200 ease-out">
+                                    {{ $page.props.auth.user.name }}
+                                    <icon
+                                        class="w-4 h-4 ml-1"
+                                        name="chevron-circle-down"
+                                    />
                                 </div>
-                                <icon
-                                    class="w-4 h-4 group-hover:text-bitter-theme-light focus:text-bitter-theme-light"
-                                    name="double-down"
-                                />
                             </div>
                         </template>
                         <template #dropdown>
                             <div class="mt-2 py-2 shadow-xl bg-thick-theme-light text-white cursor-pointer rounded text-sm">
-                                <inertia-link
+                                <Link
                                     class="block px-6 py-2 hover:bg-dark-theme-light hover:text-soft-theme-light"
-                                    :href="`${$page.props.app.baseUrl}/preferences`"
+                                    :href="route('preferences')"
                                 >
                                     Preferences
-                                </inertia-link>
-                                <inertia-link
+                                </Link>
+                                <Link
                                     class="w-full font-semibold text-left px-6 py-2 hover:bg-dark-theme-light hover:text-soft-theme-light"
-                                    :href="`${$page.props.app.baseUrl}/logout`"
-                                    method="post"
+                                    :href="route('logout')"
+                                    method="delete"
                                     as="button"
                                     type="button"
                                 >
                                     Logout
-                                </inertia-link>
+                                </Link>
                             </div>
                         </template>
-                    </dropdown>
+                    </Dropdown>
                 </div>
                 <!-- menu on mobile -->
                 <div
@@ -84,27 +87,26 @@
                             class="flex flex-col text-center justify-center"
                             @click="mobileMenuVisible = false"
                         >
-                            <span class="inline-block py-1 text-white">{{ $page.props.user.name }}</span>
-                            <inertia-link
+                            <span class="inline-block py-1 text-white">{{ $page.props.auth.user.name }}</span>
+                            <Link
                                 class="block py-1"
-                                :href="`${$page.props.app.baseUrl}/preferences`"
+                                :href="route('preferences')"
                             >
                                 Preferences
-                            </inertia-link>
-                            <inertia-link
+                            </Link>
+                            <Link
                                 class="block py-1"
-                                :href="`${$page.props.app.baseUrl}/logout`"
+                                :href="route('logout')"
                                 method="post"
                                 as="button"
                                 type="button"
                             >
                                 Logout
-                            </inertia-link>
+                            </Link>
                         </div>
                         <hr class="my-4">
-                        <main-menu
+                        <MainMenu
                             @click="mobileMenuVisible = false"
-                            :url="url()"
                         />
                     </div>
                 </div>
@@ -112,8 +114,7 @@
             <!-- this is content -->
             <div class="md:flex md:flex-grow md:overflow-hidden">
                 <!-- this is sidebar menu on desktop -->
-                <main-menu
-                    :url="url()"
+                <MainMenu
                     class="hidden md:block bg-thick-theme-light flex-shrink-0 w-56 xl:w-64 py-12 px-6 overflow-y-auto"
                 />
                 <!-- this is main page -->
@@ -133,49 +134,19 @@
 import Dropdown from '@/Components/Helpers/Dropdown.vue';
 import Icon from '@/Components/Helpers/Icon.vue';
 import MainMenu from '@/Components/Helpers/MainMenu.vue';
-import { onMounted } from 'vue';
+import { useCheckSessionTimeout } from '@/Functions/useCheckSessionTimeout';
+import { ref } from 'vue';
+import { Head, Link } from '@inertiajs/inertia-vue3';
 export default {
-    components: {
-        Dropdown,
-        Icon,
-        MainMenu
-    },
-    watch: {
-        '$page.props.flash': {
-            immediate: true,
-            deep: true,
-            handler() { document.title = this.$page.props.flash.title; }
-        },
-    },
-    data () {
-        return {
-            mobileMenuVisible: false
-        };
-    },
+    components: { Dropdown, Icon, MainMenu, Head, Link },
     setup () {
-        var lastTimeCheckSessionTimeout = Date.now();
-        const endpoint = document.querySelector('meta[name=base-url]').content + '/session-timeout';
-        const sessionLifetimeSeconds = parseInt(document.querySelector('meta[name=session-lifetime-seconds]').content);
-        window.addEventListener('focus', () => {
-            let timeDiff = Date.now() - lastTimeCheckSessionTimeout;
-            if ( (timeDiff) > (sessionLifetimeSeconds) ) {
-                axios.post(endpoint)
-                    .then(() => lastTimeCheckSessionTimeout = Date.now())
-                    .catch(() => location.reload());
-            }
-        });
+        const mobileMenuVisible = ref(false);
 
-        onMounted (() => {
-            const pageLoadingIndicator = document.getElementById('page-loading-indicator');
-            if (pageLoadingIndicator) {
-                pageLoadingIndicator.remove();
-            }
-        });
-    },
-    methods: {
-        url() {
-            return location.pathname.substr(1);
-        },
+        useCheckSessionTimeout();
+
+        return {
+            mobileMenuVisible,
+        };
     }
 };
 </script>

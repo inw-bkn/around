@@ -1,65 +1,82 @@
 <?php
 
-use Illuminate\Support\Facades\Redirect;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PagesController;
+use App\Http\Controllers\PreferencesController;
+use App\Http\Controllers\Resources\APIs\AcuteHemodialysisSlotAvailableController;
+use App\Http\Controllers\Resources\APIs\AdmissionsController;
+use App\Http\Controllers\Resources\APIs\WardsController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+// Auth
+Route::get('login', [AuthenticatedSessionController::class, 'create'])
+     ->middleware('guest')
+     ->name('login');
+Route::post('login', [AuthenticatedSessionController::class, 'store'])
+     ->middleware('guest')
+     ->name('login.store');
+Route::post('check-timeout', [AuthenticatedSessionController::class, 'update'])
+     ->name('check-timeout');
+Route::delete('logout', [AuthenticatedSessionController::class, 'destroy'])
+     ->middleware('auth')
+     ->name('logout');
 
-Route::get('/', function () {
-    return Inertia::render('Welcome');
+// Register
+Route::get('register', [RegisteredUserController::class, 'create'])
+     ->middleware('guest')
+     ->name('register');
+Route::post('register', [RegisteredUserController::class, 'store'])
+     ->middleware('guest')
+     ->name('register.store');
+
+// pages
+Route::get('terms-and-policies', [PagesController::class, 'terms'])
+     ->name('terms');
+
+// home
+Route::get('/', HomeController::class)
+     ->middleware('auth')
+     ->name('home');
+Route::get('preferences', PreferencesController::class)
+     ->middleware('auth')
+     ->name('preferences');
+
+// resurces
+Route::middleware('auth')->name('resources.api.')->group(function () {
+    Route::get('admissions/{an}', AdmissionsController::class)
+         ->name('admissions.show');
+    Route::get('wards', WardsController::class)
+         ->name('wards');
+    Route::get('acute-hemodialysis-slot-available/{dateNote}', AcuteHemodialysisSlotAvailableController::class)
+         ->name('acute-hemodialysis-slot-available');
 });
 
-Route::get('/prototypes/{page}', function ($page) {
-    switch ($page) {
-        case 'AcuteHDReservation':
-            $title = 'Acute HD Order / Mr. Ronald Duck';
-            break;
+// patients
+Route::get('patients', function () {
+    return 'patients';
+})->middleware('auth')->name('patients');
 
-        default:
-            $title = $page;
-            break;
-    }
+Route::get('clinics', function () {
+    return 'clinics';
+})->middleware('auth')->name('clinics');
 
-    request()->session()->flash('page-title', $title);
+require __DIR__.'/procedures.php';
 
-    return Inertia::render('Prototypes/'.$page);
-});
+// Route::get('/prototypes/{page}', function ($page) {
+//     switch ($page) {
+//         case 'AcuteHDReservation':
+//             $title = 'Acute HD Order / Mr. Ronald Duck';
+//             break;
 
-Route::get('/home', function () {
-    return Redirect::to('/prototypes/Home');
-});
+//         default:
+//             $title = $page;
+//             break;
+//     }
 
-Route::post('/logout', function () {
-    return Redirect::to('/');
-});
+//     request()->session()->flash('page-title', $title);
 
-Route::get('/preferences', function () {
-    return Redirect::to('/prototypes/Preferences');
-});
-
-Route::post('/session-timeout', function () {
-    return ['active' => true];
-});
-
-Route::post('/admissions', function () {
-    sleep(2);
-    $gender = rand() >= 7.5 ? 'male' : 'female';
-    $faker = Faker\Factory::create();
-
-    return [
-        'hn' => ((int) request()->an) - 7777777,
-        'name' => ($gender == 'female' ? $faker->firstNameFemale : $faker->firstNameMale).' '.$faker->lastName,
-        'gender' => $gender,
-        'age' => $faker->numberBetween(20, 100).' Yo',
-    ];
-});
+//     return Inertia::render('Prototypes/'.$page);
+// });

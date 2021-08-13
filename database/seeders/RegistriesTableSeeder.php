@@ -19,8 +19,9 @@ class RegistriesTableSeeder extends Seeder
 
         Registry::insert([
             [
-                'name' => 'Acute Hemodialysis',
-                'name_eng' => 'Acute Hemodialysis',
+                'name' => 'acute_hd',
+                'label' => 'Acute Hemodialysis',
+                'label_eng' => 'Acute Hemodialysis',
                 'route' => 'procedures.acute-hemodialysis.',
                 'division_id' => Division::whereNameEngShort('nephrology')->first()->id,
                 'created_at' => $datetime,

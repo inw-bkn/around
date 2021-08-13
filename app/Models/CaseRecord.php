@@ -10,6 +10,8 @@ class CaseRecord extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     protected $casts = [
         'form' => 'array',
     ];
@@ -17,5 +19,10 @@ class CaseRecord extends Model
     public function patient()
     {
         return $this->belongsTo(Patient::class);
+    }
+
+    public function notes()
+    {
+        return $this->hasMany(Note::class);
     }
 }

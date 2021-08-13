@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PagesController;
-use App\Http\Controllers\UsersController;
-use Illuminate\Support\Facades\Redirect;
+use App\Http\Controllers\PreferencesController;
+use App\Http\Controllers\Resources\APIs\AcuteHemodialysisSlotAvailableController;
+use App\Http\Controllers\Resources\APIs\AdmissionsController;
+use App\Http\Controllers\Resources\APIs\WardsController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -16,6 +18,8 @@ Route::get('login', [AuthenticatedSessionController::class, 'create'])
 Route::post('login', [AuthenticatedSessionController::class, 'store'])
      ->middleware('guest')
      ->name('login.store');
+Route::post('check-timeout', [AuthenticatedSessionController::class, 'update'])
+     ->name('check-timeout');
 Route::delete('logout', [AuthenticatedSessionController::class, 'destroy'])
      ->middleware('auth')
      ->name('logout');
@@ -32,49 +36,47 @@ Route::post('register', [RegisteredUserController::class, 'store'])
 Route::get('terms-and-policies', [PagesController::class, 'terms'])
      ->name('terms');
 
-// user
-Route::get('/', [UsersController::class, 'home'])
+// home
+Route::get('/', HomeController::class)
      ->middleware('auth')
      ->name('home');
-Route::get('preferences', [UsersController::class, 'preferences'])
+Route::get('preferences', PreferencesController::class)
      ->middleware('auth')
      ->name('preferences');
-Route::post('/check-timeout', [UsersController::class, 'checkTimeout'])
-     ->name('check-timeout');
 
-// Route::get('/', DashboardController::class)
-//      ->middleware('auth')
-//      ->name('home');
-
-Route::get('/prototypes/{page}', function ($page) {
-    switch ($page) {
-        case 'AcuteHDReservation':
-            $title = 'Acute HD Order / Mr. Ronald Duck';
-            break;
-
-        default:
-            $title = $page;
-            break;
-    }
-
-    request()->session()->flash('page-title', $title);
-
-    return Inertia::render('Prototypes/'.$page);
+// resurces
+Route::middleware('auth')->name('resources.api.')->group(function () {
+    Route::get('admissions/{an}', AdmissionsController::class)
+         ->name('admissions.show');
+    Route::get('wards', WardsController::class)
+         ->name('wards');
+    Route::get('acute-hemodialysis-slot-available/{dateNote}', AcuteHemodialysisSlotAvailableController::class)
+         ->name('acute-hemodialysis-slot-available');
 });
 
-// Route::get('/preferences', function () {
-//     return Redirect::to('/prototypes/Preferences');
+// patients
+Route::get('patients', function () {
+    return 'patients';
+})->middleware('auth')->name('patients');
+
+Route::get('clinics', function () {
+    return 'clinics';
+})->middleware('auth')->name('clinics');
+
+require __DIR__.'/procedures.php';
+
+// Route::get('/prototypes/{page}', function ($page) {
+//     switch ($page) {
+//         case 'AcuteHDReservation':
+//             $title = 'Acute HD Order / Mr. Ronald Duck';
+//             break;
+
+//         default:
+//             $title = $page;
+//             break;
+//     }
+
+//     request()->session()->flash('page-title', $title);
+
+//     return Inertia::render('Prototypes/'.$page);
 // });
-
-Route::post('/admissions', function () {
-    sleep(2);
-    $gender = rand() >= 7.5 ? 'male' : 'female';
-    $faker = Faker\Factory::create();
-
-    return [
-        'hn' => ((int) request()->an) - 7777777,
-        'name' => ($gender == 'female' ? $faker->firstNameFemale : $faker->firstNameMale).' '.$faker->lastName,
-        'gender' => $gender,
-        'age' => $faker->numberBetween(20, 100).' Yo',
-    ];
-});

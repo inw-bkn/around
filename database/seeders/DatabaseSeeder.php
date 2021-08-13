@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             DivisionsTableSeeder::class,
             WardsTableSeeder::class,
             RegistriesTableSeeder::class,
+            NoteTypesTableSeeder::class,
         ]);
     }
 }

@@ -1,7 +1,7 @@
 <template>
-    <InertiaHead>
+    <Head>
         <title>Login</title>
-    </InertiaHead>
+    </Head>
     <div class="flex flex-col justify-center items-center w-full min-h-screen">
         <div class="w-40 h-40 z-10 border-soft-theme-light border-4 rounded-full floating-logo">
             <img
@@ -45,8 +45,9 @@ import FormInput from '@/Components/Controls/FormInput';
 import SpinnerButton from '@/Components/Controls/SpinnerButton';
 import { useCheckSessionTimeout } from '@/Functions/useCheckSessionTimeout';
 import { nextTick, onMounted, ref } from '@vue/runtime-core';
+import { Head } from '@inertiajs/inertia-vue3';
 export default {
-    components: { FormInput, SpinnerButton },
+    components: { FormInput, SpinnerButton, Head },
     setup () {
         useCheckSessionTimeout();
 

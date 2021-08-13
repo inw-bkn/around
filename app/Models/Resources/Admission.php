@@ -19,6 +19,12 @@ class Admission extends Model
         'dismissed_at' => 'datetime',
     ];
 
+    protected $appends = [
+        'encountered_at_text',
+        'dismissed_at_text',
+        'place_name',
+    ];
+
     public function notes()
     {
         return $this->hasMany(Note::class);
@@ -96,8 +102,17 @@ class Admission extends Model
         return $this->encountered_at->longRelativeToNowDiffForHumans();
     }
 
+    public function getDismissedAtTextAttribute()
+    {
+        return $this->dismissed_at
+            ? $this->dismissed_at->tz(Auth::user() ? Auth::user()->timezone : 'UTC')->format('d M Y H:i')
+            : null;
+    }
+
     public function getPlaceNameAttribute()
     {
-        return $this->place->name;
+        return $this->place
+            ? $this->place->name
+            : null;
     }
 }

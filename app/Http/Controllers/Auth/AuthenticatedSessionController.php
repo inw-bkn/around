@@ -54,6 +54,11 @@ class AuthenticatedSessionController extends Controller
         return Redirect::route('register');
     }
 
+    public function update()
+    {
+        return ['active' => true];
+    }
+
     public function destroy()
     {
         Auth::guard('web')->logout();

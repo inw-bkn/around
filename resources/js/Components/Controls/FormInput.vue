@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import { ref } from '@vue/reactivity';
 export default {
     emits: ['autosave', 'update:modelValue', 'update:modelCheckbox'],
     props: {
@@ -74,14 +75,21 @@ export default {
         error: { type: String, default: '' },
         switchLabel: { type: String, default: '' }
     },
-    methods: {
-        focus () {
-            this.$refs.input.focus();
-        },
-        change () {
-            this.$emit('update:modelCheckbox', !this.modelCheckbox);
-            this.$emit('autosave');
-        },
+    setup (props, context) {
+        const input = ref(null);
+        const focus = () => {
+            input.value.focus();
+        };
+        const change = (event) => {
+            context.emit('update:modelCheckbox', event.target.checked);
+            context.emit('autosave');
+        };
+
+        return {
+            input,
+            focus,
+            change,
+        };
     }
 };
 </script>

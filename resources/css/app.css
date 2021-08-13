@@ -4,5 +4,6 @@
 @import 'page';
 @import 'button';
 @import 'form';
+@import 'anime';
 
 @tailwind utilities;

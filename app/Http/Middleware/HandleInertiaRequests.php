@@ -4,8 +4,6 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Session;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -40,49 +38,15 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request)
     {
         return array_merge(parent::share($request), [
-            'app' => [
-                // 'baseUrl' => url(''),
-                // 'photoPath' => config('app.PHOTO_PATH'),
-                // 'session_lifetime' => ((int) Config::get('session.lifetime') * 60), // in seconds
+            'flash' => [
+                'title' => fn () => $request->session()->pull('page-title', 'MISSING'),
+                'messages' => fn () => $request->session()->pull('messages'),
+                'mainMenuLinks' => fn () => $request->session()->pull('main-menu-links', []),
+                'actionMenu' => fn () => $request->session()->pull('action-menu', []),
             ],
-            // 'title' => Session::get('page-title', 'super page'),
-            'flash' => function () use ($request) {
-                return [
-                    // 'success' => Session::get('success'),
-                    // 'error' => Session::get('error'),
-                    // 'data' => Session::get('data'),
-                    'title' => $request->session()->get('page-title', 'MISSING'),
-                ];
-            },
-            'auth.user' => fn () => $request->user()
-                ? $request->user()
+            'auth.user' => fn () => Auth::user()
+                ? Auth::user()
                 : null,
-            'user' => function () {
-                // if (! Auth::user()) {
-                //     return;
-                // }
-                // return [
-                //     'id' => Auth::id(),
-                //     'name' => Auth::user()->name,
-                //     'configs' => [
-                //         'hideRichTextTools' => true,
-                //     ],
-                //     'abilities' => Auth::user()->abilities(),
-                // ];
-                return [
-                    'id' => 1,
-                    'name' => 'username',
-                    'configs' => [
-                        // 'hideRichTextTools' => true,
-                    ],
-                    'mainMenuLinks' => [
-                        ['icon' => 'patient', 'label' => 'Patients', 'route' => 'prototypes/PatientsIndex'],
-                        ['icon' => 'clinic', 'label' => 'Clinics', 'route' => 'prototypes/ClinicsIndex'],
-                        ['icon' => 'procedure', 'label' => 'Procedures', 'route' => 'prototypes/ProceduresIndex'],
-                    ],
-                    // 'abilities' => Auth::user()->abilities(),
-                ];
-            },
         ]);
     }
 }

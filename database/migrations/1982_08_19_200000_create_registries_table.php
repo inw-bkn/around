@@ -16,7 +16,8 @@ class CreateRegistriesTable extends Migration
         Schema::create('registries', function (Blueprint $table) {
             $table->smallIncrements('id');
             $table->string('name')->unique();
-            $table->string('name_eng')->index();
+            $table->string('label')->index();
+            $table->string('label_eng')->index();
             $table->string('route')->index();
             $table->unsignedSmallInteger('division_id')->default(1)->constrained('divisions')->onDelete('cascade');
             $table->softDeletes();

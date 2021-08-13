@@ -357,16 +357,15 @@
                 :reserved-slots="reservedSlots"
                 v-if="order.date_note"
             />
-
-            <SpinnerButton
-                class="block w-full mt-2 lg:mt-0 text-center btn btn-bitter"
-                @click="reserve"
-                :spin="order.processing"
-                :disabled="reserveButtonDisable"
-            >
-                RESERVE
-            </SpinnerButton>
         </div>
+        <SpinnerButton
+            class="block w-full mt-2 lg:mt-0 text-center btn btn-bitter"
+            @click="reserve"
+            :spin="order.processing"
+            :disabled="reserveButtonDisable"
+        >
+            RESERVE
+        </SpinnerButton>
     </div>
     <FormSelectOther
         :placeholder="selectOther.placeholder"

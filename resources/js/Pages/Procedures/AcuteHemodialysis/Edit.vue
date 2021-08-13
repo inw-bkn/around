@@ -328,12 +328,6 @@
         <hr class="my-4 border-b border-bitter-theme-light">
         <div class="lg:grid grid-cols-2 gap-2 lg:gap-6">
             <div class="md:grid grid-cols-2 gap-2 lg:gap-6">
-                <FormSelect
-                    label="patient type"
-                    name="order_patient_type"
-                    v-model="order.patient_type"
-                    :options="['Acute HD', 'Chronic HD']"
-                />
                 <FormAutocomplete
                     label="dialysis at"
                     name="dialysis_at"
@@ -351,6 +345,12 @@
                     name="date_note"
                     v-model="order.date_note"
                     :options="{ enable: configs.availableDates, onDayCreate: onDayCreate, inline: true }"
+                />
+                <FormSelect
+                    label="patient type"
+                    name="order_patient_type"
+                    v-model="order.patient_type"
+                    :options="['Acute HD', 'Chronic HD']"
                 />
             </div>
             <Slots

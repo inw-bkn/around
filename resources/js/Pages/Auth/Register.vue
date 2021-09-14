@@ -65,7 +65,7 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
 import FormCheckbox from '@/Components/Controls/FormCheckbox.vue';
 import FormInput from '@/Components/Controls/FormInput';
@@ -73,55 +73,45 @@ import SpinnerButton from '@/Components/Controls/SpinnerButton';
 import { useCheckSessionTimeout } from '@/Functions/useCheckSessionTimeout';
 import { computed, nextTick, onMounted, ref } from '@vue/runtime-core';
 import { Head } from '@inertiajs/inertia-vue3';
-export default {
-    components: { FormCheckbox, FormInput, SpinnerButton, Head },
-    props: {
-        profile: { type: Object, required: true }
-    },
-    setup (props) {
-        useCheckSessionTimeout();
 
-        const name_input = ref();
-        onMounted(() => {
-            nextTick(() => name_input.value.focus());
-        });
+const props = defineProps({
+    profile: { type: Object, required: true }
+});
 
-        const form = useForm({
-            login: props.profile.username,
-            full_name: props.profile.name,
-            org_id: props.profile.org_id,
-            division: props.profile.org_division_name,
-            position: props.profile.org_position_title,
-            password_expires_in_days: props.profile.password_expires_in_days,
-            remark: props.profile.remark,
-            name: null,
-            tel_no: null,
-            agreement_accepted: false,
-            remember: true
-        });
+useCheckSessionTimeout();
 
-        const formComplete = computed(() =>
-            form.agreement_accepted &&
-            form.name &&
-            form.full_name &&
-            form.tel_no
-        );
+const name_input = ref();
+onMounted(() => {
+    nextTick(() => name_input.value.focus());
+});
 
-        function register () {
-            form.transform(data => ({
-                ...data,
-                remember: data.remember ? 'on' : '',
-            })).post(route('register.store'), {
-                onFinish: () => form.processing = false,
-            });
-        }
+const form = useForm({
+    login: props.profile.username,
+    full_name: props.profile.name,
+    org_id: props.profile.org_id,
+    division: props.profile.org_division_name,
+    position: props.profile.org_position_title,
+    password_expires_in_days: props.profile.password_expires_in_days,
+    remark: props.profile.remark,
+    name: null,
+    tel_no: null,
+    agreement_accepted: false,
+    remember: true
+});
 
-        return {
-            name_input,
-            form,
-            formComplete,
-            register
-        };
-    },
+const formComplete = computed(() =>
+    form.agreement_accepted &&
+    form.name &&
+    form.full_name &&
+    form.tel_no
+);
+
+const register = () => {
+    form.transform(data => ({
+        ...data,
+        remember: data.remember ? 'on' : '',
+    })).post(window.route('register.store'), {
+        onFinish: () => form.processing = false,
+    });
 };
 </script>

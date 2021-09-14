@@ -21,7 +21,7 @@ class ToothpasteAPI implements PatientAPI, AuthenticationAPI
         if (! $data || ! $data['ok']) { // error: $data = null
             return [
                 'found' => false,
-                'message' => __('service.failed'),
+                'message' => ($data['status'] ?? 500) === 400 ? __('auth.failed') : __('service.failed'),
             ];
         }
 
@@ -43,11 +43,32 @@ class ToothpasteAPI implements PatientAPI, AuthenticationAPI
             'org_id' => $data['org_id'],
             'tel_no' => $data['tel_no'] ?? null,
             'document_id' => null,
-            'org_division_name' => $data['division_name'] ?? null,
-            'org_position_title' => $data['position_name'] ?? null,
+            'org_division_name' => $data['division_name'],
+            'org_position_title' => $data['position_name'],
             'remark' => $data['remark'],
             'password_expires_in_days' => $data['password_expires_in_days'],
         ];
+    }
+
+    public function getUserById($id)
+    {
+        $data = $this->brushing($this->pasteLoad('user_by_id', ['org_id' => $id]));
+        if (! $data || ! $data['ok']) { // error: $data = null
+            return [
+                'found' => false,
+                'message' => __('service.failed'),
+            ];
+        }
+
+        if (! isset($data['found']) || ! $data['found']) {
+            $data['message'] = $data['message'] ?? __('auth.failed');
+            unset($data['UserInfo']);
+            unset($data['body']);
+
+            return $data;
+        }
+
+        return $data;
     }
 
     public function getPatient($hn)

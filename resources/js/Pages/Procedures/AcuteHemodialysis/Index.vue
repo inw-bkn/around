@@ -108,43 +108,33 @@
     />
 </template>
 
-<script>
-import Layout from '@/Components/Layouts/Layout';
+<script setup>
 import Icon from '@/Components/Helpers/Icon';
 import Admission from '@/Components/Forms/Admission';
 import SearchIndex from '@/Components/Helpers/SearchIndex';
 import { ref } from '@vue/reactivity';
 import { useForm } from '@inertiajs/inertia-vue3';
 import { Link } from '@inertiajs/inertia-vue3';
-export default {
-    components: { Admission, Icon, SearchIndex, Link },
-    layout: Layout,
-    props: {
-        cases: { type: Object, required: true },
-        filters: { type: Object, required: true },
-    },
-    setup (props) {
-        const admissionForm = ref(null);
-        const newCase = useForm({
-            an: null
-        });
-        const searchForm = useForm({
-            search: props.filters.search,
-            scope: props.filters.scope,
-        });
+const props = defineProps({
+    cases: { type: Object, required: true },
+    filters: { type: Object, required: true },
+});
+const admissionForm = ref(null);
+const newCase = useForm({
+    an: null
+});
+const searchForm = useForm({
+    search: props.filters.search,
+    scope: props.filters.scope,
+});
 
-        const confirmed = (an) => {
-            console.log('yes mm' + an);
-            newCase.an = an;
-            newCase.post(window.route('procedures.acute-hemodialysis.store'));
-        };
-
-        return {
-            admissionForm,
-            newCase,
-            searchForm,
-            confirmed,
-        };
-    },
+const confirmed = (an) => {
+    console.log('yes mm' + an);
+    newCase.an = an;
+    newCase.post(window.route('procedures.acute-hemodialysis.store'));
 };
+</script>
+<script>
+import Layout from '@/Components/Layouts/Layout';
+export default { layout: Layout };
 </script>

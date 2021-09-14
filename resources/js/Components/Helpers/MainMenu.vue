@@ -15,26 +15,28 @@
                         class="w-4 h-4 mr-2 transition-colors duration-200 ease-linear text-soft-theme-light group-hover:text-bitter-theme-light"
                     />
                     <div
-                        class="duration-300 ease-linear text-soft-theme-light group-hover:text-bitter-theme-light"
+                        class="duration-200 ease-linear text-soft-theme-light group-hover:text-bitter-theme-light"
                     >
                         {{ link.label }}
                     </div>
                 </a>
-                <Link
+                <a
                     class="flex items-center group py-2 outline-none truncate"
-                    :href="link.route"
-                    v-else-if="link.route.startsWith('http')"
+                    :href="route(link.route)"
+                    v-else-if="link.use_a_tag"
                 >
                     <Icon
                         :name="link.icon"
-                        class="w-4 h-4 mr-2 transition-colors duration-200 ease-linear text-soft-theme-light group-hover:text-bitter-theme-light"
+                        class="w-4 h-4 mr-2 transition-colors duration-200 ease-linear"
+                        :class="isUrl(route(link.route)) ? 'text-white' : 'text-soft-theme-light group-hover:text-bitter-theme-light'"
                     />
                     <div
-                        class="duration-300 ease-linear text-soft-theme-light group-hover:text-bitter-theme-light"
+                        class="transition-colors duration-200 ease-linear"
+                        :class="isUrl(route(link.route)) ? 'text-white border-b-2' : 'text-soft-theme-light group-hover:text-bitter-theme-light'"
                     >
                         {{ link.label }}
                     </div>
-                </Link>
+                </a>
                 <Link
                     class="flex items-center group py-2 outline-none truncate"
                     :href="route(link.route)"
@@ -43,11 +45,11 @@
                     <Icon
                         :name="link.icon"
                         class="w-4 h-4 mr-2 transition-colors duration-200 ease-linear"
-                        :class="isUrl(route(link.route)) ? 'text-white underline' : 'text-soft-theme-light group-hover:text-bitter-theme-light'"
+                        :class="isUrl(route(link.route)) ? 'text-white' : 'text-soft-theme-light group-hover:text-bitter-theme-light'"
                     />
                     <div
-                        class="duration-300 ease-linear"
-                        :class="isUrl(route(link.route)) ? 'text-white underline' : 'text-soft-theme-light group-hover:text-bitter-theme-light'"
+                        class="transition-colors duration-200 ease-linear"
+                        :class="isUrl(route(link.route)) ? 'text-white border-b-2' : 'text-soft-theme-light group-hover:text-bitter-theme-light'"
                     >
                         {{ link.label }}
                     </div>
@@ -57,19 +59,10 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import Icon from '@/Components/Helpers/Icon.vue';
 import { Link } from '@inertiajs/inertia-vue3';
-export default {
-    components: { Icon, Link },
-    setup () {
-        const isUrl = (url) => {
-            return (location.origin + location.pathname) === url;
-        };
-
-        return {
-            isUrl,
-        };
-    }
+const isUrl = (url) => {
+    return (location.origin + location.pathname) === url;
 };
 </script>

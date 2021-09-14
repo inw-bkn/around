@@ -374,8 +374,7 @@
     />
 </template>
 
-<script>
-import Layout from '@/Components/Layouts/Layout';
+<script setup>
 import FormAutocomplete from '@/Components/Controls/FormAutocomplete';
 import FormSelect from '@/Components/Controls/FormSelect';
 import FormDatetime from '@/Components/Controls/FormDatetime';
@@ -386,168 +385,153 @@ import FormSelectOther from '@/Components/Controls/FormSelectOther';
 import SpinnerButton from '@/Components/Controls/SpinnerButton';
 import Slots from '@/Components/Helpers/AcuteHemodialysis/Slots';
 import Orders from '@/Components/Helpers/AcuteHemodialysis/Orders';
-import { Link, useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/inertia-vue3';
 import { reactive, ref } from '@vue/reactivity';
 import { computed, watch } from '@vue/runtime-core';
 import debounce from 'lodash/debounce';
-export default {
-    components: { FormAutocomplete, FormSelect, FormDatetime, FormInput, FormCheckbox, FormRadio, FormSelectOther, SpinnerButton, Slots, Orders },
-    layout: Layout,
-    props: {
-        caseRecordForm: { type: Object, required: true },
-        orders: { type: Array, required: true },
-        formConfigs: { type: Object, required: true }
-    },
-    setup (props) {
-        const form = useForm({...props.caseRecordForm});
-        const reset = {
-            previous_crrt: true,
-            renal_diagnosis_aki: true,
-            renal_diagnosis_ckd: true
-        };
-        watch (
-            () => form,
-            (val) => {
-                if (!val.previous_crrt && !reset.previous_crrt) {
-                    val.date_start_crrt = null;
-                    val.date_end_crrt = null;
-                    reset.previous_crrt = true;
-                } else if (val.previous_crrt) {
-                    reset.previous_crrt = false;
-                }
 
-                if (!val.renal_diagnosis_aki.check && !reset.renal_diagnosis_aki) {
-                    val.renal_diagnosis_aki.sepsis = false;
-                    val.renal_diagnosis_aki.chf = false;
-                    val.renal_diagnosis_aki.acs = false;
-                    val.renal_diagnosis_aki.other_cardiac_cause = false;
-                    val.renal_diagnosis_aki.glomerulonephritis = false;
-                    val.renal_diagnosis_aki.acute_interstitial_nephritis = false;
-                    val.renal_diagnosis_aki.contrast_induced_nephropathy = false;
-                    val.renal_diagnosis_aki.acute_tubular_necrosis = false;
-                    val.renal_diagnosis_aki.drug_induced_aki = false;
-                    val.renal_diagnosis_aki.other = null;
-                    reset.renal_diagnosis_aki = true;
-                } else if (val.renal_diagnosis_aki.check) {
-                    reset.renal_diagnosis_aki = false;
-                }
+const props = defineProps({
+    caseRecordForm: { type: Object, required: true },
+    orders: { type: Array, required: true },
+    formConfigs: { type: Object, required: true }
+});
 
-                if (!val.renal_diagnosis_ckd.check && !reset.renal_diagnosis_ckd) {
-                    val.renal_diagnosis_ckd.check = false;
-                    val.renal_diagnosis_ckd.dn = false;
-                    val.renal_diagnosis_ckd.ht = false;
-                    val.renal_diagnosis_ckd.glomerular_disease = false;
-                    val.renal_diagnosis_ckd.chronic_tubulointerstitial_nephritis = false;
-                    val.renal_diagnosis_ckd.other = null;
-                } else if (val.renal_diagnosis_ckd.check) {
-                    reset.renal_diagnosis_ckd = false;
-                }
-
-                let data = val.data();
-                delete data.admission;
-                delete data.record;
-                autosave(window.route('procedures.acute-hemodialysis.update', form.record.slug), data);
-            },
-            { deep: true }
-        );
-        const autosave = debounce(function (url, data) {
-            window.axios
-                .patch(url, data)
-                .catch(error => {
-                    console.log(error);
-                });
-        }, 2000);
-
-
-        const order = useForm({
-            dialysis_type: null,
-            dialysis_at: null,
-            date_note: null,
-            case_record_id: form.record.id,
-            patient_id: form.record.patient_id,
-        });
-        const configs = reactive({...props.formConfigs});
-
-        const dateFirstDialysis = ref(props.orders.length ? props.orders[0].date_note : null);
-
-        const insurance = ref(null);
-        if (form.insurance && !configs.insurances.includes(form.insurance)) {
-            configs.insurances.push(form.insurance);
+const form = useForm({...props.caseRecordForm});
+const reset = {
+    previous_crrt: true,
+    renal_diagnosis_aki: true,
+    renal_diagnosis_ckd: true
+};
+watch (
+    () => form,
+    (val) => {
+        if (!val.previous_crrt && !reset.previous_crrt) {
+            val.date_start_crrt = null;
+            val.date_end_crrt = null;
+            reset.previous_crrt = true;
+        } else if (val.previous_crrt) {
+            reset.previous_crrt = false;
         }
-        watch (
-            () => form.insurance,
-            (val) => {
-                if (val !== 'other') {
-                    return;
-                }
 
-                selectOther.placeholder = 'Other Insurance';
-                selectOther.configs = 'insurances';
-                selectOther.input = insurance.value;
-                selectOtherInput.value.open();
-            }
-        );
+        if (!val.renal_diagnosis_aki.check && !reset.renal_diagnosis_aki) {
+            val.renal_diagnosis_aki.sepsis = false;
+            val.renal_diagnosis_aki.chf = false;
+            val.renal_diagnosis_aki.acs = false;
+            val.renal_diagnosis_aki.other_cardiac_cause = false;
+            val.renal_diagnosis_aki.glomerulonephritis = false;
+            val.renal_diagnosis_aki.acute_interstitial_nephritis = false;
+            val.renal_diagnosis_aki.contrast_induced_nephropathy = false;
+            val.renal_diagnosis_aki.acute_tubular_necrosis = false;
+            val.renal_diagnosis_aki.drug_induced_aki = false;
+            val.renal_diagnosis_aki.other = null;
+            reset.renal_diagnosis_aki = true;
+        } else if (val.renal_diagnosis_aki.check) {
+            reset.renal_diagnosis_aki = false;
+        }
 
-        const selectOtherInput = ref(null);
-        const selectOther = reactive({
-            placeholder: '',
-            configs: '',
-            input: '',
+        if (!val.renal_diagnosis_ckd.check && !reset.renal_diagnosis_ckd) {
+            val.renal_diagnosis_ckd.check = false;
+            val.renal_diagnosis_ckd.dn = false;
+            val.renal_diagnosis_ckd.ht = false;
+            val.renal_diagnosis_ckd.glomerular_disease = false;
+            val.renal_diagnosis_ckd.chronic_tubulointerstitial_nephritis = false;
+            val.renal_diagnosis_ckd.other = null;
+        } else if (val.renal_diagnosis_ckd.check) {
+            reset.renal_diagnosis_ckd = false;
+        }
+
+        let data = val.data();
+        delete data.admission;
+        delete data.record;
+        autosave(window.route('procedures.acute-hemodialysis.update', form.record.slug), data);
+    },
+    { deep: true }
+);
+
+const autosave = debounce(function (url, data) {
+    window.axios
+        .patch(url, data)
+        .catch(error => {
+            console.log(error);
         });
-        const selectOtherClosed = (val) => {
-            if (! val) {
-                selectOther.input.setOther('');
-                return;
-            }
+}, 2000);
 
-            configs[selectOther.configs].push(val);
-            selectOther.input.setOther(val);
-        };
+const order = useForm({
+    dialysis_type: null,
+    dialysis_at: null,
+    date_note: null,
+    case_record_id: form.record.id,
+    patient_id: form.record.patient_id,
+});
+const configs = reactive({...props.formConfigs});
 
-        const onDayCreate = (dObj, dStr, fp, dayElem) => {
-            if (!configs.disableDates.length) return;
-            for (let i = 0; i < configs.disableDates.length; i++) {
-                if (dayElem.getAttribute('aria-label') == configs.disableDates[i]) {
-                    dayElem.innerHTML += '<span class="calendar-event busy"></span>';
-                }
-            }
-        };
-        watch (
-            () => order.date_note,
-            (val) => {
-                window.axios
-                    .get(window.route('resources.api.acute-hemodialysis-slot-available', val))
-                    .then(response => {
-                        reservedSlots.value = response.data;
-                    });
-            }
-        );
+const dateFirstDialysis = ref(props.orders.length ? props.orders[0].date_note : null);
 
-        const reservedSlots = ref([]);
-        const reserveButtonDisable = computed(() => {
-            return !order.dialysis_at || !order.date_note || !order.dialysis_type;
-        });
+const insurance = ref(null);
+if (form.insurance && !configs.insurances.includes(form.insurance)) {
+    configs.insurances.push(form.insurance);
+}
+watch (
+    () => form.insurance,
+    (val) => {
+        if (val !== 'other') {
+            return;
+        }
 
-        const reserve = () => {
-            order.post(window.route('procedures.acute-hemodialysis.orders.store'), {
-                onFinish: () => order.processing = false,
-            });
-        };
+        selectOther.placeholder = 'Other Insurance';
+        selectOther.configs = 'insurances';
+        selectOther.input = insurance.value;
+        selectOtherInput.value.open();
+    }
+);
 
-        return {
-            form,
-            order,
-            configs,
-            dateFirstDialysis,
-            insurance,
-            selectOtherInput,
-            selectOther,
-            selectOtherClosed,
-            onDayCreate,
-            reservedSlots,
-            reserve,
-            reserveButtonDisable
-        };
+const selectOtherInput = ref(null);
+const selectOther = reactive({
+    placeholder: '',
+    configs: '',
+    input: '',
+});
+const selectOtherClosed = (val) => {
+    if (! val) {
+        selectOther.input.setOther('');
+        return;
+    }
+
+    configs[selectOther.configs].push(val);
+    selectOther.input.setOther(val);
+};
+
+const onDayCreate = (dObj, dStr, fp, dayElem) => {
+    if (!configs.disableDates.length) return;
+    for (let i = 0; i < configs.disableDates.length; i++) {
+        if (dayElem.getAttribute('aria-label') == configs.disableDates[i]) {
+            dayElem.innerHTML += '<span class="calendar-event busy"></span>';
+        }
     }
 };
+watch (
+    () => order.date_note,
+    (val) => {
+        window.axios
+            .get(window.route('resources.api.acute-hemodialysis-slot-available', val))
+            .then(response => {
+                reservedSlots.value = response.data;
+            });
+    }
+);
+
+const reservedSlots = ref([]);
+const reserveButtonDisable = computed(() => {
+    return !order.dialysis_at || !order.date_note || !order.dialysis_type;
+});
+
+const reserve = () => {
+    order.post(window.route('procedures.acute-hemodialysis.orders.store'), {
+        onFinish: () => order.processing = false,
+    });
+};
+</script>
+<script>
+import Layout from '@/Components/Layouts/Layout';
+export default { layout: Layout };
 </script>

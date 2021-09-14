@@ -39,14 +39,26 @@
                 <!-- right navbar on desktop -->
                 <div class="hidden md:flex w-full font-semibold text-dark-theme-light bg-alt-theme-light border-b sticky top-0 z-30 p-4 md:py-0 md:px-12 justify-between items-center">
                     <!-- title display on desktop -->
-                    <div class="mt-1 mr-4">
-                        {{ $page.props.flash.title }}
+                    <div class="mr-4 w-full flex justify-between items-center">
+                        <div>{{ $page.props.flash.title }}</div>
+                        <div class="text-white">
+                            <button
+                                class="w-6 h-6 rounded-full transition-colors duration-200 ease-in hover:bg-white hover:text-dark-theme-light mr-2"
+                                v-text="'a'"
+                                @click="scaleFont('down')"
+                            />
+                            <button
+                                class="w-6 h-6 rounded-full transition-colors duration-200 ease-in hover:bg-white hover:text-dark-theme-light font-semibold mr-2"
+                                v-text="'A'"
+                                @click="scaleFont('up')"
+                            />
+                        </div>
                     </div>
                     <!-- username and menu -->
                     <Dropdown>
                         <template #default>
                             <div class="cursor-pointer select-none group">
-                                <div class="flex items-center group-hover:text-bitter-theme-light focus:text-bitter-theme-light mr-1 whitespace-no-wrap transition-colors duration-200 ease-out">
+                                <div class="flex items-center group-hover:text-bitter-theme-light focus:text-bitter-theme-light mr-1 whitespace-nowrap transition-colors duration-200 ease-out">
                                     {{ $page.props.auth.user.name }}
                                     <icon
                                         class="w-4 h-4 ml-1"
@@ -114,9 +126,10 @@
             <!-- this is content -->
             <div class="md:flex md:flex-grow md:overflow-hidden">
                 <!-- this is sidebar menu on desktop -->
-                <MainMenu
-                    class="hidden md:block bg-thick-theme-light flex-shrink-0 w-56 xl:w-64 py-12 px-6 overflow-y-auto"
-                />
+                <div class="hidden md:block bg-thick-theme-light flex-shrink-0 w-56 xl:w-64 py-12 px-6 overflow-y-auto">
+                    <MainMenu />
+                    <ActionMenu @action-clicked="actionClicked" />
+                </div>
                 <!-- this is main page -->
                 <div
                     class="w-full p-4 md:overflow-y-auto md:py-12 lg:px-8 xl:px-10"
@@ -130,23 +143,38 @@
     </div>
 </template>
 
-<script>
-import Dropdown from '@/Components/Helpers/Dropdown.vue';
-import Icon from '@/Components/Helpers/Icon.vue';
-import MainMenu from '@/Components/Helpers/MainMenu.vue';
+<script setup>
+import Dropdown from '@/Components/Helpers/Dropdown';
+import Icon from '@/Components/Helpers/Icon';
+import MainMenu from '@/Components/Helpers/MainMenu';
+import ActionMenu from '@/Components/Helpers/ActionMenu';
 import { useCheckSessionTimeout } from '@/Functions/useCheckSessionTimeout';
-import { ref } from 'vue';
-import { Head, Link } from '@inertiajs/inertia-vue3';
-export default {
-    components: { Dropdown, Icon, MainMenu, Head, Link },
-    setup () {
-        const mobileMenuVisible = ref(false);
+import { nextTick, ref } from 'vue';
+import { Head, Link, usePage } from '@inertiajs/inertia-vue3';
+useCheckSessionTimeout();
 
-        useCheckSessionTimeout();
+const mobileMenuVisible = ref(false);
+const actionClicked = (action) => {
+    mobileMenuVisible.value = false;
+    nextTick(() => {
+        setTimeout(() => {
+            usePage().props.value.event.payload = action;
+            usePage().props.value.event.name = 'action-clicked';
+            usePage().props.value.event.fire = + new Date();
+        }, 300); // equal to animate duration
+    });
+};
 
-        return {
-            mobileMenuVisible,
-        };
+let fontScaleIndex = 3;
+let fontScales = [67, 80, 90, 100];
+const scaleFont = (mode) => {
+    fontScaleIndex = mode === 'up' ? (fontScaleIndex+1) : (fontScaleIndex-1);
+    if (fontScaleIndex > (fontScales.length - 1)) {
+        fontScaleIndex = fontScales.length - 1;
+    } else if (fontScaleIndex < 0) {
+        fontScaleIndex = 0;
     }
+
+    document.querySelector('body').style.fontSize = fontScales[fontScaleIndex] + '%';
 };
 </script>

@@ -431,92 +431,80 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import FormCheckbox from '@/Components/Controls/FormCheckbox.vue';
 import FormInput from '@/Components/Controls/FormInput.vue';
 import FormSelect from '@/Components/Controls/FormSelect.vue';
-import Layout from '@/Components/Layouts/Layout.vue';
+// import Layout from '@/Components/Layouts/Layout.vue';
 import Alert from '@/Components/Helpers/Alert.vue';
 import { Link, useForm } from '@inertiajs/inertia-vue3';
 import { reactive } from '@vue/reactivity';
 import debounce from 'lodash/debounce';
 import { watch } from '@vue/runtime-core';
-export default {
-    layout: Layout,
-    props: {
-        orderForm: { type: Object, required: true },
-        formConfigs: { type: Object, required: true },
-    },
-    components: {
-        FormCheckbox,
-        FormInput,
-        FormSelect,
-        Alert,
-        Link,
-    },
-    setup (props) {
-        const form = useForm({...props.orderForm});
-        const reset = {
-            anticoagulant: null
-        };
-        const patchEndpoint = window.route('procedures.acute-hemodialysis.orders.update', form.record.slug);
-        watch (
-            () => form,
-            (val) => {
-                if (val.anticoagulant !== reset.anticoagulant) {
-                    val.anticoagulant_none_drip_via_peripheral_iv = false;
-                    val.anticoagulant_none_nss_200ml_flush_q_hour = false;
-                    val.heparin_loading_dose = null;
-                    val.heparin_maintenance_dose = null;
-                    val.enoxaparin_dose = null;
-                    val.fondaparinux_bolus_dose = null;
-                    val.tinzaparin_dose = null;
-                    val.anticoagulant_other = null;
-                    reset.anticoagulant = val.anticoagulant;
-                }
+const props = defineProps({
+    orderForm: { type: Object, required: true },
+    formConfigs: { type: Object, required: true },
+});
 
-                let data = val.data();
-                delete data.reservation;
-                delete data.record;
-                autosave(patchEndpoint, data);
-            },
-            { deep: true }
-        );
-        const autosave = debounce(function (url, data) {
-            window.axios
-                .patch(url, data)
-                .catch(error => {
-                    console.log(error);
-                });
-        }, 2000);
+const form = useForm({...props.orderForm});
+const reset = {
+    anticoagulant: null
+};
+const patchEndpoint = window.route('procedures.acute-hemodialysis.orders.update', form.record.slug);
 
-        const errors = reactive({
-            heparin_loading_dose: null,
-            heparin_maintenance_dose: null,
-            enoxaparin_dose: null,
-            tinzaparin_dose: null,
-            ultrafiltration: null,
-            glucose_50_percent_iv_volume: null,
+watch (
+    () => form,
+    (val) => {
+        if (val.anticoagulant !== reset.anticoagulant) {
+            val.anticoagulant_none_drip_via_peripheral_iv = false;
+            val.anticoagulant_none_nss_200ml_flush_q_hour = false;
+            val.heparin_loading_dose = null;
+            val.heparin_maintenance_dose = null;
+            val.enoxaparin_dose = null;
+            val.fondaparinux_bolus_dose = null;
+            val.tinzaparin_dose = null;
+            val.anticoagulant_other = null;
+            reset.anticoagulant = val.anticoagulant;
+        }
+
+        let data = val.data();
+        delete data.reservation;
+        delete data.record;
+        autosave(patchEndpoint, data);
+    },
+    { deep: true }
+);
+
+const autosave = debounce(function (url, data) {
+    window.axios
+        .patch(url, data)
+        .catch(error => {
+            console.log(error);
         });
-        const validate = (fieldname) => {
-            let validator = configs.validators.filter((rule) => rule.name === fieldname)[0];
-            const value = validator.type == 'integer' ? parseInt(form[fieldname]) :  parseFloat(form[fieldname]);
-            if (value < validator.min || value > validator.max) {
-                errors[fieldname] = `${form[fieldname]} could not be saved. Accept range [${validator.min}, ${validator.max}].`;
-                setTimeout(() => form[fieldname] = null, 1500);
-            } else {
-                errors[fieldname] = '';
-            }
-        };
+}, 2000);
 
-        const configs = reactive({...props.formConfigs});
-
-        return {
-            form,
-            errors,
-            validate,
-            configs,
-        };
+const errors = reactive({
+    heparin_loading_dose: null,
+    heparin_maintenance_dose: null,
+    enoxaparin_dose: null,
+    tinzaparin_dose: null,
+    ultrafiltration: null,
+    glucose_50_percent_iv_volume: null,
+});
+const validate = (fieldname) => {
+    let validator = configs.validators.filter((rule) => rule.name === fieldname)[0];
+    const value = validator.type == 'integer' ? parseInt(form[fieldname]) :  parseFloat(form[fieldname]);
+    if (value < validator.min || value > validator.max) {
+        errors[fieldname] = `${form[fieldname]} could not be saved. Accept range [${validator.min}, ${validator.max}].`;
+        setTimeout(() => form[fieldname] = null, 1500);
+    } else {
+        errors[fieldname] = '';
     }
 };
+
+const configs = reactive({...props.formConfigs});
+</script>
+<script>
+import Layout from '@/Components/Layouts/Layout';
+export default { layout: Layout };
 </script>

@@ -39,6 +39,19 @@
                 </a>
                 <Link
                     class="flex items-center group py-2 outline-none truncate"
+                    :href="link.route"
+                    v-else-if="link.route.startsWith('http')"
+                >
+                    <Icon
+                        :name="link.icon"
+                        class="w-4 h-4 mr-2 transition-colors duration-200 ease-linear text-soft-theme-light group-hover:text-bitter-theme-ligh"
+                    />
+                    <div class="transition-colors duration-200 ease-linear text-soft-theme-light group-hover:text-bitter-theme-light">
+                        {{ link.label }}
+                    </div>
+                </Link>
+                <Link
+                    class="flex items-center group py-2 outline-none truncate"
                     :href="route(link.route)"
                     v-else
                 >

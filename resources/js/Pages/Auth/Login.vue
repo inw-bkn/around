@@ -39,46 +39,33 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
 import FormInput from '@/Components/Controls/FormInput';
 import SpinnerButton from '@/Components/Controls/SpinnerButton';
 import { useCheckSessionTimeout } from '@/Functions/useCheckSessionTimeout';
 import { nextTick, onMounted, ref } from '@vue/runtime-core';
 import { Head } from '@inertiajs/inertia-vue3';
-export default {
-    components: { FormInput, SpinnerButton, Head },
-    setup () {
-        useCheckSessionTimeout();
+useCheckSessionTimeout();
+const login_input = ref(null);
+onMounted(() => {
+    nextTick(() => login_input.value.focus());
+});
+const form = useForm({
+    login: null,
+    password: null,
+    remember: true
+});
 
-        const login_input = ref(null);
-        onMounted(() => {
-            nextTick(() => login_input.value.focus());
-        });
-
-        const form = useForm({
-            login: null,
-            password: null,
-            remember: true
-        });
-
-        function login() {
-            form.transform(data => ({
-                login: data.login.toLowerCase(),
-                password: data.password,
-                remember: data.remember ? 'on' : '',
-            })).post(route('login.store'), {
-                replace: true,
-                onFinish: () => form.processing = false,
-            });
-        }
-
-        return {
-            login_input,
-            form,
-            login,
-        };
-    }
+const login = () => {
+    form.transform(data => ({
+        login: data.login.toLowerCase(),
+        password: data.password,
+        remember: data.remember ? 'on' : '',
+    })).post(window.route('login.store'), {
+        replace: true,
+        onFinish: () => form.processing = false,
+    });
 };
 </script>
 

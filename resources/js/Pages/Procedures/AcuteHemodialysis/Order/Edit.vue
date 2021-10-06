@@ -137,7 +137,7 @@
                         placeholder="[0, 1500] IU/Hour"
                     />
                 </div>
-                <alert
+                <Alert
                     title="Duration of maintenance (hours)"
                     message="DLC/PC uses duration of dialysis. AVF/AVG uses duration of dialysis - 1."
                 />
@@ -432,11 +432,10 @@
 </template>
 
 <script setup>
-import FormCheckbox from '@/Components/Controls/FormCheckbox.vue';
-import FormInput from '@/Components/Controls/FormInput.vue';
-import FormSelect from '@/Components/Controls/FormSelect.vue';
-// import Layout from '@/Components/Layouts/Layout.vue';
-import Alert from '@/Components/Helpers/Alert.vue';
+import FormCheckbox from '@/Components/Controls/FormCheckbox';
+import FormInput from '@/Components/Controls/FormInput';
+import FormSelect from '@/Components/Controls/FormSelect';
+import Alert from '@/Components/Helpers/Alert';
 import { Link, useForm } from '@inertiajs/inertia-vue3';
 import { reactive } from '@vue/reactivity';
 import debounce from 'lodash/debounce';

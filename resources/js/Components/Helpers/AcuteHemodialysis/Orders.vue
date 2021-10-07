@@ -10,6 +10,7 @@
         >
             <div class="w-2/3 px-4 py-2 md:flex justify-between items-center">
                 <p>{{ order.date_note }}</p>
+                <p>{{ order.dialysis_type }}</p>
                 <p>{{ order.ward_name }}</p>
             </div>
             <div class="w-1/3 flex justify-end">
@@ -35,16 +36,10 @@
     </p>
 </template>
 
-<script>
+<script setup>
 import Icon from '@/Components/Helpers/Icon';
 import { Link } from '@inertiajs/inertia-vue3';
-export default {
-    components: { Icon, Link },
-    props: {
-        orders: { type: Array, required: true }
-    },
-    setup() {
-
-    },
-};
+defineProps({
+    orders: { type: Array, required: true }
+});
 </script>

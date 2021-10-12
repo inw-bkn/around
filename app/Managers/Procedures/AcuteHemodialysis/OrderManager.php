@@ -201,47 +201,7 @@ class OrderManager
         $form = [
             'patient_type' => null,
             'dialysis_type' => $dialysisType,
-        ];
-
-        $hd = [
-            'access_type' => null,
-            'access_site_coagulant' => null,
-            'dialyzer' => null,
-            'dialysate' => null,
-            'dialysate_flow' => null,
-            'reverse_flow' => null,
-            'blood_flow' => null,
-            'dialysate_temperature' => null,
-            'anticoagulant' => null,
-            'anticoagulant_none_drip_via_peripheral_iv' => false,
-            'anticoagulant_none_nss_200ml_flush_q_hour' => false,
-            'heparin_loading_dose' => null,
-            'heparin_maintenance_dose' => null,
-            'enoxaparin_dose' => null,
-            'fondaparinux_bolus_dose' => null,
-            'tinzaparin_dose' => null,
-            'anticoagulant_other' => null,
-            'ultrafiltration' => null,
-            'dry_weight' => null,
-            'glucose_50_percent_iv_volume' => null,
-            'glucose_50_percent_iv_at' => null,
-            'albumin_20_percent_prime_100ml' => null,
-            'nutrition_iv_type' => null,
-            'nutrition_iv_volume' => null,
-            'prc_volume' => null,
-            'ffp_volume' => null,
-            'platelet_volume' => null,
-            'transfusion_other' => null,
-            'inotrope' => null,
-            'o2_rx' => null,
-            'monitor' => [
-                'ekg' => false,
-                'observe_chest_pain' => false,
-                'observe_neuro_sign' => false,
-                'bp_map_greater_than_65mmhg' => false,
-                'other' => null,
-            ],
-            'spacial_order' => null,
+            'special_order' => null,
             'labs' => [
                 'cbc' => false,
                 'hct' => false,
@@ -287,6 +247,51 @@ class OrderManager
             ],
         ];
 
+        $hd = [
+            'access_type' => null,
+            'access_site_coagulant' => null,
+            'dialyzer' => null,
+            'dialysate' => null,
+            'dialysate_flow' => null,
+            'reverse_flow' => null,
+            'blood_flow' => null,
+            'dialysate_temperature' => null,
+            'anticoagulant' => null,
+            'anticoagulant_none_drip_via_peripheral_iv' => false,
+            'anticoagulant_none_nss_200ml_flush_q_hour' => false,
+            'heparin_loading_dose' => null,
+            'heparin_maintenance_dose' => null,
+            'enoxaparin_dose' => null,
+            'fondaparinux_bolus_dose' => null,
+            'tinzaparin_dose' => null,
+            'anticoagulant_other' => null,
+            'ultrafiltration' => null,
+            'dry_weight' => null,
+            'glucose_50_percent_iv_volume' => null,
+            'glucose_50_percent_iv_at' => null,
+            'albumin_20_percent_prime_100ml' => null,
+            'nutrition_iv_type' => null,
+            'nutrition_iv_volume' => null,
+            'prc_volume' => null,
+            'ffp_volume' => null,
+            'platelet_volume' => null,
+            'transfusion_other' => null,
+            'inotrope' => null,
+            'o2_rx' => null,
+            'monitor' => [
+                'ekg' => false,
+                'observe_chest_pain' => false,
+                'observe_neuro_sign' => false,
+                'bp_map_greater_than_65mmhg' => false,
+                'other' => null,
+            ],
+            'hf' => [
+                'with_hf' => false,
+                'perform_at' => null,
+                'ultrafiltration' => null,
+            ],
+        ];
+
         $hf = [
             'access_type' => null,
             'access_site_coagulant' => null,
@@ -320,7 +325,6 @@ class OrderManager
                 'bp_map_greater_than_65mmhg' => false,
                 'other' => null,
             ],
-            'spacial_order' => null,
         ];
 
         $tpe = [
@@ -367,7 +371,6 @@ class OrderManager
                 'bp_map_greater_than_65mmhg' => false,
                 'other' => null,
             ],
-            'spacial_order' => null,
         ];
 
         if (str_contains($dialysisType, 'HD ')) {

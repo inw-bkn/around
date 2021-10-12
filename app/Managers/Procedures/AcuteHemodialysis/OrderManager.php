@@ -57,7 +57,7 @@ class OrderManager
         $note->case_record_id = $data['case_record_id'];
         $note->patient_id = $data['patient_id'];
         $note->date_note = $data['date_note'];
-        $form = $this->initForm();
+        $form = $this->initForm($data['dialysis_type']);
         $form['dialysis_type'] = $data['dialysis_type'];
         $note->form = $form;
         $note->user_id = Auth::id();
@@ -196,11 +196,14 @@ class OrderManager
         ];
     }
 
-    protected function initForm()
+    protected function initForm($dialysisType)
     {
-        return [
+        $form = [
             'patient_type' => null,
-            'dialysis_type' => null,
+            'dialysis_type' => $dialysisType,
+        ];
+
+        $hd = [
             'access_type' => null,
             'access_site_coagulant' => null,
             'dialyzer' => null,
@@ -283,5 +286,190 @@ class OrderManager
                 'iron_iv_dose' => null,
             ],
         ];
+
+        $hf = [
+            'access_type' => null,
+            'access_site_coagulant' => null,
+            'blood_flow' => null,
+            'anticoagulant' => null,
+            'anticoagulant_none_drip_via_peripheral_iv' => false,
+            'anticoagulant_none_nss_200ml_flush_q_hour' => false,
+            'heparin_loading_dose' => null,
+            'heparin_maintenance_dose' => null,
+            'enoxaparin_dose' => null,
+            'fondaparinux_bolus_dose' => null,
+            'tinzaparin_dose' => null,
+            'anticoagulant_other' => null,
+            'ultrafiltration' => null,
+            'dry_weight' => null,
+            'glucose_50_percent_iv_volume' => null,
+            'glucose_50_percent_iv_at' => null,
+            'albumin_20_percent_prime_100ml' => null,
+            'nutrition_iv_type' => null,
+            'nutrition_iv_volume' => null,
+            'prc_volume' => null,
+            'ffp_volume' => null,
+            'platelet_volume' => null,
+            'transfusion_other' => null,
+            'inotrope' => null,
+            'o2_rx' => null,
+            'monitor' => [
+                'ekg' => false,
+                'observe_chest_pain' => false,
+                'observe_neuro_sign' => false,
+                'bp_map_greater_than_65mmhg' => false,
+                'other' => null,
+            ],
+            'spacial_order' => null,
+        ];
+
+        $tpe = [
+            'access_type' => null,
+            'access_site_coagulant' => null,
+        ];
+
+        $sledd = [
+            'duration' => null,
+            'access_type' => null,
+            'access_site_coagulant' => null,
+            'dialyzer' => null,
+            'dialysate' => null,
+            'dialysate_flow' => null,
+            'reverse_flow' => null,
+            'blood_flow' => null,
+            'dialysate_temperature' => null,
+            'anticoagulant' => null,
+            'anticoagulant_none_drip_via_peripheral_iv' => false,
+            'anticoagulant_none_nss_200ml_flush_q_hour' => false,
+            'heparin_loading_dose' => null,
+            'heparin_maintenance_dose' => null,
+            'enoxaparin_dose' => null,
+            'fondaparinux_bolus_dose' => null,
+            'tinzaparin_dose' => null,
+            'anticoagulant_other' => null,
+            'ultrafiltration' => null,
+            'dry_weight' => null,
+            'glucose_50_percent_iv_volume' => null,
+            'glucose_50_percent_iv_at' => null,
+            'albumin_20_percent_prime_100ml' => null,
+            'nutrition_iv_type' => null,
+            'nutrition_iv_volume' => null,
+            'prc_volume' => null,
+            'ffp_volume' => null,
+            'platelet_volume' => null,
+            'transfusion_other' => null,
+            'inotrope' => null,
+            'o2_rx' => null,
+            'monitor' => [
+                'ekg' => false,
+                'observe_chest_pain' => false,
+                'observe_neuro_sign' => false,
+                'bp_map_greater_than_65mmhg' => false,
+                'other' => null,
+            ],
+            'spacial_order' => null,
+        ];
+
+        if (str_contains($dialysisType, 'HD ')) {
+            $form['hd'] = $hd;
+        } elseif (str_contains($dialysisType, 'HF ')) {
+            $form['hf'] = $hd;
+        } elseif (str_contains($dialysisType, 'TPE ')) {
+            $form['tpe'] = $hd;
+        } elseif (str_contains($dialysisType, 'SLEDD ')) {
+            $form['sledd'] = $hd;
+        } elseif (str_contains($dialysisType, 'HD+HF')) {
+            $form['hd'] = $hd;
+            $form['hf'] = $hd;
+        } elseif (str_contains($dialysisType, 'HD+TPE')) {
+            $form['hd'] = $hd;
+            $form['tpe'] = $hd;
+        }
+
+        return $form;
+
+        // return [
+        //     'access_type' => null,
+        //     'access_site_coagulant' => null,
+        //     'dialyzer' => null,
+        //     'dialysate' => null,
+        //     'dialysate_flow' => null,
+        //     'reverse_flow' => null,
+        //     'blood_flow' => null,
+        //     'dialysate_temperature' => null,
+        //     'anticoagulant' => null,
+        //     'anticoagulant_none_drip_via_peripheral_iv' => false,
+        //     'anticoagulant_none_nss_200ml_flush_q_hour' => false,
+        //     'heparin_loading_dose' => null,
+        //     'heparin_maintenance_dose' => null,
+        //     'enoxaparin_dose' => null,
+        //     'fondaparinux_bolus_dose' => null,
+        //     'tinzaparin_dose' => null,
+        //     'anticoagulant_other' => null,
+        //     'ultrafiltration' => null,
+        //     'dry_weight' => null,
+        //     'glucose_50_percent_iv_volume' => null,
+        //     'glucose_50_percent_iv_at' => null,
+        //     'albumin_20_percent_prime_100ml' => null,
+        //     'nutrition_iv_type' => null,
+        //     'nutrition_iv_volume' => null,
+        //     'prc_volume' => null,
+        //     'ffp_volume' => null,
+        //     'platelet_volume' => null,
+        //     'transfusion_other' => null,
+        //     'inotrope' => null,
+        //     'o2_rx' => null,
+        //     'monitor' => [
+        //         'ekg' => false,
+        //         'observe_chest_pain' => false,
+        //         'observe_neuro_sign' => false,
+        //         'bp_map_greater_than_65mmhg' => false,
+        //         'other' => null,
+        //     ],
+        //     'spacial_order' => null,
+        //     'labs' => [
+        //         'cbc' => false,
+        //         'hct' => false,
+        //         'bun' => false,
+        //         'cr' => false,
+        //         'na' => false,
+        //         'k' => false,
+        //         'cl' => false,
+        //         'hco3' => false,
+        //         'total_calcium' => false,
+        //         'phosphate' => false,
+        //         'ipth' => false,
+        //         'alb' => false,
+        //         'glob' => false,
+        //         'tb' => false,
+        //         'db' => false,
+        //         'ast' => false,
+        //         'alt' => false,
+        //         'alp' => false,
+        //         'ggt' => false,
+        //         'pt' => false,
+        //         'inr' => false,
+        //         'aptt' => false,
+        //         'aptt_ratio' => false,
+        //         'anti_xa' => false,
+        //         'iron_study' => false,
+        //         'ferritin' => false,
+        //         'crossmatch' => null,
+        //         'other' => null,
+        //     ],
+        //     'pre_treatments' => null,
+        //     'post_treatments' => [
+        //         'heparin' => null,
+        //         'heparin_dose' => null,
+        //         'citrate' => null,
+        //         'citrate_dose' => null,
+        //         'antibiotic' => null,
+        //         'antibiotic_dose' => null,
+        //         'esa' => null,
+        //         'esa_dose' => null,
+        //         'iron_iv' => null,
+        //         'iron_iv_dose' => null,
+        //     ],
+        // ];
     }
 }

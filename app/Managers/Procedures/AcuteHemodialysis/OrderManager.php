@@ -119,10 +119,6 @@ class OrderManager
                 'Ca 2.5, K 3, Mg 0.7, glucose 100 => AA 251 K3',
                 'Ca 3.0, K 3, Mg 0.7, glucose 100 => AA 301 K3',
             ],
-            // 'bloodFlowOptions' => [150, 200, 250, 300, 350, 400, 500],
-            // 'dialysateFlowOptions' => [150, 200, 250, 300, 350, 400, 500],
-            // 'sessionLengthOptions' => [2, 3, 4, 5, 6, 7, 8],
-            // 'dialysateTemperatureOptions' => [35.5, 36, 36.5, 37],
             'anticoagulants' => [
                 ['value' => 'None', 'label' => 'None'],
                 ['value' => 'Heparin', 'label' => 'Heparin'],
@@ -131,31 +127,6 @@ class OrderManager
                 ['value' => 'Tinzaparin', 'label' => 'Tinzaparin (Innohep)'],
                 ['value' => 'Other', 'label' => 'Other'],
             ],
-            // 'anticoagulantLoadingOptions' => [0, 500, 1000, 1500, 2000, 40, 60, 80],
-            // 'anticoagulantLoadingUnitOptions' => ['units', 'mg'],
-            // 'anticoagulantMaintenanceOptions' => [0, 250, 500, 1000],
-            // 'anticoagulantMaintenanceUnitOptions' => ['units', 'mg'],
-            // 'anticoagulantDoseOptions' => [
-            //     'enoxaparin' => [
-            //         ['value' => 30, 'label' => '30 mg (0.3 ml)'],
-            //         ['value' => 40, 'label' => '40 mg (0.4 ml)'],
-            //         ['value' => 60, 'label' => '60 mg (0.5 ml)'],
-            //         ['value' => 80, 'label' => '80 mg (0.8 ml)'],
-            //     ],
-            //     'nadroparin' => [
-            //         ['value' => 0.3, 'label' => '0.3 ml (2,850 IUAXa)'],
-            //         ['value' => 0.4, 'label' => '0.4 ml (3,800 IUAXa)'],
-            //         ['value' => 0.6, 'label' => '0.6 ml (5,700 IUAXa)'],
-            //         ['value' => 0.8, 'label' => '0.8 ml (7,600 IUAXa)'],
-            //     ],
-            //     'tinzaparin' => [
-            //         ['value' => 0.25, 'label' => '0.25 ml (2,850 IUAXa)'],
-            //         ['value' => 0.35, 'label' => '0.35 ml (3,500 IUAXa)'],
-            //         ['value' => 0.45, 'label' => '0.45 ml (4,500 IUAXa)'],
-            //     ],
-            // ],
-            // 'NSSFlush' => ['100 ml q 30 min', '100 ml q 60 min', '200 ml q 30 min', '200 ml q 60 min'],
-            // 'glucoseIVOptions' => ['No','Yes'],
             'iv_gluclose_options' => [
                 ['value' => 1, 'label' => 'At 1 hour'],
                 ['value' => 2, 'label' => 'At 2 hour'],
@@ -191,6 +162,7 @@ class OrderManager
                 ['name' => 'enoxaparin_dose', 'min' => 0.3, 'max' => 0.8, 'type' => 'float'],
                 ['name' => 'tinzaparin_dose', 'min' => 1500, 'max' => 3500, 'type' => 'interger'],
                 ['name' => 'ultrafiltration', 'min' => 0, 'max' => 4000, 'type' => 'interger'],
+                ['name' => 'ultrafiltration_hf', 'min' => 0, 'max' => 4000, 'type' => 'interger'],
                 ['name' => 'glucose_50_percent_iv_volume', 'min' => 50, 'max' => 100, 'type' => 'interger'],
             ],
         ];
@@ -373,106 +345,24 @@ class OrderManager
             ],
         ];
 
-        if (str_contains($dialysisType, 'HD ')) {
+        $dialysisType = Str::of($dialysisType);
+
+        if ($dialysisType->contains('HD+HF')) {
             $form['hd'] = $hd;
-        } elseif (str_contains($dialysisType, 'HF ')) {
-            $form['hf'] = $hd;
-        } elseif (str_contains($dialysisType, 'TPE ')) {
-            $form['tpe'] = $hd;
-        } elseif (str_contains($dialysisType, 'SLEDD ')) {
-            $form['sledd'] = $hd;
-        } elseif (str_contains($dialysisType, 'HD+HF')) {
+            $form['hd']['hf']['with_hf'] = true;
+        } elseif ($dialysisType->contains('HD+TPE')) {
             $form['hd'] = $hd;
-            $form['hf'] = $hd;
-        } elseif (str_contains($dialysisType, 'HD+TPE')) {
+            $form['tpe'] = $tpe;
+        } elseif ($dialysisType->contains('HD ')) {
             $form['hd'] = $hd;
-            $form['tpe'] = $hd;
+        } elseif ($dialysisType->contains('HF ')) {
+            $form['hf'] = $hf;
+        } elseif ($dialysisType->contains('TPE ')) {
+            $form['tpe'] = $tpe;
+        } elseif ($dialysisType->contains('SLEDD ')) {
+            $form['sledd'] = $sledd;
         }
 
         return $form;
-
-        // return [
-        //     'access_type' => null,
-        //     'access_site_coagulant' => null,
-        //     'dialyzer' => null,
-        //     'dialysate' => null,
-        //     'dialysate_flow' => null,
-        //     'reverse_flow' => null,
-        //     'blood_flow' => null,
-        //     'dialysate_temperature' => null,
-        //     'anticoagulant' => null,
-        //     'anticoagulant_none_drip_via_peripheral_iv' => false,
-        //     'anticoagulant_none_nss_200ml_flush_q_hour' => false,
-        //     'heparin_loading_dose' => null,
-        //     'heparin_maintenance_dose' => null,
-        //     'enoxaparin_dose' => null,
-        //     'fondaparinux_bolus_dose' => null,
-        //     'tinzaparin_dose' => null,
-        //     'anticoagulant_other' => null,
-        //     'ultrafiltration' => null,
-        //     'dry_weight' => null,
-        //     'glucose_50_percent_iv_volume' => null,
-        //     'glucose_50_percent_iv_at' => null,
-        //     'albumin_20_percent_prime_100ml' => null,
-        //     'nutrition_iv_type' => null,
-        //     'nutrition_iv_volume' => null,
-        //     'prc_volume' => null,
-        //     'ffp_volume' => null,
-        //     'platelet_volume' => null,
-        //     'transfusion_other' => null,
-        //     'inotrope' => null,
-        //     'o2_rx' => null,
-        //     'monitor' => [
-        //         'ekg' => false,
-        //         'observe_chest_pain' => false,
-        //         'observe_neuro_sign' => false,
-        //         'bp_map_greater_than_65mmhg' => false,
-        //         'other' => null,
-        //     ],
-        //     'spacial_order' => null,
-        //     'labs' => [
-        //         'cbc' => false,
-        //         'hct' => false,
-        //         'bun' => false,
-        //         'cr' => false,
-        //         'na' => false,
-        //         'k' => false,
-        //         'cl' => false,
-        //         'hco3' => false,
-        //         'total_calcium' => false,
-        //         'phosphate' => false,
-        //         'ipth' => false,
-        //         'alb' => false,
-        //         'glob' => false,
-        //         'tb' => false,
-        //         'db' => false,
-        //         'ast' => false,
-        //         'alt' => false,
-        //         'alp' => false,
-        //         'ggt' => false,
-        //         'pt' => false,
-        //         'inr' => false,
-        //         'aptt' => false,
-        //         'aptt_ratio' => false,
-        //         'anti_xa' => false,
-        //         'iron_study' => false,
-        //         'ferritin' => false,
-        //         'crossmatch' => null,
-        //         'other' => null,
-        //     ],
-        //     'pre_treatments' => null,
-        //     'post_treatments' => [
-        //         'heparin' => null,
-        //         'heparin_dose' => null,
-        //         'citrate' => null,
-        //         'citrate_dose' => null,
-        //         'antibiotic' => null,
-        //         'antibiotic_dose' => null,
-        //         'esa' => null,
-        //         'esa_dose' => null,
-        //         'iron_iv' => null,
-        //         'iron_iv_dose' => null,
-        //     ],
-        // ];
     }
 }

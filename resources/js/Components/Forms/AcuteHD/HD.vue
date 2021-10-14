@@ -271,11 +271,42 @@
             v-model="form.monitor.other"
         />
     </div>
+    <template v-if="form.hf.with_hf">
+        <h2
+            class="mt-6 md:mt-12 xl:mt-24 form-label italic text-xl text-thick-theme-light"
+            id="prescription"
+        >
+            HF Prescription
+        </h2>
+        <hr class="my-4 border-b border-bitter-theme-light">
+        <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
+            <div>
+                <label class="form-label">perform at</label>
+                <FormRadio
+                    class="grid grid-cols-2 gap-x-2"
+                    name="with_hf"
+                    v-model="form.hf.perform_at"
+                    :options="['Pre HD', 'Post HD']"
+                />
+            </div>
+            <FormInput
+                pattern="\d*"
+                label="uf (ml.)"
+                v-model="form.hf.ultrafiltration"
+                name="ultrafiltration_hf"
+                type="number"
+                @autosave="validate('ultrafiltration_hf')"
+                :error="errors.ultrafiltration_hf"
+                placeholder="[0, 4000] ml"
+            />
+        </div>
+    </template>
 </template>
 <script setup>
 import FormCheckbox from '@/Components/Controls/FormCheckbox';
 import FormInput from '@/Components/Controls/FormInput';
 import FormSelect from '@/Components/Controls/FormSelect';
+import FormRadio from '@/Components/Controls/FormRadio';
 import Alert from '@/Components/Helpers/Alert';
 import { reactive } from '@vue/reactivity';
 import { watch } from '@vue/runtime-core';

@@ -166,12 +166,15 @@
             name="glucose_50_percent_iv_at"
             :options="configs.iv_gluclose_options"
         />
-        <FormSelect
-            label="20% albumin prime 100 ml"
-            v-model="form.albumin_20_percent_prime_100ml"
-            name="albumin_20_percent_prime_100ml"
-            :options="['Yes', 'No']"
-        />
+        <div>
+            <label class="form-label">20% albumin prime 100 ml</label>
+            <FormRadio
+                class="grid grid-cols-2 gap-x-2"
+                name="albumin_20_percent_prime_100ml"
+                v-model="form.albumin_20_percent_prime_100ml"
+                :options="['Yes', 'No']"
+            />
+        </div>
         <FormInput
             label="nutrition iv type"
             v-model="form.nutrition_iv_type"
@@ -215,12 +218,15 @@
     </div>
     <hr class="border border-dashed my-2 md:my-4 xl:my-8">
     <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
-        <FormSelect
-            label="inotrope"
-            v-model="form.inotrope"
-            name="inotrope"
-            :options="['Yes', 'No']"
-        />
+        <div>
+            <label class="form-label">inotrope</label>
+            <FormRadio
+                class="grid grid-cols-2 gap-x-2"
+                v-model="form.inotrope"
+                name="inotrope"
+                :options="['Yes', 'No']"
+            />
+        </div>
         <FormSelect
             label="o2 rx"
             v-model="form.o2_rx"
@@ -249,6 +255,7 @@
 import FormCheckbox from '@/Components/Controls/FormCheckbox';
 import FormInput from '@/Components/Controls/FormInput';
 import FormSelect from '@/Components/Controls/FormSelect';
+import FormRadio from '@/Components/Controls/FormRadio';
 import Alert from '@/Components/Helpers/Alert';
 import { reactive } from '@vue/reactivity';
 import { watch } from '@vue/runtime-core';

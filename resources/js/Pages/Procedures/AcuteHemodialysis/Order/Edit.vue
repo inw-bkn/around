@@ -46,6 +46,12 @@
             :form-configs="formConfigs"
             @autosave="autosave"
         />
+        <SLEDD
+            v-if="orderForm.sledd !== undefined"
+            v-model="form.sledd"
+            :form-configs="formConfigs"
+            @autosave="autosave"
+        />
 
         <hr class="border border-dashed my-2 md:my-4 xl:my-8">
         <FormInput
@@ -176,6 +182,7 @@
 <script setup>
 import HD from '@/Components/Forms/AcuteHD/HD';
 import HF from '@/Components/Forms/AcuteHD/HF';
+import SLEDD from '@/Components/Forms/AcuteHD/SLEDD';
 import FormInput from '@/Components/Controls/FormInput';
 import FormCheckbox from '@/Components/Controls/FormCheckbox';
 import { Link, useForm } from '@inertiajs/inertia-vue3';

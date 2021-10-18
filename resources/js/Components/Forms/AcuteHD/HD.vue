@@ -1,4 +1,34 @@
 <template>
+    <template v-if="form.hf !== undefined">
+        <h2
+            class="mt-6 md:mt-12 xl:mt-24 form-label italic text-xl text-thick-theme-light"
+            id="prescription"
+        >
+            HF Prescription
+        </h2>
+        <hr class="my-4 border-b border-bitter-theme-light">
+        <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
+            <div>
+                <label class="form-label">perform at</label>
+                <FormRadio
+                    class="grid grid-cols-2 gap-x-2"
+                    name="with_hf"
+                    v-model="form.hf.perform_at"
+                    :options="['Pre HD', 'Post HD']"
+                />
+            </div>
+            <FormInput
+                pattern="\d*"
+                label="uf (ml.)"
+                v-model="form.hf.ultrafiltration"
+                name="ultrafiltration_hf"
+                type="number"
+                @autosave="validate('ultrafiltration_hf')"
+                :error="errors.ultrafiltration_hf"
+                placeholder="[0, 4000] ml"
+            />
+        </div>
+    </template>
     <h2
         class="mt-6 md:mt-12 xl:mt-24 form-label italic text-xl text-thick-theme-light"
         id="prescription"
@@ -243,70 +273,6 @@
             v-model="form.transfusion_other"
         />
     </div>
-    <hr class="border border-dashed my-2 md:my-4 xl:my-8">
-    <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
-        <div>
-            <label class="form-label">inotrope</label>
-            <FormRadio
-                class="grid grid-cols-2 gap-x-2"
-                v-model="form.inotrope"
-                name="inotrope"
-                :options="['Yes', 'No']"
-            />
-        </div>
-        <FormSelect
-            label="o2 rx"
-            v-model="form.o2_rx"
-            name="o2_rx"
-            :options="configs.o2_rx_options"
-        />
-    </div>
-    <hr class="border border-dashed my-2 md:my-4 xl:my-8">
-    <label class="form-label">monitoring :</label>
-    <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
-        <FormCheckbox
-            v-for="(monitor, key) in configs.monitors"
-            :key="key"
-            :label="monitor.label"
-            :name="monitor.name"
-            v-model="form.monitor[monitor.name]"
-        />
-        <FormInput
-            label="other"
-            name="monitoring_other"
-            v-model="form.monitor.other"
-        />
-    </div>
-    <template v-if="form.hf.with_hf">
-        <h2
-            class="mt-6 md:mt-12 xl:mt-24 form-label italic text-xl text-thick-theme-light"
-            id="prescription"
-        >
-            HF Prescription
-        </h2>
-        <hr class="my-4 border-b border-bitter-theme-light">
-        <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
-            <div>
-                <label class="form-label">perform at</label>
-                <FormRadio
-                    class="grid grid-cols-2 gap-x-2"
-                    name="with_hf"
-                    v-model="form.hf.perform_at"
-                    :options="['Pre HD', 'Post HD']"
-                />
-            </div>
-            <FormInput
-                pattern="\d*"
-                label="uf (ml.)"
-                v-model="form.hf.ultrafiltration"
-                name="ultrafiltration_hf"
-                type="number"
-                @autosave="validate('ultrafiltration_hf')"
-                :error="errors.ultrafiltration_hf"
-                placeholder="[0, 4000] ml"
-            />
-        </div>
-    </template>
 </template>
 <script setup>
 import FormCheckbox from '@/Components/Controls/FormCheckbox';

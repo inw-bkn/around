@@ -54,6 +54,41 @@
         />
 
         <hr class="border border-dashed my-2 md:my-4 xl:my-8">
+        <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
+            <div>
+                <label class="form-label">inotrope</label>
+                <FormRadio
+                    class="grid grid-cols-2 gap-x-2"
+                    v-model="form.inotrope"
+                    name="inotrope"
+                    :options="['Yes', 'No']"
+                />
+            </div>
+            <FormSelect
+                label="o2 rx"
+                v-model="form.o2_rx"
+                name="o2_rx"
+                :options="configs.o2_rx_options"
+            />
+        </div>
+        <hr class="border border-dashed my-2 md:my-4 xl:my-8">
+        <label class="form-label">monitoring :</label>
+        <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
+            <FormCheckbox
+                v-for="(monitor, key) in configs.monitors"
+                :key="key"
+                :label="monitor.label"
+                :name="monitor.name"
+                v-model="form.monitor[monitor.name]"
+            />
+            <FormInput
+                label="other"
+                name="monitoring_other"
+                v-model="form.monitor.other"
+            />
+        </div>
+
+        <hr class="border border-dashed my-2 md:my-4 xl:my-8">
         <FormInput
             class="mt-2 md:bt-4 xl:mt-8"
             label="special order"
@@ -185,6 +220,8 @@ import HF from '@/Components/Forms/AcuteHD/HF';
 import SLEDD from '@/Components/Forms/AcuteHD/SLEDD';
 import FormInput from '@/Components/Controls/FormInput';
 import FormCheckbox from '@/Components/Controls/FormCheckbox';
+import FormSelect from '@/Components/Controls/FormSelect';
+import FormRadio from '@/Components/Controls/FormRadio';
 import { Link, useForm } from '@inertiajs/inertia-vue3';
 import debounce from 'lodash/debounce';
 

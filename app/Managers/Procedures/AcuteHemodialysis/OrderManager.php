@@ -173,6 +173,15 @@ class OrderManager
         $form = [
             'patient_type' => null,
             'dialysis_type' => $dialysisType,
+            'inotrope' => null,
+            'o2_rx' => null,
+            'monitor' => [
+                'ekg' => false,
+                'observe_chest_pain' => false,
+                'observe_neuro_sign' => false,
+                'bp_map_greater_than_65mmhg' => false,
+                'other' => null,
+            ],
             'special_order' => null,
             'labs' => [
                 'cbc' => false,
@@ -248,20 +257,6 @@ class OrderManager
             'ffp_volume' => null,
             'platelet_volume' => null,
             'transfusion_other' => null,
-            'inotrope' => null,
-            'o2_rx' => null,
-            'monitor' => [
-                'ekg' => false,
-                'observe_chest_pain' => false,
-                'observe_neuro_sign' => false,
-                'bp_map_greater_than_65mmhg' => false,
-                'other' => null,
-            ],
-            'hf' => [
-                'with_hf' => false,
-                'perform_at' => null,
-                'ultrafiltration' => null,
-            ],
         ];
 
         $hf = [
@@ -288,15 +283,6 @@ class OrderManager
             'ffp_volume' => null,
             'platelet_volume' => null,
             'transfusion_other' => null,
-            'inotrope' => null,
-            'o2_rx' => null,
-            'monitor' => [
-                'ekg' => false,
-                'observe_chest_pain' => false,
-                'observe_neuro_sign' => false,
-                'bp_map_greater_than_65mmhg' => false,
-                'other' => null,
-            ],
         ];
 
         $tpe = [
@@ -334,15 +320,6 @@ class OrderManager
             'ffp_volume' => null,
             'platelet_volume' => null,
             'transfusion_other' => null,
-            'inotrope' => null,
-            'o2_rx' => null,
-            'monitor' => [
-                'ekg' => false,
-                'observe_chest_pain' => false,
-                'observe_neuro_sign' => false,
-                'bp_map_greater_than_65mmhg' => false,
-                'other' => null,
-            ],
         ];
 
         $dialysisType = Str::of($dialysisType);

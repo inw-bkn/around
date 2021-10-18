@@ -359,7 +359,7 @@ class OrderManager
             $form['hf'] = $hf;
         } elseif ($dialysisType->contains('TPE ')) {
             $form['tpe'] = $tpe;
-        } elseif ($dialysisType->contains('SLEDD ')) {
+        } elseif ($dialysisType->contains('SLEDD')) {
             $form['sledd'] = $sledd;
         }
 

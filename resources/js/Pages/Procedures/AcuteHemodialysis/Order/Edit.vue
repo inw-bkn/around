@@ -52,6 +52,12 @@
             :form-configs="formConfigs"
             @autosave="autosave"
         />
+        <TPE
+            v-if="orderForm.tpe !== undefined"
+            v-model="form.tpe"
+            :form-configs="formConfigs"
+            @autosave="autosave"
+        />
 
         <hr class="border border-dashed my-2 md:my-4 xl:my-8">
         <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
@@ -218,6 +224,7 @@
 import HD from '@/Components/Forms/AcuteHD/HD';
 import HF from '@/Components/Forms/AcuteHD/HF';
 import SLEDD from '@/Components/Forms/AcuteHD/SLEDD';
+import TPE from '@/Components/Forms/AcuteHD/TPE';
 import FormInput from '@/Components/Controls/FormInput';
 import FormCheckbox from '@/Components/Controls/FormCheckbox';
 import FormSelect from '@/Components/Controls/FormSelect';

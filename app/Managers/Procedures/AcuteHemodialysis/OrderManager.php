@@ -165,6 +165,7 @@ class OrderManager
                 ['name' => 'ultrafiltration_hf', 'min' => 0, 'max' => 4000, 'type' => 'interger'],
                 ['name' => 'glucose_50_percent_iv_volume', 'min' => 50, 'max' => 100, 'type' => 'interger'],
             ],
+            'tpe_dialyzers' => ['Plasmaflo'],
         ];
     }
 
@@ -288,6 +289,25 @@ class OrderManager
         $tpe = [
             'access_type' => null,
             'access_site_coagulant' => null,
+            'dialyzer' => 'Plasmaflo',
+            'replacement_fluid_volume' => null,
+            'replacement_fluid_type' => null,
+            'blood_pumb' => null,
+            'filtration_pumb' => null,
+            'replacement_pumb' => null,
+            'drain_pumb' => null,
+            'dialysate_temperature' => null,
+            '10_percent_calcium_gluconate_volume' => null,
+            '10_percent_calcium_gluconate_timing' => null,
+            'anticoagulant' => null,
+            'anticoagulant_none_drip_via_peripheral_iv' => false,
+            'anticoagulant_none_nss_200ml_flush_q_hour' => false,
+            'heparin_loading_dose' => null,
+            'heparin_maintenance_dose' => null,
+            'enoxaparin_dose' => null,
+            'fondaparinux_bolus_dose' => null,
+            'tinzaparin_dose' => null,
+            'anticoagulant_other' => null,
         ];
 
         $sledd = [

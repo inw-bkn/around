@@ -10,7 +10,8 @@ import { InertiaProgress } from '@inertiajs/progress';
 
 InertiaProgress.init({
     delay: 200,
-    color: '#AD9C68'
+    color: '#AD9C68',
+    showSpinner: true
 });
 
 createInertiaApp({

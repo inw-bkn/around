@@ -59,4 +59,12 @@ return [
         ],
     ],
 
+    'SUBHANNAH_API_NAME' => env('SUBHANNAH_API_NAME'),
+    'SUBHANNAH_API_TOKEN' => env('SUBHANNAH_API_TOKEN'),
+    'SUBHANNAH_API_URL' => env('SUBHANNAH_API_URL'),
+
+    'SMUGGLE_URL' => env('SMUGGLE_URL'),
+    'SMUGGLE_TOKEN' => env('SMUGGLE_TOKEN'),
+    'SMUGGLE_SECRET' => env('SMUGGLE_SECRET'),
+
 ];

@@ -77,6 +77,7 @@ class CaseRecordManager
                         return [
                         'slug' => $note->slug,
                         'ward_name' => $note->place->name,
+                        'dialysis_type' => $note->form['dialysis_type'],
                         'date_note' => $note->date_note->format('d M Y'),
                         ];
                     }),

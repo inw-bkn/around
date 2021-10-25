@@ -14,24 +14,24 @@
                 <div class="py-4 my-2 md:py-6 md:my-4 border-t border-b border-bitter-theme-light">
                     <FormInput
                         name="an"
-                        label="an"
+                        :label="mode"
                         v-model="an"
                         pattern="\d*"
                         type="number"
                         ref="anInput"
                         :error="anError"
-                        @keydown.enter="searchAn"
+                        @keydown.enter="searchAdmission"
                     />
                     <SpinnerButton
                         :spin="busy"
                         class="btn-dark w-full mt-2"
-                        @click="searchAn"
+                        @click="searchAdmission"
                         :disabled="!an.length"
                     >
                         SEARCH
                     </SpinnerButton>
                     <hr class="my-4 md:my-6">
-                    <span class="form-label block">Admission Data</span>
+                    <span class="form-label block">{{ mode === 'hn' ? 'Current ':'' }} Admission Data</span>
                     <div
                         v-if="!admission.hn"
                         class="bg-white rounded shadow p-2 lg:p-4 text-sm"
@@ -76,84 +76,76 @@
     </teleport>
 </template>
 
-<script>
+<script setup>
 import Modal from '@/Components/Helpers/Modal';
 import FormInput from '@/Components/Controls/FormInput';
 import SpinnerButton from '@/Components/Controls/SpinnerButton';
 import { reactive, ref } from '@vue/reactivity';
 import { nextTick } from '@vue/runtime-core';
-export default {
-    components: { FormInput, Modal, SpinnerButton },
-    emits: ['confirmed'],
-    props: {
-        heading: { type: String, default: 'Search AN'},
-        confirmLabel: { type: String, default: 'CONFIRM'}
-    },
-    setup (props, context) {
-        const modal = ref(null);
-        const anInput = ref(null);
-        const an = ref('');
-        const anError = ref('');
-        const busy = ref(false);
-        const admission = reactive({
-            hn: '',
-            name: '',
-            gender: '',
-            age: '',
-            ward_admit: '',
-            admitted_at: '',
-        });
 
-        const searchAn = () => {
-            busy.value = true;
-            anError.value = '';
-            admission.hn = '';
-            window.axios
-                .get(window.route('resources.api.admissions.show', an.value))
-                .then(response => {
-                    if (! response.data.found) {
-                        anError.value = response.data.message;
-                        return;
-                    }
-                    admission.hn = response.data.hn;
-                    admission.name = response.data.name;
-                    admission.gender = response.data.gender;
-                    admission.age = response.data.age;
-                    admission.ward_admit = response.data.ward_admit;
-                    admission.admitted_at = response.data.admitted_at;
-                }).catch(error => {
-                    console.log(error);
-                }).finally(() => busy.value = false);
-        };
+const props = defineProps({
+    heading: { type: String, default: 'Search Admission'},
+    confirmLabel: { type: String, default: 'CONFIRM'},
+    mode: { type: String, default: 'an' }
+});
 
-        const resetAdmission = () => {
-            an.value = '';
-            anError.value = '';
-            admission.hn = '';
-        };
+const emits = defineEmits(['confirmed']);
 
-        const open = () => {
-            modal.value.open();
-            nextTick(() => anInput.value.focus());
-        };
+const modal = ref(null);
+const anInput = ref(null);
+const an = ref('');
+const anError = ref('');
+const busy = ref(false);
+const admission = reactive({
+    an: '',
+    hn: '',
+    name: '',
+    gender: '',
+    age: '',
+    ward_admit: '',
+    admitted_at: '',
+});
 
-        const confirm = () => {
-            modal.value.close();
-            context.emit('confirmed', an.value);
-        };
-
-        return {
-            modal,
-            anInput,
-            open,
-            busy,
-            an,
-            anError,
-            admission,
-            searchAn,
-            resetAdmission,
-            confirm,
-        };
-    }
+const searchAdmission = () => {
+    busy.value = true;
+    anError.value = '';
+    admission.hn = '';
+    let endpoint = props.mode === 'an'
+        ? 'resources.api.admissions.show'
+        : 'resources.api.admissions.show';
+    window.axios
+        .get(window.route(endpoint, an.value))
+        .then(response => {
+            if (! response.data.found) {
+                anError.value = response.data.message;
+                return;
+            }
+            admission.hn = response.data.hn;
+            admission.name = response.data.name;
+            admission.gender = response.data.gender;
+            admission.age = response.data.age;
+            admission.ward_admit = response.data.ward_admit;
+            admission.admitted_at = response.data.admitted_at;
+        }).catch(error => {
+            console.log(error);
+        }).finally(() => busy.value = false);
 };
+
+const resetAdmission = () => {
+    an.value = '';
+    anError.value = '';
+    admission.hn = '';
+};
+
+const open = () => {
+    modal.value.open();
+    nextTick(() => anInput.value.focus());
+};
+
+const confirm = () => {
+    modal.value.close();
+    emits('confirmed', an.value);
+};
+
+defineExpose({ open });
 </script>

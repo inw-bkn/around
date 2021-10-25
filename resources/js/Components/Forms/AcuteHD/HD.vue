@@ -217,11 +217,11 @@
             :error="errors.glucose_50_percent_iv_volume"
             placeholder="[50, 100] ml"
         />
-        <FormSelect
-            label="50% glucose iv at"
+        <FormInput
             v-model="form.glucose_50_percent_iv_at"
+            type="tel"
             name="glucose_50_percent_iv_at"
-            :options="configs.iv_gluclose_options"
+            label="50% glucose iv (at hour)"
         />
         <div>
             <label class="form-label">20% albumin prime 100 ml</label>

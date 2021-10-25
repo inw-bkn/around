@@ -127,12 +127,12 @@ class OrderManager
                 ['value' => 'Tinzaparin', 'label' => 'Tinzaparin (Innohep)'],
                 ['value' => 'Other', 'label' => 'Other'],
             ],
-            'iv_gluclose_options' => [
-                ['value' => 1, 'label' => 'At 1 hour'],
-                ['value' => 2, 'label' => 'At 2 hour'],
-                ['value' => 3, 'label' => 'At 3 hour'],
-                ['value' => 4, 'label' => 'At 4 hour'],
-            ],
+            // 'iv_gluclose_options' => [
+            //     ['value' => 1, 'label' => 'At 1 hour'],
+            //     ['value' => 2, 'label' => 'At 2 hour'],
+            //     ['value' => 3, 'label' => 'At 3 hour'],
+            //     ['value' => 4, 'label' => 'At 4 hour'],
+            // ],
             'o2_rx_options' => [
                 'None',
                 'O2 canula',

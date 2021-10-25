@@ -115,3 +115,7 @@ const register = () => {
     });
 };
 </script>
+<script>
+import Plain from '@/Components/Layouts/Plain';
+export default { layout: Plain };
+</script>

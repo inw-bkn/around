@@ -129,12 +129,7 @@ const searchForm = useForm({
 });
 
 const confirmed = (an) => {
-    console.log('yes mm' + an);
     newCase.an = an;
     newCase.post(window.route('procedures.acute-hemodialysis.store'));
 };
-</script>
-<script>
-import Layout from '@/Components/Layouts/Layout';
-export default { layout: Layout };
 </script>

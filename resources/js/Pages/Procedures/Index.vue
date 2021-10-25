@@ -46,11 +46,6 @@
     </div>
 </template>
 
-<script>
-import Layout from '@/Components/Layouts/Layout.vue';
+<script setup>
 import { Link } from '@inertiajs/inertia-vue3';
-export default {
-    layout: Layout,
-    components: { Link }
-};
 </script>

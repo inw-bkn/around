@@ -23,6 +23,11 @@ class RegisteredUserController extends Controller
     public function create()
     {
         if ($profile = Session::get('profile', null)) {
+            if (! isset($profile['is_md'])) {
+                $profile['is_md'] = str_contains($profile['name'], 'พญ.') || str_contains($profile['name'], 'นพ.');
+                Session::put('profile', $profile);
+            }
+
             return Inertia::render('Auth/Register', ['profile' => $profile]);
         }
 
@@ -43,6 +48,7 @@ class RegisteredUserController extends Controller
                 },
             ],
             'full_name' => 'required|string',
+            'pln' => 'exclude_if:is_md,false|required|digits:5',
             'tel_no' => 'required|digits_between:9,10',
             'agreement_accepted' => 'required',
         ]);
@@ -55,6 +61,7 @@ class RegisteredUserController extends Controller
             'org_id' => $data['org_id'],
             'division' => $data['division'],
             'position' => $data['position'],
+            'pln' => $data['pln'] ?? null,
             'remark' => $data['remark'],
         ];
 

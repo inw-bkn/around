@@ -159,8 +159,9 @@ class ToothpasteAPI implements PatientAPI, AuthenticationAPI
     protected function brushing($data)
     {
         try {
-            $response = Http::timeout(5)
+            $response = Http::timeout(2)
                         ->withOptions(['verify' => false])
+                        ->retry(3, 100)
                         ->asForm()
                         ->post(config('services.toothpaste.url'), ['payload' => $data]);
         } catch (Exception $e) {

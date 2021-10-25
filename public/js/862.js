@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[862],{3862:(e,n,l)=>{l.r(n),l.d(n,{default:()=>r});var t=l(6252),u=[(0,t._)("h1",null,"Hello Patients 🤕",-1)];const s={layout:l(4365).Z};const r=(0,l(3744).Z)(s,[["render",function(e,n,l,s,r,a){return(0,t.wg)(),(0,t.iD)("div",null,u)}]])}}]);

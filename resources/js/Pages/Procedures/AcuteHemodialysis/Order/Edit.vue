@@ -230,6 +230,8 @@ import FormCheckbox from '@/Components/Controls/FormCheckbox';
 import FormSelect from '@/Components/Controls/FormSelect';
 import FormRadio from '@/Components/Controls/FormRadio';
 import { Link, useForm } from '@inertiajs/inertia-vue3';
+import { reactive } from '@vue/reactivity';
+import { watch } from '@vue/runtime-core';
 import debounce from 'lodash/debounce';
 
 const props = defineProps({
@@ -253,10 +255,4 @@ const autosave = debounce(function () {
         });
 }, 2000);
 const configs = reactive({...props.formConfigs});
-</script>
-<script>
-import Layout from '@/Components/Layouts/Layout';
-import { reactive } from '@vue/reactivity';
-import { watch } from '@vue/runtime-core';
-export default { layout: Layout };
 </script>

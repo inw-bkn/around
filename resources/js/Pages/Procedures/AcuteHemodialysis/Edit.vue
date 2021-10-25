@@ -531,7 +531,3 @@ const reserve = () => {
     });
 };
 </script>
-<script>
-import Layout from '@/Components/Layouts/Layout';
-export default { layout: Layout };
-</script>

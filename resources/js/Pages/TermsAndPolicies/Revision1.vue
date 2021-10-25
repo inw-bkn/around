@@ -67,11 +67,11 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import { useCheckSessionTimeout } from '@/Functions/useCheckSessionTimeout';
-export default {
-    setup () {
-        useCheckSessionTimeout();
-    }
-};
+useCheckSessionTimeout();
+</script>
+<script>
+import Plain from '@/Components/Layouts/Plain';
+export default { layout: Plain };
 </script>

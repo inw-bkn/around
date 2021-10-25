@@ -42,6 +42,16 @@
                 :error="form.errors.tel_no"
                 placeholder="for emergency case only"
             />
+            <FormInput
+                v-if="profile.is_md"
+                class="mt-2"
+                type="tel"
+                name="pln"
+                label="license number"
+                v-model="form.pln"
+                :error="form.errors.pln"
+                placeholder="เลข ว."
+            />
             <FormCheckbox
                 class="mt-2"
                 v-model="form.agreement_accepted"
@@ -95,6 +105,8 @@ const form = useForm({
     remark: props.profile.remark,
     name: null,
     tel_no: null,
+    pln: null,
+    is_md: props.profile.is_md,
     agreement_accepted: false,
     remember: true
 });
@@ -114,4 +126,8 @@ const register = () => {
         onFinish: () => form.processing = false,
     });
 };
+</script>
+<script>
+import Plain from '@/Components/Layouts/Plain';
+export default { layout: Plain };
 </script>

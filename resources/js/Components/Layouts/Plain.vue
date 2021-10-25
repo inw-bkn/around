@@ -1,5 +1,5 @@
 <template>
     <div>
-        <h1>Preferences ⚙️</h1>
+        <slot />
     </div>
 </template>

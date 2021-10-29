@@ -109,6 +109,15 @@ class Admission extends Model
             : null;
     }
 
+    public function getDismissedAtForHumansAttribute()
+    {
+        if (! $this->dismissed_at) {
+            return null;
+        }
+
+        return $this->dismissed_at->longRelativeToNowDiffForHumans();
+    }
+
     public function getPlaceNameAttribute()
     {
         return $this->place

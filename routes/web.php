@@ -7,6 +7,7 @@ use App\Http\Controllers\PagesController;
 use App\Http\Controllers\PreferencesController;
 use App\Http\Controllers\Resources\APIs\AcuteHemodialysisSlotAvailableController;
 use App\Http\Controllers\Resources\APIs\AdmissionsController;
+use App\Http\Controllers\Resources\APIs\PatientRecentlyAdmissionController;
 use App\Http\Controllers\Resources\APIs\WardsController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -48,6 +49,8 @@ Route::get('preferences', PreferencesController::class)
 Route::middleware('auth')->name('resources.api.')->group(function () {
     Route::get('admissions/{an}', AdmissionsController::class)
          ->name('admissions.show');
+    Route::get('patient-recently-admission/{hn}', PatientRecentlyAdmissionController::class)
+         ->name('patient-recently-admission.show');
     Route::get('wards', WardsController::class)
          ->name('wards');
     Route::get('acute-hemodialysis-slot-available/{dateNote}', AcuteHemodialysisSlotAvailableController::class)

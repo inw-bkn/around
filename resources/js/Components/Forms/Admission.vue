@@ -31,7 +31,7 @@
                         SEARCH
                     </SpinnerButton>
                     <hr class="my-4 md:my-6">
-                    <span class="form-label block">{{ mode === 'hn' ? 'Current ':'' }} Admission Data</span>
+                    <span class="form-label block">{{ mode === 'hn' ? 'Latest ':'' }} Admission Data</span>
                     <div
                         v-if="!admission.hn"
                         class="bg-white rounded shadow p-2 lg:p-4 text-sm"
@@ -53,7 +53,7 @@
                     >
                         <p
                             class="mt-1 whitespace-nowrap"
-                            v-for="key in Object.keys(admission)"
+                            v-for="key in [...Object.keys(admission)].filter(k => admission[k])"
                             :key="key"
                         >
                             <span class="text-thick-theme-light uppercase font-semibold">{{ key.replaceAll('_', ' ') }} : </span> {{ admission[key] }}
@@ -104,6 +104,7 @@ const admission = reactive({
     age: '',
     ward_admit: '',
     admitted_at: '',
+    discharged_at: '',
 });
 
 const searchAdmission = () => {
@@ -112,20 +113,30 @@ const searchAdmission = () => {
     admission.hn = '';
     let endpoint = props.mode === 'an'
         ? 'resources.api.admissions.show'
-        : 'resources.api.admissions.show';
+        : 'resources.api.patient-recently-admission.show';
     window.axios
         .get(window.route(endpoint, an.value))
         .then(response => {
-            if (! response.data.found) {
-                anError.value = response.data.message;
+            if (! response.data.hn) {
+                anError.value = 'Patient not found';
                 return;
             }
+
+            if (! response.data.found || response.data.discharged_at) {
+                anError.value = 'No active admission';
+            }
+
+            if (props.mode === 'hn') {
+                admission.an = response.data.an;
+            }
+
             admission.hn = response.data.hn;
             admission.name = response.data.name;
             admission.gender = response.data.gender;
             admission.age = response.data.age;
             admission.ward_admit = response.data.ward_admit;
             admission.admitted_at = response.data.admitted_at;
+            admission.discharged_at = response.data.discharged_at;
         }).catch(error => {
             console.log(error);
         }).finally(() => busy.value = false);
@@ -144,7 +155,7 @@ const open = () => {
 
 const confirm = () => {
     modal.value.close();
-    emits('confirmed', an.value);
+    emits('confirmed', { hn: admission.hn, an: admission.an});
 };
 
 defineExpose({ open });

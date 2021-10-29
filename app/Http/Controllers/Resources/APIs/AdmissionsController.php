@@ -23,6 +23,7 @@ class AdmissionsController extends Controller
             'age' => $admission['admission']->patient_age_at_encounter_text,
             'ward_admit' => $admission['admission']->place_name,
             'admitted_at' => $admission['admission']->encountered_at_for_humans,
+            'discharged_at' => $admission['admission']->dismissed_at_for_humans,
         ];
     }
 }

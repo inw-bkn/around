@@ -7,6 +7,7 @@ use App\Http\Controllers\PagesController;
 use App\Http\Controllers\PreferencesController;
 use App\Http\Controllers\Resources\APIs\AcuteHemodialysisSlotAvailableController;
 use App\Http\Controllers\Resources\APIs\AdmissionsController;
+use App\Http\Controllers\Resources\APIs\AttendingStaffsController;
 use App\Http\Controllers\Resources\APIs\PatientRecentlyAdmissionController;
 use App\Http\Controllers\Resources\APIs\WardsController;
 use Illuminate\Support\Facades\Route;
@@ -53,6 +54,8 @@ Route::middleware('auth')->name('resources.api.')->group(function () {
          ->name('patient-recently-admission.show');
     Route::get('wards', WardsController::class)
          ->name('wards');
+    Route::get('staffs', AttendingStaffsController::class)
+         ->name('staffs');
     Route::get('acute-hemodialysis-slot-available/{dateNote}', AcuteHemodialysisSlotAvailableController::class)
          ->name('acute-hemodialysis-slot-available');
 });

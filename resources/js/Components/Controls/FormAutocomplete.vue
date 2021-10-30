@@ -73,6 +73,7 @@ const props = defineProps({
     modelValue: { type: String, default: '' },
     label: { type: String, default: '' },
     endpoint: { type: String, default: '' },
+    params: { type: String, default: '' },
     name: { type: String, required: true },
     error: { type: String, default: '' },
 });
@@ -95,7 +96,7 @@ const search = throttle(function () {
         return;
     }
     window.axios
-        .get(props.endpoint + '?search=' + input.value.value)
+        .get(props.endpoint + '?search=' + input.value.value + props.params)
         .then(response => {
             items.value = response.data.length ? response.data : ['No match found'];
             open.value = true;

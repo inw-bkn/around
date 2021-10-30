@@ -21,6 +21,7 @@ class CreateCaseRecordsTable extends Migration
             $table->json('form');
             $table->foreignId('creator_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('updater_id')->nullable()->constrained('users')->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

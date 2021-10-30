@@ -19,7 +19,7 @@ class CreatePatientsTable extends Migration
             $table->string('hn');
             $table->string('mini_hash', config('app.MINI_HASH_LENGTH'))->index();
             $table->text('profile')->nullable();
-            $table->softDeletes();
+            $table->boolean('alive')->default(true)->index();
             $table->timestamps();
         });
     }

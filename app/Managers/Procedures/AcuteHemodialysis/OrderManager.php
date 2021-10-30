@@ -5,6 +5,7 @@ namespace App\Managers\Procedures\AcuteHemodialysis;
 use App\Models\Note;
 use App\Models\NoteType;
 use App\Models\Registry;
+use App\Models\Resources\AttendingStaff;
 use App\Models\Resources\Ward;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -49,16 +50,19 @@ class OrderManager
         $noteType = NoteType::findbyName('acute_hd_order');
         $registry = Registry::findbyName('acute_hd');
         $ward = Ward::findbyName($data['dialysis_at']);
+        $staff = AttendingStaff::findbyName($data['attending_staff']);
 
         $note = new Note();
         $note->slug = Str::uuid()->toString();
         $note->note_type_id = $noteType->id;
         $note->registry_id = $registry->id;
+        $note->attending_staff_id = $staff->id;
         $note->case_record_id = $data['case_record_id'];
         $note->patient_id = $data['patient_id'];
         $note->date_note = $data['date_note'];
         $form = $this->initForm($data['dialysis_type']);
         $form['dialysis_type'] = $data['dialysis_type'];
+        $form['patient_type'] = $data['patient_type'];
         $note->form = $form;
         $note->user_id = Auth::id();
         $note->save();

@@ -20,6 +20,7 @@ class CreateNotesTable extends Migration
             $table->foreignId('case_record_id')->constrained('case_records')->onDelete('cascade');
             $table->foreignId('patient_id')->constrained('patients')->onDelete('cascade');
             $table->foreignId('note_type_id')->constrained('note_types')->onDelete('cascade');
+            $table->unsignedSmallInteger('attending_staff_id')->nullable()->constrained('attending_staffs')->onDelete('cascade');
             $table->nullableMorphs('place');
             $table->json('form');
             $table->json('report')->nullable();
@@ -28,6 +29,7 @@ class CreateNotesTable extends Migration
             $table->date('performed_at')->nullable()->index();
             $table->date('canceled_at')->nullable()->index();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

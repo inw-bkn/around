@@ -6,11 +6,10 @@ use App\Traits\DataCryptable;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Patient extends Model
 {
-    use HasFactory, DataCryptable, SoftDeletes;
+    use HasFactory, DataCryptable;
 
     protected $encryptedKey = 'hn';
 
@@ -95,6 +94,6 @@ class Patient extends Model
 
     public function getLabelAttribute()
     {
-        return 'HN ' . $this->hn . ' ' . $this->full_name;
+        return 'HN '.$this->hn.' '.$this->full_name;
     }
 }

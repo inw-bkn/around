@@ -22,7 +22,6 @@ class CreateAdmissionsTable extends Migration
             $table->dateTime('encountered_at')->index()->nullable();
             $table->dateTime('dismissed_at')->index()->nullable();
             $table->unsignedSmallInteger('ward_id')->default(1)->constrained('wards')->onDelete('cascade');
-            $table->softDeletes();
             $table->timestamps();
         });
     }

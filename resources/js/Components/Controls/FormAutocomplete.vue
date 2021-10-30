@@ -20,6 +20,7 @@
                     :name="name"
                     ref="input"
                     :value="modelValue"
+                    :class="{ 'border-red-400 text-red-400': error }"
                 >
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
                     <svg
@@ -37,6 +38,12 @@
                         />
                     </svg>
                 </div>
+            </div>
+            <div
+                v-if="error"
+                class="text-red-700 mt-2 text-sm"
+            >
+                {{ error }}
             </div>
         </div>
         <transition name="fade-appear">
@@ -58,62 +65,50 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from '@vue/reactivity';
 import throttle from 'lodash/throttle';
-export default {
-    emits: ['update:modelValue', 'autosave'],
-    props: {
-        modelValue: { type: String, default: '' },
-        label: { type: String, default: '' },
-        endpoint: { type: String, default: '' },
-        name: { type: String, required: true },
-    },
+const emits = defineEmits(['update:modelValue', 'autosave']);
+const props = defineProps({
+    modelValue: { type: String, default: '' },
+    label: { type: String, default: '' },
+    endpoint: { type: String, default: '' },
+    name: { type: String, required: true },
+    error: { type: String, default: '' },
+});
 
-    setup (props, context) {
-        const items = ref([]);
-        const input = ref(null);
-        const open = ref(false);
+const items = ref([]);
+const input = ref(null);
+const open = ref(false);
+const search = throttle(function () {
+    emits('update:modelValue', input.value.value);
 
-        const search = throttle(function () {
-            context.emit('update:modelValue', input.value.value);
-
-            if (input.value.value.length < 3) {
-                if (open.value) {
-                    open.value = false;
-                }
-
-                if (! input.value.value) {
-                    context.emit('autosave');
-                }
-
-                return;
-            }
-            window.axios
-                .get(props.endpoint + '?search=' + input.value.value)
-                .then(response => {
-                    items.value = response.data.length ? response.data : ['No match found'];
-                    open.value = true;
-                }).catch(error => {
-                    console.log(error);
-                });
-        }, 300);
-
-        const selectItem = (item) => {
-            input.value.value = item;
+    if (input.value.value.length < 3) {
+        if (open.value) {
             open.value = false;
-            context.emit('update:modelValue', item);
-            context.emit('autosave');
-        };
+        }
 
-        return {
-            open,
-            items,
-            selectItem,
-            input,
-            search
-        };
+        if (! input.value.value) {
+            emits('autosave');
+        }
+
+        return;
     }
+    window.axios
+        .get(props.endpoint + '?search=' + input.value.value)
+        .then(response => {
+            items.value = response.data.length ? response.data : ['No match found'];
+            open.value = true;
+        }).catch(error => {
+            console.log(error);
+        });
+}, 300);
+
+const selectItem = (item) => {
+    input.value.value = item;
+    open.value = false;
+    emits('update:modelValue', item);
+    emits('autosave');
 };
 </script>
 

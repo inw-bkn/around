@@ -105,6 +105,7 @@
     <Admission
         ref="admissionForm"
         @confirmed="confirmed"
+        mode="hn"
     />
 </template>
 
@@ -121,6 +122,7 @@ const props = defineProps({
 });
 const admissionForm = ref(null);
 const newCase = useForm({
+    hn: null,
     an: null
 });
 const searchForm = useForm({
@@ -128,8 +130,9 @@ const searchForm = useForm({
     scope: props.filters.scope,
 });
 
-const confirmed = (an) => {
-    newCase.an = an;
+const confirmed = (admission) => {
+    newCase.hn = admission.hn;
+    newCase.an = admission.an;
     newCase.post(window.route('procedures.acute-hemodialysis.store'));
 };
 </script>

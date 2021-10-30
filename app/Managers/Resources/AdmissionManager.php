@@ -8,9 +8,23 @@ use Illuminate\Support\Str;
 
 class AdmissionManager
 {
-    public function manage($an)
+    public function manage($key, $recently = false)
     {
-        $admissionData = app()->make('App\Contracts\PatientAPI')->getAdmission($an);
+        $admissionData = $recently
+                            ? app()->make('App\Contracts\PatientAPI')->getAdmission($key)
+                            : app()->make('App\Contracts\PatientAPI')->recentlyAdmission($key);
+
+        if ($recently) {
+            $admissionData = app()->make('App\Contracts\PatientAPI')->recentlyAdmission($key);
+            if (! $admissionData['found']) {
+                return $admissionData;
+            }
+            $an = $admissionData['an'];
+        } else {
+            $admissionData = app()->make('App\Contracts\PatientAPI')->getAdmission($key);
+            $an = $key;
+        }
+
         $admission = Admission::whereAn($an)->first();
 
         if ($admission) {

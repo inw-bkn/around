@@ -326,46 +326,61 @@
             Reservation
         </h2>
         <hr class="my-4 border-b border-bitter-theme-light">
-        <div class="lg:grid grid-cols-2 gap-2 lg:gap-6">
-            <div class="md:grid grid-cols-2 gap-2 lg:gap-6">
-                <FormAutocomplete
-                    label="dialysis at"
-                    name="dialysis_at"
-                    v-model="order.dialysis_at"
-                    :endpoint="route('resources.api.wards')"
-                />
-                <FormSelect
-                    label="dialysis type"
-                    name="order_dialysis_type"
-                    v-model="order.dialysis_type"
-                    :options="configs.dialysis_types"
-                />
-                <FormDatetime
-                    label="required date"
-                    name="date_note"
-                    v-model="order.date_note"
-                    :options="{ enable: configs.availableDates, onDayCreate: onDayCreate, inline: true }"
-                />
-                <FormSelect
-                    label="patient type"
-                    name="order_patient_type"
+
+        <div class="md:grid grid-cols-2 gap-2 lg:gap-6">
+            <FormAutocomplete
+                label="dialysis at"
+                name="dialysis_at"
+                v-model="order.dialysis_at"
+                :endpoint="route('resources.api.wards')"
+                :error="order.errors.dialysis_at"
+            />
+            <FormAutocomplete
+                label="attending"
+                name="attending_staff"
+                v-model="order.attending_staff"
+                :endpoint="route('resources.api.staffs')"
+                :params="'&division_id=4'"
+                :error="order.errors.attending_staff"
+            />
+            <FormSelect
+                label="dialysis type"
+                name="order_dialysis_type"
+                v-model="order.dialysis_type"
+                :options="configs.dialysis_types"
+            />
+            <div>
+                <label class="form-label">patient type</label>
+                <FormRadio
+                    class="grid grid-cols-2 gap-x-2"
+                    name="patient_type"
                     v-model="order.patient_type"
-                    :options="['Acute HD', 'Chronic HD']"
+                    :options="['Acute', 'Chronic']"
                 />
             </div>
+        </div>
+        <div class="md:grid grid-cols-2 gap-2 lg:gap-6">
+            <FormDatetime
+                label="required date"
+                name="date_note"
+                v-model="order.date_note"
+                :options="{ enable: configs.availableDates, onDayCreate: onDayCreate, inline: true }"
+            />
             <Slots
                 :reserved-slots="reservedSlots"
                 v-if="order.date_note"
             />
         </div>
-        <SpinnerButton
-            class="block w-full mt-2 lg:mt-0 text-center btn btn-bitter"
-            @click="reserve"
-            :spin="order.processing"
-            :disabled="reserveButtonDisable"
-        >
-            RESERVE
-        </SpinnerButton>
+        <div class="mt-2 lg:mt-0 md:pt-4">
+            <SpinnerButton
+                class="block w-full text-center btn btn-bitter"
+                @click="reserve"
+                :spin="order.processing"
+                :disabled="reserveButtonDisable"
+            >
+                RESERVE
+            </SpinnerButton>
+        </div>
     </div>
     <FormSelectOther
         :placeholder="selectOther.placeholder"
@@ -459,7 +474,9 @@ const autosave = debounce(function (url, data) {
 const order = useForm({
     dialysis_type: null,
     dialysis_at: null,
+    attending_staff: null,
     date_note: null,
+    patient_type: null,
     case_record_id: form.record.id,
     patient_id: form.record.patient_id,
 });
@@ -522,11 +539,12 @@ watch (
 
 const reservedSlots = ref([]);
 const reserveButtonDisable = computed(() => {
-    return !order.dialysis_at || !order.date_note || !order.dialysis_type;
+    return !order.dialysis_at || !order.date_note || !order.dialysis_type || !order.patient_type || !order.attending_staff;
 });
 
 const reserve = () => {
     order.post(window.route('procedures.acute-hemodialysis.orders.store'), {
+        preserveScroll: true,
         onFinish: () => order.processing = false,
     });
 };

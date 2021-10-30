@@ -19,8 +19,7 @@ class CreateDivisionsTable extends Migration
             $table->string('name_eng')->index();
             $table->string('name_eng_short', 60)->index();
             $table->string('department', 60)->index();
-            $table->boolean('active')->default(true);
-            $table->unsignedInteger('creator_id')->index()->nullable();
+            $table->boolean('active')->default(true)->index();
             $table->timestamps();
         });
     }

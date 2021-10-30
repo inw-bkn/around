@@ -6,7 +6,10 @@ use App\Contracts\AuthenticationAPI;
 use App\Contracts\PatientAPI;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class ToothpasteAPI implements PatientAPI, AuthenticationAPI
 {
@@ -161,15 +164,17 @@ class ToothpasteAPI implements PatientAPI, AuthenticationAPI
         try {
             $response = Http::timeout(2)
                         ->withOptions(['verify' => false])
-                        ->retry(3, 100)
+                        ->retry(5, 100, fn ($exception) => $exception instanceof ConnectionException)
                         ->asForm()
                         ->post(config('services.toothpaste.url'), ['payload' => $data]);
         } catch (Exception $e) {
-            return [
-                'ok' => false,
-                'found' => false,
-                'message' => __('service.failed'),
-            ];
+            $errorsInAWhile = Cache::remember('connection-errors-in-a-while', 60, fn () => 0) + 1;
+            Cache::increment('connection-errors-in-a-while');
+            if ($errorsInAWhile > 3) {
+                Log::error('toothpaste '.$e->getMessage());
+            }
+
+            return ['ok' => false];
         }
 
         return $response->json();

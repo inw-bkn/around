@@ -20,7 +20,7 @@ class CreateRegistriesTable extends Migration
             $table->string('label_eng')->index();
             $table->string('route')->index();
             $table->unsignedSmallInteger('division_id')->default(1)->constrained('divisions')->onDelete('cascade');
-            $table->softDeletes();
+            $table->boolean('active')->default(true)->index();
             $table->timestamps();
         });
 

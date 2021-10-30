@@ -17,9 +17,11 @@ class OrdersController extends Controller
         $this->manager = new OrderManager();
     }
 
-    public function store()
+    public function store(StoreOrderRequest $request)
     {
-        $note = $this->manager->store(Request::all());
+        $validated = $request->validated(); // return only validated
+
+        $note = $this->manager->store($validated);
 
         return Redirect::route('procedures.acute-hemodialysis.orders.edit', $note->slug);
     }

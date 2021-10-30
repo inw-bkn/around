@@ -19,9 +19,7 @@ class CreateWardsTable extends Migration
             $table->string('name_short', 120)->index()->nullable();
             $table->string('name_ref')->unique();
             $table->unsignedSmallInteger('division_id')->default(1)->index()->constrained('divisions')->onDelete('cascade');
-            $table->boolean('active')->default(true);
-            $table->unsignedInteger('creator_id')->index()->nullable();
-            $table->softDeletes();
+            $table->boolean('active')->default(true)->index();
             $table->timestamps();
         });
     }

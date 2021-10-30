@@ -3,11 +3,13 @@
 namespace App\Managers\Procedures\AcuteHemodialysis;
 
 use App\Managers\Resources\AdmissionManager;
+use App\Managers\Resources\PatientManager;
 use App\Models\CaseRecord;
 use App\Models\Note;
 use App\Models\NoteType;
 use App\Models\Registry;
 use App\Models\Resources\Admission;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -48,7 +50,11 @@ class CaseRecordManager
         }
 
         $form = $caseRecord->form;
-        $form['admission'] = (new AdmissionManager)->manage($caseRecord->form['an'])['admission'];
+        if ($form['an']) {
+            $form['admission'] = (new AdmissionManager)->manage($caseRecord->form['an'])['admission'];
+        } else {
+            $form['admission'] = [];
+        }
         $form['record']['id'] = $caseRecord->id;
         $form['record']['slug'] = $caseRecord->slug;
         $form['record']['patient_id'] = $caseRecord->patient_id;
@@ -95,10 +101,14 @@ class CaseRecordManager
 
         $caseRecord = new CaseRecord();
         $caseRecord->slug = Str::uuid()->toString();
-        $caseRecord->patient_id = Admission::whereAn($data['an'])->first()->patient_id;
+        $search = (new PatientManager)->manage($data['hn']);
+        if (! $search['found']) {
+            throw new ModelNotFoundException();
+        }
+        $caseRecord->patient_id = $search['patient']->id;
         $caseRecord->registry_id = Registry::findByName('acute_hd')->id;
         $form = $this->initForm();
-        $form['an'] = $data['an'];
+        $form['an'] = $data['an'] ?? null;
         $caseRecord->form = $form;
         $caseRecord->creator_id = Auth::user()->id;
         $caseRecord->updater_id = Auth::user()->id;

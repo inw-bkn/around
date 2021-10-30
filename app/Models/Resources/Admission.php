@@ -4,12 +4,11 @@ namespace App\Models\Resources;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
 class Admission extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $guarded = [];
 
@@ -107,6 +106,15 @@ class Admission extends Model
         return $this->dismissed_at
             ? $this->dismissed_at->tz(Auth::user() ? Auth::user()->timezone : 'UTC')->format('d M Y H:i')
             : null;
+    }
+
+    public function getDismissedAtForHumansAttribute()
+    {
+        if (! $this->dismissed_at) {
+            return null;
+        }
+
+        return $this->dismissed_at->longRelativeToNowDiffForHumans();
     }
 
     public function getPlaceNameAttribute()

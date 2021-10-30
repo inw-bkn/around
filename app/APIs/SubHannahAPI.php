@@ -5,7 +5,9 @@ namespace App\APIs;
 use App\Contracts\AuthenticationAPI;
 use App\Contracts\PatientAPI;
 use Exception;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -161,29 +163,25 @@ class SubHannahAPI implements PatientAPI, AuthenticationAPI
     protected function makePost($url, $data)
     {
         $headers = ['app' => config('services.SUBHANNAH_API_NAME'), 'token' => config('services.SUBHANNAH_API_TOKEN')];
-        $options = ['timeout' => 2.0, 'verify' => false];
         try {
-            $response = Http::withOptions($options)
+            $response = Http::timeout(2)
                             ->withHeaders($headers)
-                            ->retry(3, 100)
+                            ->retry(5, 100, fn ($exception) => $exception instanceof ConnectionException)
                             ->post(config('services.SUBHANNAH_API_URL').$url, $data);
         } catch (Exception $e) {
-            Log::error($url.'@hannah '.$e->getMessage());
+            $errorsInAWhile = Cache::remember('connection-errors-in-a-while', 60, fn () => 0) + 1;
+            Cache::increment('connection-errors-in-a-while');
+            if ($errorsInAWhile > 3) {
+                Log::error($url.'@hannah '.$e->getMessage());
+            }
 
-            return ['ok' => false, 'status' => 408, 'error' => 'client', 'body' => 'Service is not available at the moment, please try again.'];
+            return ['ok' => false];
         }
 
         if ($response->successful()) {
             return $response->json();
         }
 
-        Log::error($url.'@hannah '.$response->body().' '.$response->status());
-
-        return [
-            'ok' => false,
-            'status' => $response->status(),
-            'error' => $response->serverError() ? 'server' : 'client',
-            'body' => 'Service is not available at the moment, please try again.',
-        ];
+        return ['ok' => false];
     }
 }

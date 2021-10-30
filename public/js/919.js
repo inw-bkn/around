@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[919],{919:(n,u,e)=>{e.r(u),e.d(u,{default:()=>t});var r=e(6252),a=[(0,r._)("h1",null,"around 🤲🏻 about 🙌🏻 arrange",-1)];const l={},t=(0,e(3744).Z)(l,[["render",function(n,u){return(0,r.wg)(),(0,r.iD)("div",null,a)}]])}}]);

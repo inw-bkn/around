@@ -33,6 +33,16 @@ class Note extends Model
         return $this->belongsTo('App\Models\User', 'user_id', 'id');
     }
 
+    public function scopeWithAuthorUsername($query)
+    {
+        $query->addSelect([
+            'author_username' => User::select('name')
+                    ->whereColumn('id', 'notes.user_id')
+                    ->limit(1)
+                    ->latest(),
+        ]);
+    }
+
     /**
      * Get all of the owning place models.
      */

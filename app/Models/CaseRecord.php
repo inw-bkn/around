@@ -14,6 +14,7 @@ class CaseRecord extends Model
 
     protected $casts = [
         'form' => 'array',
+        'date_note' => 'datetime',
     ];
 
     public function patient()
@@ -24,5 +25,14 @@ class CaseRecord extends Model
     public function notes()
     {
         return $this->hasMany(Note::class);
+    }
+
+    public function latestAcuteOrder()
+    {
+        return $this->hasOne(Note::class)->ofMany([
+            'date_note' => 'max',
+        ], function ($query) {
+            $query->where('note_type_id', 1);
+        });
     }
 }

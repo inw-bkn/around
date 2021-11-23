@@ -29,16 +29,18 @@ class CaseRecordManager
                 ],
                 'action-menu' => [],
             ],
-            'cases' => CaseRecord::with('patient')
-                    ->whereRegistryId(Registry::findByName('acute_hd')->id)
-                    ->paginate()
-                    ->withQueryString()
-                    ->through(fn ($case) => [
-                        'slug' => $case->slug,
-                        'hn' => $case->patient->hn,
-                        'an' => $case->form['an'],
-                        'patient_name' => $case->patient->full_name,
-                    ]),
+            'cases' => CaseRecord::whereRegistryId(Registry::findByName('acute_hd')->id)
+                                ->with(['patient', 'latestAcuteOrder' => fn ($q) => $q->withAuthorUsername()])
+                                ->paginate(3)
+                                ->withQueryString()
+                                ->through(fn ($case) => [
+                                    'slug' => $case->slug,
+                                    'hn' => $case->patient->hn,
+                                    'patient_name' => $case->patient->full_name,
+                                    'date_dialyze' =>$case->latestAcuteOrder?->date_note?->format('M j'),
+                                    'date_reserved' =>$case->latestAcuteOrder?->created_at?->tz(7)?->format('M j'),
+                                    'md' => $case->latestAcuteOrder?->author_username,
+                                ]),
         ];
     }
 

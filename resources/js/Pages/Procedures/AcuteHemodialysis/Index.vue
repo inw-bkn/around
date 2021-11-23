@@ -18,47 +18,39 @@
         <div class="bg-white rounded shadow overflow-x-auto hidden md:block">
             <table class="w-full whitespace-no-wrap">
                 <tr class="text-left font-semibold">
-                    <th class="px-6 pt-6 pb-4">
-                        AN
-                    </th>
-                    <th class="px-6 pt-6 pb-4">
-                        HN
-                    </th>
-                    <th class="px-6 pt-6 pb-4">
-                        Name
-                    </th>
                     <th
                         class="px-6 pt-6 pb-4"
-                        colspan="2"
-                    >
-                        Ward
-                    </th>
+                        v-for="column in headrow"
+                        :key="column"
+                        v-text="column"
+                        :colspan="column === 'MD' ? 2:1"
+                    />
                 </tr>
                 <tr
                     class="focus-within:bg-alt-theme-light"
                     v-for="(caseRecord, key) in cases.data"
                     :key="key"
                 >
-                    <td class="px-6 py4 border-t">
-                        <div class="flex items-center">
-                            {{ caseRecord.an }}
-                        </div>
-                    </td>
-                    <td class="px-6 py4 border-t">
-                        <div class="flex items-center">
-                            {{ caseRecord.hn }}
-                        </div>
-                    </td>
-                    <td class="px-6 py4 border-t">
-                        <div class="flex items-center">
-                            {{ caseRecord.patient_name }}
-                        </div>
-                    </td>
-                    <td class="px-6 py4 border-t">
-                        <div class="flex items-center">
-                            {{ caseRecord.ward }}
-                        </div>
-                    </td>
+                    <td
+                        class="px-6 py4 border-t"
+                        v-text="caseRecord.hn"
+                    />
+                    <td
+                        class="px-6 py4 border-t"
+                        v-text="caseRecord.patient_name"
+                    />
+                    <td
+                        class="px-6 py4 border-t"
+                        v-text="caseRecord.date_dialyze"
+                    />
+                    <td
+                        class="px-6 py4 border-t"
+                        v-text="caseRecord.date_reserved"
+                    />
+                    <td
+                        class="px-6 py4 border-t"
+                        v-text="caseRecord.md"
+                    />
                     <td class="border-t">
                         <Link
                             class="px-4 py-2 flex items-center focus:text-alt-theme-light"
@@ -120,6 +112,9 @@ const props = defineProps({
     cases: { type: Object, required: true },
     filters: { type: Object, required: true },
 });
+
+const headrow = ['HN', 'Name', 'Dialyze on', 'Ordered on', 'MD'];
+
 const admissionForm = ref(null);
 const newCase = useForm({
     hn: null,

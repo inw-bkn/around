@@ -16,11 +16,11 @@
             </button>
         </div>
         <div class="bg-white rounded shadow overflow-x-auto hidden md:block">
-            <table class="w-full whitespace-no-wrap">
+            <table class="w-full whitespace-nowrap">
                 <tr class="text-left font-semibold">
                     <th
                         class="px-6 pt-6 pb-4"
-                        v-for="column in headrow"
+                        v-for="column in ['HN', 'Name', 'Dialyze on', 'Ordered on', 'MD']"
                         :key="column"
                         v-text="column"
                         :colspan="column === 'MD' ? 2:1"
@@ -33,23 +33,9 @@
                 >
                     <td
                         class="px-6 py4 border-t"
-                        v-text="caseRecord.hn"
-                    />
-                    <td
-                        class="px-6 py4 border-t"
-                        v-text="caseRecord.patient_name"
-                    />
-                    <td
-                        class="px-6 py4 border-t"
-                        v-text="caseRecord.date_dialyze"
-                    />
-                    <td
-                        class="px-6 py4 border-t"
-                        v-text="caseRecord.date_reserved"
-                    />
-                    <td
-                        class="px-6 py4 border-t"
-                        v-text="caseRecord.md"
+                        v-for="field in ['hn', 'patient_name', 'date_dialyze', 'date_reserved', 'md']"
+                        :key="field"
+                        v-text="caseRecord[field]"
                     />
                     <td class="border-t">
                         <Link
@@ -92,6 +78,30 @@
                 </Link>
             </div>
         </div>
+
+        <!-- pagination -->
+        <div v-if="cases.links.length > 3">
+            <div class="flex flex-wrap -mb-1 mt-4">
+                <template v-for="(link, key) in cases.links">
+                    <div
+                        v-if="link.url === null"
+                        :key="key"
+                        class="mr-1 mb-1 px-4 py-3 text-sm leading-4 bg-gray-200 text-gray-400 border rounded cursor-not-allowed"
+                        v-html="link.label"
+                    />
+                    <Link
+                        v-else
+                        :key="key+'theLink'"
+                        class="mr-1 mb-1 px-4 py-3 text-sm text-dark-theme-light leading-4 border border-alt-theme-light rounded hover:bg-white focus:border-dark-theme-light focus:text-dark-theme-light transition-colors"
+                        :class="{ 'bg-alt-theme-light cursor-not-allowed hover:bg-alt-theme-light': link.active }"
+                        :href="link.url"
+                        as="button"
+                        :disabled="link.active"
+                        v-html="link.label"
+                    />
+                </template>
+            </div>
+        </div>
     </div>
     <!-- create new case -->
     <Admission
@@ -112,8 +122,6 @@ const props = defineProps({
     cases: { type: Object, required: true },
     filters: { type: Object, required: true },
 });
-
-const headrow = ['HN', 'Name', 'Dialyze on', 'Ordered on', 'MD'];
 
 const admissionForm = ref(null);
 const newCase = useForm({

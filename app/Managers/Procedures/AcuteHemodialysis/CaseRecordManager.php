@@ -31,7 +31,7 @@ class CaseRecordManager
             ],
             'cases' => CaseRecord::whereRegistryId(Registry::findByName('acute_hd')->id)
                                 ->with(['patient', 'latestAcuteOrder' => fn ($q) => $q->withAuthorUsername()])
-                                ->paginate(3)
+                                ->paginate()
                                 ->withQueryString()
                                 ->through(fn ($case) => [
                                     'slug' => $case->slug,

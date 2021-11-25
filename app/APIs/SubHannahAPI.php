@@ -160,12 +160,69 @@ class SubHannahAPI implements PatientAPI, AuthenticationAPI
         return $data;
     }
 
+    public function wardsSummary($wardName = '')
+    {
+        $data = $this->makePost('api/wards-summary/'.$wardName, []);
+
+        if (! $data) { // error: $data = null
+            return [
+                'found' => false,
+                'message' => __('service.failed'),
+            ];
+        }
+
+        return $data;
+    }
+
+    public function staysSummary($refId = '')
+    {
+        $data = $this->makePost('api/stays-summary/'.$refId, []);
+
+        if (! $data) { // error: $data = null
+            return [
+                'found' => false,
+                'message' => __('service.failed'),
+            ];
+        }
+
+        return $data;
+    }
+
+    public function stayNotes($refId)
+    {
+        $data = $this->makePost('api/stay-notes/'.$refId, []);
+
+        if (! $data) { // error: $data = null
+            return [
+                'found' => false,
+                'message' => __('service.failed'),
+            ];
+        }
+
+        return $data;
+    }
+
+    public function stayRecently($hn)
+    {
+        $data = $this->makePost('api/stay-recently/'.$hn, []);
+
+        if (! $data) { // error: $data = null
+            return [
+                'found' => false,
+                'message' => __('service.failed'),
+            ];
+        }
+
+        return $data;
+    }
+
     protected function makePost($url, $data)
     {
         $headers = ['app' => config('services.SUBHANNAH_API_NAME'), 'token' => config('services.SUBHANNAH_API_TOKEN')];
         try {
             $response = Http::timeout(2)
                             ->withHeaders($headers)
+                            ->withOptions(['verify' => ! str_contains(config('services.SUBHANNAH_API_URL'), '10.7.')])
                             ->retry(5, 100, fn ($exception) => $exception instanceof ConnectionException)
                             ->post(config('services.SUBHANNAH_API_URL').$url, $data);
         } catch (Exception $e) {

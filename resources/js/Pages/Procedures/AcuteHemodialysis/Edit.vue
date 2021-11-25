@@ -358,13 +358,13 @@
         />
         <template v-if="form.admission.an">
             <ImageUploader
-                class="mt-2 md:mt-4"
+                class="mt-4 md:mt-6"
                 label="๏ ipd consent form"
                 name="ipd_consent_form"
                 v-model="form.ipd_consent_form"
             />
             <FormCheckbox
-                class="mt-2 md:mt-4"
+                class="mt-4 md:mt-6"
                 label="Same consent form"
                 name="same_consent_form"
                 v-model="form.same_consent_form"
@@ -538,6 +538,36 @@ watch (
         autosave(window.route('procedures.acute-hemodialysis.update', form.record.slug), data);
     },
     { deep: true }
+);
+
+watch(
+    () => form.indications.initiate_chronic_hd,
+    (val) => {
+        if (val) {
+            form.indications.maintain_chronic_hd = false;
+            form.indications.change_from_pd = false;
+        }
+    }
+);
+
+watch(
+    () => form.indications.maintain_chronic_hd,
+    (val) => {
+        if (val) {
+            form.indications.initiate_chronic_hd = false;
+            form.indications.change_from_pd = false;
+        }
+    }
+);
+
+watch(
+    () => form.indications.change_from_pd,
+    (val) => {
+        if (val) {
+            form.indications.initiate_chronic_hd = false;
+            form.indications.maintain_chronic_hd = false;
+        }
+    }
 );
 
 const autosave = debounce(function (url, data) {

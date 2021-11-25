@@ -348,13 +348,27 @@
 
         <hr class="border border-dashed my-2 md:my-4 xl:my-8">
         <!-- consent signed -->
-        <FormCheckbox
-            class="mt-4 md:mt-8 xl:mt-16"
-            label="Consent signed"
-            name="consent_signed"
-            v-model="form.consent_signed"
-            :toggler="true"
+        <h3 class="form-label mt-4 md:mt-8 xl:mt-16">
+            Consent :
+        </h3>
+        <ImageUploader
+            label="๏ opd consent form"
+            name="opd_consent_form"
+            v-model="form.opd_consent_form"
         />
+        <template v-if="form.admission.an">
+            <ImageUploader
+                label="๏ ipd consent form"
+                name="ipd_consent_form"
+                v-model="form.ipd_consent_form"
+            />
+            <FormCheckbox
+                label="Same consent form"
+                name="same_consent_form"
+                v-model="form.same_consent_form"
+                :toggler="true"
+            />
+        </template>
         <hr class="border border-dashed my-2 md:my-4 xl:my-8">
         <h3 class="form-label mt-4 md:mt-8 xl:mt-16">
             Medical scheme :
@@ -457,6 +471,7 @@ import FormCheckbox from '@/Components/Controls/FormCheckbox';
 import FormRadio from '@/Components/Controls/FormRadio';
 import FormSelectOther from '@/Components/Controls/FormSelectOther';
 import SpinnerButton from '@/Components/Controls/SpinnerButton';
+import ImageUploader from '@/Components/Controls/ImageUploader';
 import Slots from '@/Components/Helpers/AcuteHemodialysis/Slots';
 import Orders from '@/Components/Helpers/AcuteHemodialysis/Orders';
 import { useForm } from '@inertiajs/inertia-vue3';
@@ -474,8 +489,8 @@ const form = useForm({...props.caseRecordForm});
 
 const reset = {
     previous_crrt: true,
-    renal_diagnosis_aki: true,
-    renal_diagnosis_ckd: true
+    // renal_diagnosis_aki: true,
+    // renal_diagnosis_ckd: true
 };
 watch (
     () => form,
@@ -488,32 +503,32 @@ watch (
             reset.previous_crrt = false;
         }
 
-        if (!val.renal_diagnosis_aki.check && !reset.renal_diagnosis_aki) {
-            val.renal_diagnosis_aki.sepsis = false;
-            val.renal_diagnosis_aki.chf = false;
-            val.renal_diagnosis_aki.acs = false;
-            val.renal_diagnosis_aki.other_cardiac_cause = false;
-            val.renal_diagnosis_aki.glomerulonephritis = false;
-            val.renal_diagnosis_aki.acute_interstitial_nephritis = false;
-            val.renal_diagnosis_aki.contrast_induced_nephropathy = false;
-            val.renal_diagnosis_aki.acute_tubular_necrosis = false;
-            val.renal_diagnosis_aki.drug_induced_aki = false;
-            val.renal_diagnosis_aki.other = null;
-            reset.renal_diagnosis_aki = true;
-        } else if (val.renal_diagnosis_aki.check) {
-            reset.renal_diagnosis_aki = false;
-        }
+        // if (!val.renal_diagnosis_aki.check && !reset.renal_diagnosis_aki) {
+        //     val.renal_diagnosis_aki.sepsis = false;
+        //     val.renal_diagnosis_aki.chf = false;
+        //     val.renal_diagnosis_aki.acs = false;
+        //     val.renal_diagnosis_aki.other_cardiac_cause = false;
+        //     val.renal_diagnosis_aki.glomerulonephritis = false;
+        //     val.renal_diagnosis_aki.acute_interstitial_nephritis = false;
+        //     val.renal_diagnosis_aki.contrast_induced_nephropathy = false;
+        //     val.renal_diagnosis_aki.acute_tubular_necrosis = false;
+        //     val.renal_diagnosis_aki.drug_induced_aki = false;
+        //     val.renal_diagnosis_aki.other = null;
+        //     reset.renal_diagnosis_aki = true;
+        // } else if (val.renal_diagnosis_aki.check) {
+        //     reset.renal_diagnosis_aki = false;
+        // }
 
-        if (!val.renal_diagnosis_ckd.check && !reset.renal_diagnosis_ckd) {
-            val.renal_diagnosis_ckd.check = false;
-            val.renal_diagnosis_ckd.dn = false;
-            val.renal_diagnosis_ckd.ht = false;
-            val.renal_diagnosis_ckd.glomerular_disease = false;
-            val.renal_diagnosis_ckd.chronic_tubulointerstitial_nephritis = false;
-            val.renal_diagnosis_ckd.other = null;
-        } else if (val.renal_diagnosis_ckd.check) {
-            reset.renal_diagnosis_ckd = false;
-        }
+        // if (!val.renal_diagnosis_ckd.check && !reset.renal_diagnosis_ckd) {
+        //     val.renal_diagnosis_ckd.check = false;
+        //     val.renal_diagnosis_ckd.dn = false;
+        //     val.renal_diagnosis_ckd.ht = false;
+        //     val.renal_diagnosis_ckd.glomerular_disease = false;
+        //     val.renal_diagnosis_ckd.chronic_tubulointerstitial_nephritis = false;
+        //     val.renal_diagnosis_ckd.other = null;
+        // } else if (val.renal_diagnosis_ckd.check) {
+        //     reset.renal_diagnosis_ckd = false;
+        // }
 
         let data = val.data();
         delete data.admission;

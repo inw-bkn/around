@@ -358,11 +358,13 @@
         />
         <template v-if="form.admission.an">
             <ImageUploader
+                class="mt-2 md:mt-4"
                 label="๏ ipd consent form"
                 name="ipd_consent_form"
                 v-model="form.ipd_consent_form"
             />
             <FormCheckbox
+                class="mt-2 md:mt-4"
                 label="Same consent form"
                 name="same_consent_form"
                 v-model="form.same_consent_form"

@@ -83,4 +83,6 @@ const change = (event) => {
     emits('update:modelCheckbox', event.target.checked);
     emits('autosave');
 };
+
+defineExpose({focus});
 </script>

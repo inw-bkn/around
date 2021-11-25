@@ -12,6 +12,7 @@
                 class="w-full p-2 md:p-4 rounded shadow"
                 :class="{
                     'col-span-4': slot.slotColSpan === 4,
+                    'col-span-3': slot.slotColSpan === 3,
                     'col-span-2': slot.slotColSpan === 2,
                     'col-span-1': slot.slotColSpan === 1,
                     'bg-red-300 md:flex justify-between items-center': !slot.available,
@@ -60,7 +61,9 @@ export default {
         const slotColSpan = (typeName) => {
             if (typeName === 'SLEDD') {
                 return 4;
-            } else if (typeName.indexOf('4') !== -1) {
+            } if (typeName.startsWith('HD+TPE')) {
+                return 3;
+            } else if (typeName.indexOf('4') !== -1 || typeName.indexOf('3') !== -1) {
                 return 2;
             } else {
                 return 1;
@@ -68,17 +71,44 @@ export default {
         };
 
         const slots = computed(() => {
-            let reserveSlots = props.reservedSlots.map(s => {
+            let slotGroup = [[], [], [], [], []];
+            let availableSlotsCount = 0;
+
+            props.reservedSlots.forEach(s => {
                 s.slotColSpan = slotColSpan(s.type);
                 s.type = s.type.split(' ')[0];
                 s.available = false;
-                return s;
+                slotGroup[s.slotColSpan].push(s);
+                availableSlotsCount += s.slotColSpan;
             });
-            let availableSlots = 32 - props.reservedSlots.reduce((sum, s) => sum + s.slotColSpan, 0);
-            for(let i = 1;  i <= availableSlots; i++) {
-                reserveSlots.push({ slotColSpan: 1, available: true });
+
+            availableSlotsCount = 32 - availableSlotsCount;
+            for(let i = 1;  i <= availableSlotsCount; i++) {
+                slotGroup[1].push({ slotColSpan: 1, available: true });
             }
-            return reserveSlots.sort((a, b) => a.slotColSpan < b.slotColSpan);
+
+            let rearrangeSlots = [];
+            for(let i = slotGroup.length - 1 ; i > 0; i--) {
+                slotGroup[i].forEach((slot) => {
+                    rearrangeSlots.push(slot);
+                    if (slot.slotColSpan === 4) {
+                        return;
+                    } else if (slot.slotColSpan === 3) {
+                        if (slotGroup[1].length) {
+                            rearrangeSlots.push(slotGroup[1].shift());
+                        }
+                    } else if (slot.slotColSpan === 2) {
+                        if (slotGroup[2].length) {
+                            rearrangeSlots.push(slotGroup[2].shift());
+                        } else if (slotGroup[1].length) {
+                            rearrangeSlots.push(slotGroup[1].shift());
+                            rearrangeSlots.push(slotGroup[1].shift());
+                        }
+                    }
+                });
+            }
+
+            return rearrangeSlots.reverse();
         });
 
         return {

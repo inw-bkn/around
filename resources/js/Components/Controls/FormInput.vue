@@ -59,37 +59,28 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from '@vue/reactivity';
-export default {
-    emits: ['autosave', 'update:modelValue', 'update:modelCheckbox'],
-    props: {
-        modelValue: { type: String, default: '' },
-        modelCheckbox: { type: Boolean },
-        name: { type: String, required: true },
-        label: { type: String, default: '' },
-        type: { type: String, default: 'text' },
-        placeholder: { type: String, default: '' },
-        pattern: { type: String, default: '' },
-        readonly: { type: Boolean },
-        error: { type: String, default: '' },
-        switchLabel: { type: String, default: '' }
-    },
-    setup (props, context) {
-        const input = ref(null);
-        const focus = () => {
-            input.value.focus();
-        };
-        const change = (event) => {
-            context.emit('update:modelCheckbox', event.target.checked);
-            context.emit('autosave');
-        };
+const emits = defineEmits(['autosave', 'update:modelValue', 'update:modelCheckbox']);
+defineProps({
+    modelValue: { type: String, default: '' },
+    modelCheckbox: { type: Boolean },
+    name: { type: String, required: true },
+    label: { type: String, default: '' },
+    type: { type: String, default: 'text' },
+    placeholder: { type: String, default: '' },
+    pattern: { type: String, default: '' },
+    readonly: { type: Boolean },
+    error: { type: String, default: '' },
+    switchLabel: { type: String, default: '' }
+});
 
-        return {
-            input,
-            focus,
-            change,
-        };
-    }
+const input = ref(null);
+const focus = () => {
+    input.value.focus();
+};
+const change = (event) => {
+    emits('update:modelCheckbox', event.target.checked);
+    emits('autosave');
 };
 </script>

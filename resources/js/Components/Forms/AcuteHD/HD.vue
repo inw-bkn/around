@@ -239,45 +239,60 @@
     </transition>
     <hr class="border border-dashed my-2 md:my-4 xl:my-8">
     <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
-        <FormInput
-            pattern="\d*"
-            label="uf (ml.)"
-            v-model="form.ultrafiltration"
-            name="ultrafiltration"
-            type="number"
-            @autosave="validate('ultrafiltration')"
-            :error="errors.ultrafiltration"
-            placeholder="[0, 4000] ml"
-        />
+        <div>
+            <label
+                for=""
+                class="form-label"
+            >uf (ml.)</label>
+            <div class="grid gap-2 md:grid-cols-2">
+                <FormInput
+                    name="ultrafiltration_min"
+                    v-model="form.ultrafiltration_min"
+                    pattern="\d*"
+                    type="number"
+                    @autosave="validate('ultrafiltration_min')"
+                    :error="errors.ultrafiltration_min"
+                    placeholder="min [0, 5500]"
+                />
+                <FormInput
+                    name="ultrafiltration_max"
+                    v-model="form.ultrafiltration_max"
+                    pattern="\d*"
+                    type="number"
+                    @autosave="validate('ultrafiltration_max')"
+                    :error="errors.ultrafiltration_max"
+                    placeholder="max [0, 5500]"
+                />
+            </div>
+        </div>
         <FormInput
             label="dry weight (kg.)"
             v-model="form.dry_weight"
             name="dry_weight"
             type="number"
         />
-        <FormInput
-            label="50% Glucose IV volume (ml)"
-            v-model="form.glucose_50_percent_iv_volume"
-            name="glucose_50_percent_iv_volume"
-            pattern="\d*"
-            type="number"
-            @autosave="validate('glucose_50_percent_iv_volume')"
-            :error="errors.glucose_50_percent_iv_volume"
-            placeholder="[50, 100] ml"
-        />
-        <FormInput
-            v-model="form.glucose_50_percent_iv_at"
-            type="tel"
-            name="glucose_50_percent_iv_at"
-            label="50% glucose iv (at hour)"
-        />
         <div>
-            <label class="form-label">20% albumin prime 100 ml</label>
+            <label class="form-label">50% Glucose IV volume (ml)</label>
             <FormRadio
                 class="grid grid-cols-2 gap-x-2"
-                name="albumin_20_percent_prime_100ml"
-                v-model="form.albumin_20_percent_prime_100ml"
-                :options="['Yes', 'No']"
+                name="glucose_50_percent_iv_volume"
+                v-model="form.glucose_50_percent_iv_volume"
+                :options="['50', '100']"
+            />
+        </div>
+        <FormSelect
+            v-model="form.glucose_50_percent_iv_at"
+            name="glucose_50_percent_iv_at"
+            label="50% glucose iv (at hour)"
+            :options="[1,2,3,4]"
+        />
+        <div>
+            <label class="form-label">20% albumin prime (ml)</label>
+            <FormRadio
+                class="grid grid-cols-2 gap-x-2"
+                name="albumin_20_percent_prime"
+                v-model="form.albumin_20_percent_prime"
+                :options="['50', '100']"
             />
         </div>
         <FormInput

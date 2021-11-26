@@ -62,15 +62,6 @@
             label="dialysate"
             :options="configs.dialysates"
         />
-        <!-- <FormInput
-            v-model:model-value="form.dialysate_flow"
-            v-model:model-checkbox="form.reverse_flow"
-            type="number"
-            pattern="\d*"
-            name="dialysate_flow"
-            label="dialysate flow (ml/min)"
-            switch-label="Reverse flow"
-        /> -->
         <FormSelect
             v-model:model-value="form.dialysate_flow_rate"
             v-model:model-checkbox="form.reverse_dialysate_flow"
@@ -85,11 +76,61 @@
             :options="configs.blood_flow_rates"
             label="blood flow rate (ml/min)"
         />
-        <FormInput
+        <FormSelect
             v-model="form.dialysate_temperature"
-            type="number"
             name="dialysate_temperature"
+            :options="configs.dialysate_temperatures"
             label="dialysate temperature (℃)"
+        />
+    </div>
+    <hr class="border border-dashed my-2 md:my-4 xl:my-8">
+    <div class="grid md:grid-cols-2 gap-2 xl-gap-8 my-2 md:my-4 xl:mt-8">
+        <div>
+            <FormInput
+                label="sodium"
+                name="sodium"
+                v-model="form.sodium"
+                type="number"
+                pattern="\d*"
+                @autosave="validate('sodium')"
+                :error="errors.sodium"
+                placeholder="[128, 145]"
+            />
+            <FormCheckbox
+                class="mt-2 md:mt-4 xl:mt-8"
+                label="Sodium profile"
+                name="sodium_profile"
+                v-model="form.sodium_profile"
+                :toggler="true"
+            />
+            <transition name="slide-fade">
+                <div
+                    v-if="form.sodium_profile"
+                >
+                    <FormInput
+                        label="start"
+                        name="sodium_profile_start"
+                        v-model="form.sodium_profile_start"
+                        type="number"
+                        pattern="\d*"
+                        :error="errors.sodium_profile_start"
+                    />
+                    <FormInput
+                        label="end"
+                        name="sodium_profile_end"
+                        v-model="form.sodium_profile_end"
+                        type="number"
+                        pattern="\d*"
+                        :error="errors.sodium_profile_end"
+                    />
+                </div>
+            </transition>
+        </div>
+        <FormSelect
+            v-model="form.bicarbonate"
+            name="bicarbonate"
+            label="bicarbonate"
+            :options="configs.bicarbonates"
         />
     </div>
     <hr class="border border-dashed my-2 md:my-4 xl:my-8">

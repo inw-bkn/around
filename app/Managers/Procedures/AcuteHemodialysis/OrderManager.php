@@ -125,6 +125,8 @@ class OrderManager
             ],
             'dialysate_flow_rates' => [300, 500, 800],
             'blood_flow_rates' => [200, 250, 300, 350, 400],
+            'dialysate_temperatures' => [35.5, 36],
+            'bicarbonates' => [28, 32, 35],
             'anticoagulants' => [
                 ['value' => 'None', 'label' => 'None'],
                 ['value' => 'Heparin', 'label' => 'Heparin'],
@@ -163,6 +165,7 @@ class OrderManager
                 ['name' => '', 'labs' => ['Iron study', 'Ferritin']],
             ],
             'validators' => [
+                ['name' => 'sodium', 'min' => 128, 'max' => 145, 'type' => 'integer'],
                 ['name' => 'heparin_loading_dose', 'min' => 250, 'max' => 2000, 'type' => 'integer'],
                 ['name' => 'heparin_maintenance_dose', 'min' => 0, 'max' => 1500, 'type' => 'integer'],
                 ['name' => 'enoxaparin_dose', 'min' => 0.3, 'max' => 0.8, 'type' => 'float'],
@@ -245,6 +248,11 @@ class OrderManager
             'reverse_dialysate_flow' => false,
             'blood_flow_rate' => null,
             'dialysate_temperature' => null,
+            'sodium' => 138,
+            'sodium_profile' => false,
+            'sodium_profile_start' => null,
+            'sodium_profile_end' => null,
+            'bicarbonate' => null,
             'anticoagulant' => null,
             'anticoagulant_none_drip_via_peripheral_iv' => false,
             'anticoagulant_none_nss_200ml_flush_q_hour' => false,

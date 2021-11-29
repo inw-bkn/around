@@ -48,7 +48,7 @@
             v-model="form.access_site_coagulant"
             name="access_site_coagulant"
             :options="(form.access_type && form.access_type.startsWith('AV')) ? configs.av_access_sites : configs.non_av_access_sites"
-            :disabled="!form.access_type"
+            :disabled="!form.access_type || form.access_type === 'รอใส่สาย'"
         />
         <FormSelect
             v-model="form.dialyzer"
@@ -84,7 +84,7 @@
         />
     </div>
     <hr class="border border-dashed my-2 md:my-4 xl:my-8">
-    <div class="grid md:grid-cols-2 gap-2 xl-gap-8 my-2 md:my-4 xl:mt-8">
+    <div class="grid md:grid-cols-2 gap-2 xl:gap-8 my-2 md:my-4 xl:mt-8">
         <div>
             <FormInput
                 label="sodium"
@@ -106,6 +106,7 @@
             <transition name="slide-fade">
                 <div
                     v-if="form.sodium_profile"
+                    class="grid gap-2 md:gap-4 xl:gap-8 mt-2 md:mt-4 xl:mt-8"
                 >
                     <FormInput
                         label="start"
@@ -308,6 +309,14 @@
             pattern="\d*"
         />
     </div>
+    <hr class="border border-dashed my-2 md:my-4 xl:my-8">
+    <FormCheckbox
+        label="Post Dialysis BW"
+        name="post_dialysis_bw"
+        v-model="form.post_dialysis_bw"
+        :toggler="true"
+    />
+
     <hr class="border border-dashed my-2 md:my-4 xl:my-8">
     <label class="form-label">transfustion :</label>
     <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">

@@ -365,7 +365,7 @@
             />
             <FormCheckbox
                 class="mt-4 md:mt-6"
-                label="Same consent form"
+                label="Use same form"
                 name="same_consent_form"
                 v-model="form.same_consent_form"
                 :toggler="true"

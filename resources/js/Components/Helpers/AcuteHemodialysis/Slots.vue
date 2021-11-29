@@ -72,17 +72,17 @@ export default {
 
         const slots = computed(() => {
             let slotGroup = [[], [], [], [], []];
-            let availableSlotsCount = 0;
+            let unavailableSlotsCount = 0;
 
             props.reservedSlots.forEach(s => {
                 s.slotColSpan = slotColSpan(s.type);
                 s.type = s.type.split(' ')[0];
                 s.available = false;
                 slotGroup[s.slotColSpan].push(s);
-                availableSlotsCount += s.slotColSpan;
+                unavailableSlotsCount += s.slotColSpan;
             });
 
-            availableSlotsCount = 32 - availableSlotsCount;
+            let availableSlotsCount = 32 - unavailableSlotsCount;
             for(let i = 1;  i <= availableSlotsCount; i++) {
                 slotGroup[1].push({ slotColSpan: 1, available: true });
             }
@@ -98,7 +98,7 @@ export default {
                             rearrangeSlots.push(slotGroup[1].shift());
                         }
                     } else if (slot.slotColSpan === 2) {
-                        if (slotGroup[2].length) {
+                        if (slotGroup[2].length > 1) {
                             rearrangeSlots.push(slotGroup[2].shift());
                         } else if (slotGroup[1].length) {
                             rearrangeSlots.push(slotGroup[1].shift());

@@ -225,7 +225,7 @@ class OrderManager
             ],
             'predialysis_labs_request' => false,
             'postdialysis_esa' => false,
-            'predialysis_iron_iv' => false,
+            'postdialysis_iron_iv' => false,
             'treatments_request' => null,
         ];
 

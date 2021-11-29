@@ -222,9 +222,9 @@
         />
         <FormCheckbox
             class="mt-2 md:mt-4 xl:mt-8"
-            name="predialysis_iron_iv"
-            v-model="form.predialysis_iron_iv"
-            label="Predialysis Iron IV"
+            name="postdialysis_iron_iv"
+            v-model="form.postdialysis_iron_iv"
+            label="Postdialysis Iron IV"
             :toggler="true"
         />
         <FormTextarea

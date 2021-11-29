@@ -190,136 +190,49 @@
                     />
                 </div>
                 <FormTextarea
+                    class="mt-2 md:mt-4 xl:mt-8"
                     label="other"
+                    placeholder="others..."
                     name="monitoring_other"
                     v-model="form.monitor.other"
                 />
             </div>
         </transition>
 
-        <hr class="border border-dashed my-2 md:my-4 xl:my-8">
+        <h2
+            class="mt-6 md:mt-12 xl:mt-24 form-label italic text-xl text-thick-theme-light"
+            id="predialysis๘evaluation"
+        >
+            special orders
+        </h2>
+        <hr class="my-4 border-b border-bitter-theme-light">
+        <FormCheckbox
+            class="mt-2 md:bt-4 xl:mt-8"
+            name="predialysis_labs_request"
+            v-model="form.predialysis_labs_request"
+            label="Predialysis Labs request"
+            :toggler="true"
+        />
+        <FormCheckbox
+            class="mt-2 md:mt-4 xl:mt-8"
+            name="postdialysis_esa"
+            v-model="form.postdialysis_esa"
+            label="Postdialysis ESA"
+            :toggler="true"
+        />
+        <FormCheckbox
+            class="mt-2 md:mt-4 xl:mt-8"
+            name="predialysis_iron_iv"
+            v-model="form.predialysis_iron_iv"
+            label="Predialysis Iron IV"
+            :toggler="true"
+        />
         <FormTextarea
-            class="mt-2 md:bt-4 xl:mt-8"
-            label="special order"
-            name="special_order"
-            v-model="form.special_order"
+            class="mt-2 md:mt-4 xl:mt-8"
+            label="treatments request"
+            name="treatments_request"
+            v-model="form.treatments_request"
         />
-        <h2
-            class="mt-6 md:mt-12 xl:mt-24 form-label italic text-xl text-thick-theme-light"
-            id="pre-dialysis-labs-request"
-        >
-            Pre-Dialysis Labs Request
-        </h2>
-        <hr class="my-4 border-b border-bitter-theme-light">
-        <div
-            v-for="(labSet, key) in configs.lab_sets"
-            :key="key"
-        >
-            <label
-                class="form-label mb-2 md:mb-4 xl:mb-8"
-                v-if="labSet.name"
-            ><span class=" italic font-extralight text-dark-theme-light">{{ labSet.name }}</span></label>
-            <div class="grid grid-cols-2 gap-2 md:gap-4 xl:gap-8 xl:grid-cols-4">
-                <FormCheckbox
-                    v-for="(lab, index) in labSet.labs"
-                    :key="index"
-                    :label="lab"
-                    :name="lab"
-                    v-model="form.labs[lab.replaceAll(' ', '_').toLowerCase()]"
-                />
-            </div>
-            <hr class="border border-dashed my-2 md:my-4 xl:my-8">
-        </div>
-        <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
-            <FormInput
-                label="crossmatch"
-                name="lab_crossmatch"
-                placeholder="please specify"
-                v-model="form.labs.crossmatch"
-            />
-            <FormInput
-                label="other"
-                name="lab_other"
-                v-model="form.labs.other"
-            />
-        </div>
-        <h2
-            class="mt-6 md:mt-12 xl:mt-24 form-label italic text-xl text-thick-theme-light"
-            id="pre-dialysis-treatments-request"
-        >
-            Pre-Dialysis Treatments Request
-        </h2>
-        <hr class="my-4 border-b border-bitter-theme-light">
-        <FormInput
-            class="mt-2 md:bt-4 xl:mt-8"
-            name="pre_treatments"
-            v-model="form.pre_treatments"
-        />
-        <h2
-            class="mt-6 md:mt-12 xl:mt-24 form-label italic text-xl text-thick-theme-light"
-            id="post-dialysis-treatments-request"
-        >
-            post-Dialysis Treatments Request
-        </h2>
-        <hr class="my-4 border-b border-bitter-theme-light">
-        <div v-if="form.access_type == 'Perm cath' || form.access_type == 'DLC'">
-            <label class="form-label">DLC/PC lock solution</label>
-            <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
-                <FormInput
-                    label="heparin"
-                    name="post_treatment_heparin"
-                    v-model="form.post_treatments.heparin"
-                />
-                <FormInput
-                    label="heparin dose"
-                    name="post_treatment_heparin_dose"
-                    v-model="form.post_treatments.heparin_dose"
-                />
-                <FormInput
-                    label="citrate"
-                    name="post_treatment_citrate"
-                    v-model="form.post_treatments.citrate"
-                />
-                <FormInput
-                    label="citrate dose"
-                    name="post_treatment_citrate_dose"
-                    v-model="form.post_treatments.citrate_dose"
-                />
-                <FormInput
-                    label="antibiotic"
-                    name="post_treatment_antibiotic"
-                    v-model="form.post_treatments.antibiotic"
-                />
-                <FormInput
-                    label="antibiotic dose"
-                    name="post_treatment_antibiotic_dose"
-                    v-model="form.post_treatments.antibiotic_dose"
-                />
-            </div>
-            <hr class="border border-dashed my-2 md:my-4 xl:my-8">
-        </div>
-        <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
-            <FormInput
-                label="ESA"
-                name="post_treatment_ESA"
-                v-model="form.post_treatments.esa"
-            />
-            <FormInput
-                label="ESA dose"
-                name="post_treatment_ESA_dose"
-                v-model="form.post_treatments.esa_dose"
-            />
-            <FormInput
-                label="Iron iv"
-                name="post_treatment_iron_iv"
-                v-model="form.post_treatments.iron_iv"
-            />
-            <FormInput
-                label="Iron iv dose"
-                name="post_treatment_iron_iv_dose"
-                v-model="form.post_treatments.iron_iv_dose"
-            />
-        </div>
     </div>
 </template>
 

@@ -79,18 +79,18 @@
             :options="configs.dialysates"
         />
         <FormSelect
-            v-model:model-value="form.dialysate_flow_rate"
-            v-model:model-checkbox="form.reverse_dialysate_flow"
-            :options="configs.dialysate_flow_rates"
-            name="dialysate_flow"
-            label="dialysate flow (ml/min)"
-            switch-label="Reverse flow"
-        />
-        <FormSelect
             v-model="form.blood_flow_rate"
             name="blood_flow_rate"
             :options="configs.blood_flow_rates"
             label="blood flow rate (ml/min)"
+        />
+        <FormSelect
+            v-model:model-value="form.dialysate_flow_rate"
+            v-model:model-checkbox="form.reverse_dialysate_flow"
+            :options="configs.dialysate_flow_rates"
+            name="dialysate_flow_rate"
+            label="dialysate flow (ml/min)"
+            switch-label="Reverse flow"
         />
         <FormSelect
             v-model="form.dialysate_temperature"

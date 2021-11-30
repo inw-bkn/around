@@ -31,7 +31,7 @@
                         SEARCH
                     </SpinnerButton>
                     <hr class="my-4 md:my-6">
-                    <span class="form-label block">{{ mode === 'hn' ? 'Latest ':'' }} Admission Data</span>
+                    <span class="form-label block">{{ dataLabel }}</span>
                     <div
                         v-if="!admission.hn"
                         class="bg-white rounded shadow p-2 lg:p-4 text-sm"
@@ -80,7 +80,7 @@
 import Modal from '@/Components/Helpers/Modal';
 import FormInput from '@/Components/Controls/FormInput';
 import SpinnerButton from '@/Components/Controls/SpinnerButton';
-import { reactive, ref } from '@vue/reactivity';
+import { computed, reactive, ref } from '@vue/reactivity';
 import { nextTick } from '@vue/runtime-core';
 
 const props = defineProps({
@@ -105,6 +105,20 @@ const admission = reactive({
     ward_admit: '',
     admitted_at: '',
     discharged_at: '',
+});
+
+const dataLabel = computed(() => {
+    if (admission.admitted_at) {
+        return  admission.discharged_at
+            ? 'latest admission'
+            : 'active admission';
+    }
+
+    if (admission.hn) {
+        return 'patient data';
+    }
+
+    return null;
 });
 
 const searchAdmission = () => {

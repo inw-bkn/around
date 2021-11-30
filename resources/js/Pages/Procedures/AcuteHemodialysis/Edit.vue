@@ -401,7 +401,7 @@
         </h2>
         <hr class="my-4 border-b border-bitter-theme-light">
 
-        <div class="md:grid grid-cols-2 gap-2 lg:gap-6">
+        <div class="grid md:grid-cols-2 gap-2 lg:gap-6">
             <FormAutocomplete
                 label="dialysis at"
                 name="dialysis_at"
@@ -434,7 +434,7 @@
                 />
             </div>
         </div>
-        <div class="md:grid grid-cols-2 gap-2 lg:gap-6">
+        <div class="grid md:grid-cols-2 gap-2 lg:gap-6">
             <FormDatetime
                 label="required date"
                 name="date_note"

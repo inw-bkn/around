@@ -104,6 +104,7 @@ class OrderManager
             'av_access_sites' => ['Rt arm', 'Lt arm', 'Rt leg', 'Lt leg'],
             'non_av_access_sites' => ['Rt IJV', 'Lt IJV', 'Rt Femoral vain', 'Lt Femoral vain', 'Rt SCV', 'Lt SCV'],
             'dialyzers' => ['SF130E', 'SF150E', 'SF170E', 'SF190E', 'Rexeed 13L', 'Rexeed 15L', 'Rexeed 18L', 'FB170U', 'FB190U', 'FB210U', 'HF80S'],
+            'hf_dialyzers' => ['SF130E', 'SF150E', 'Rexeed 13L', 'Rexeed 15L'],
             'dialysates' => [
                 'None => K 0, Ca 0, Mg 0',
                 'K 3, Ca 3.5, Mg 1 => AA 101 K3',
@@ -271,7 +272,8 @@ class OrderManager
         $hf = [
             'access_type' => null,
             'access_site_coagulant' => null,
-            'blood_flow' => null,
+            'dialyzer' => null,
+            'blood_flow_rate' => null,
             'anticoagulant' => null,
             'anticoagulant_none_drip_via_peripheral_iv' => false,
             'anticoagulant_none_nss_200ml_flush_q_hour' => false,
@@ -281,7 +283,8 @@ class OrderManager
             'fondaparinux_bolus_dose' => null,
             'tinzaparin_dose' => null,
             'anticoagulant_other' => null,
-            'ultrafiltration' => null,
+            'ultrafiltration_min' => null,
+            'ultrafiltration_max' => null,
             'dry_weight' => null,
             'glucose_50_percent_iv_volume' => null,
             'glucose_50_percent_iv_at' => null,

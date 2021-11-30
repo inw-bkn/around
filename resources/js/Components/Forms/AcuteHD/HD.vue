@@ -275,10 +275,12 @@
         <div>
             <label class="form-label">50% Glucose IV volume (ml)</label>
             <FormRadio
-                class="grid grid-cols-2 gap-x-2"
+                class="grid grid-cols-3 gap-x-2"
+                :class="{'grid-cols-3': form.glucose_50_percent_iv_volume}"
                 name="glucose_50_percent_iv_volume"
                 v-model="form.glucose_50_percent_iv_volume"
                 :options="['50', '100']"
+                :allow-reset="true"
             />
         </div>
         <FormSelect
@@ -291,9 +293,11 @@
             <label class="form-label">20% albumin prime (ml)</label>
             <FormRadio
                 class="grid grid-cols-2 gap-x-2"
+                :class="{'grid-cols-3': form.albumin_20_percent_prime}"
                 name="albumin_20_percent_prime"
                 v-model="form.albumin_20_percent_prime"
                 :options="['50', '100']"
+                :allow-reset="true"
             />
         </div>
         <FormInput

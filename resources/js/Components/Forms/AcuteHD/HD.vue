@@ -9,7 +9,7 @@
         <hr class="my-4 border-b border-bitter-theme-light">
         <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
             <div>
-                <label class="form-label">perform at</label>
+                <label class="form-label">perform at :</label>
                 <FormRadio
                     class="grid grid-cols-2 gap-x-2"
                     name="with_hf"
@@ -17,16 +17,32 @@
                     :options="['Pre HD', 'Post HD']"
                 />
             </div>
-            <FormInput
-                pattern="\d*"
-                label="uf (ml.)"
-                v-model="form.hf.ultrafiltration"
-                name="ultrafiltration_hf"
-                type="number"
-                @autosave="validate('ultrafiltration_hf')"
-                :error="errors.ultrafiltration_hf"
-                placeholder="[0, 4000] ml"
-            />
+            <div>
+                <label
+                    for=""
+                    class="form-label"
+                >uf (ml.) :</label>
+                <div class="grid gap-2 md:grid-cols-2">
+                    <FormInput
+                        name="ultrafiltration_min"
+                        v-model="form.hf.ultrafiltration_min"
+                        pattern="\d*"
+                        type="number"
+                        @autosave="validate('ultrafiltration_min')"
+                        :error="errors.ultrafiltration_min"
+                        placeholder="min [0, 5500]"
+                    />
+                    <FormInput
+                        name="ultrafiltration_max"
+                        v-model="form.hf.ultrafiltration_max"
+                        pattern="\d*"
+                        type="number"
+                        @autosave="validate('ultrafiltration_max')"
+                        :error="errors.ultrafiltration_max"
+                        placeholder="max [0, 5500]"
+                    />
+                </div>
+            </div>
         </div>
     </template>
     <h2
@@ -275,7 +291,7 @@
         <div>
             <label class="form-label">50% Glucose IV volume (ml)</label>
             <FormRadio
-                class="grid grid-cols-3 gap-x-2"
+                class="grid grid-cols-2 gap-x-2"
                 :class="{'grid-cols-3': form.glucose_50_percent_iv_volume}"
                 name="glucose_50_percent_iv_volume"
                 v-model="form.glucose_50_percent_iv_volume"

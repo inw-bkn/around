@@ -63,7 +63,7 @@
 import { ref } from '@vue/reactivity';
 const emits = defineEmits(['autosave', 'update:modelValue', 'update:modelCheckbox']);
 defineProps({
-    modelValue: { type: String, default: '' },
+    modelValue: { type: [String, Number, null], default: '' },
     modelCheckbox: { type: Boolean },
     name: { type: String, required: true },
     label: { type: String, default: '' },

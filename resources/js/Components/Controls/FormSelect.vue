@@ -143,7 +143,7 @@
 export default {
     emits: ['autosave', 'update:modelValue', 'update:modelCheckbox'],
     props: {
-        modelValue: { type: String, default: '' },
+        modelValue: { type: [String, Number, null], default: '' },
         modelCheckbox: { type: Boolean },
         options: { type: Array, required: true },
         name: { type: String, required: true },

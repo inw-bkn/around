@@ -662,7 +662,6 @@ const reserveButtonDisable = computed(() => {
 
 const reserve = () => {
     order.post(window.route('procedures.acute-hemodialysis.orders.store'), {
-        preserveScroll: true,
         onFinish: () => order.processing = false,
     });
 };

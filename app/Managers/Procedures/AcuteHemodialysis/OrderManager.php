@@ -309,6 +309,8 @@ class OrderManager
             'filtration_pumb' => 30,
             'replacement_pumb' => 30,
             'drain_pumb' => null,
+            'calcium_gluconate_10_percent_volume' => null,
+            'calcium_gluconate_10_percent_timing' => null,
         ];
 
         $sledd = [

@@ -86,7 +86,7 @@
             v-model="form.blood_pumb"
             name="blood_pumb"
             label="blood pumb (ml/min)"
-            :options="['150']"
+            :options="['150', '200']"
         />
         <FormSelect
             v-model="form.filtration_pumb"

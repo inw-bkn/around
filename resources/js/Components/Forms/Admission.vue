@@ -142,6 +142,7 @@ const searchAdmission = () => {
 
             if (props.mode === 'hn') {
                 admission.an = response.data.an;
+                admission.location = response.data.location;
             }
 
             admission.hn = response.data.hn;

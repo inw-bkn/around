@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Resources\APIs;
 
+use App\Contracts\PatientAPI;
 use App\Http\Controllers\Controller;
 use App\Managers\Resources\AdmissionManager;
 use Illuminate\Support\Carbon;
@@ -20,6 +21,8 @@ class PatientRecentlyAdmissionController extends Controller
                 ];
             }
 
+            $stay = app()->make(PatientAPI::class)?->stayRecently($hn);
+
             return [
                 'found' => false,
                 'hn' => $admission['patient']['hn'],
@@ -28,7 +31,7 @@ class PatientRecentlyAdmissionController extends Controller
                 'age' => $admission['patient']['dob']
                     ? Carbon::create($admission['patient']['dob'])->diffInYears()
                     : null,
-                'ward_admit' => 'OPD ?', // 'แพทย์เวรและอีอาร์',
+                'location' => ($stay['found'] ?? false) ? 'แพทย์เวร' : 'ER ?', // 'แพทย์เวรและอีอาร์',
                 'admitted_at' => null,
             ];
         }

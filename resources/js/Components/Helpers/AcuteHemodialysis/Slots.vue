@@ -25,7 +25,7 @@
                     <span class="p-1 md:p-2 bg-soft-theme-light rounded-full text-xs text-bitter-theme-light font-semibold">{{ slot.type }}</span>
                     <div class="mt-1 md:mt-0 space-y-1 md:space-y-2">
                         <Link
-                            class="font-bold text-soft-theme-light text-xs flex items-center"
+                            class="font-semibold text-soft-theme-light text-xs flex items-center"
                             :href="route('procedures.acute-hemodialysis.edit', slot.case_record_slug)"
                         >
                             <Icon
@@ -34,7 +34,7 @@
                             />
                             <span class="block italic truncate underline">{{ slot.patient_name }}</span>
                         </Link>
-                        <p class="font-bold text-soft-theme-light text-xs flex items-center">
+                        <p class="font-semibold text-soft-theme-light text-xs flex items-center">
                             <Icon
                                 name="user-md"
                                 class="h-3 w-3 mr-1 text-white"

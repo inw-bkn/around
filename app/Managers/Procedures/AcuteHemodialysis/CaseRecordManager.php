@@ -77,16 +77,18 @@ class CaseRecordManager
                 'action-menu' => [],
             ],
             'orders' => Note::with(['patient', 'place'])
+                    ->WithAuthorUsername()
                     ->whereCaseRecordId($caseRecord->id)
                     ->whereNoteTypeId(NoteType::findByName('acute_hd_order')->id)
-                    ->orderby('date_note')
+                    ->orderByDesc('date_note')
                     ->get()
                     ->transform(function ($note) {
                         return [
-                        'slug' => $note->slug,
-                        'ward_name' => $note->place->name,
-                        'dialysis_type' => $note->form['dialysis_type'],
-                        'date_note' => $note->date_note->format('d M Y'),
+                            'slug' => $note->slug,
+                            'ward_name' => $note->place->name,
+                            'dialysis_type' => $note->form['dialysis_type'],
+                            'date_dialyze' => $note->date_note->format('d M'),
+                            'md' => $note->author_username,
                         ];
                     }),
             // 'admission' => (new AdmissionManager)->manage($caseRecord->form['an'])['admission'],

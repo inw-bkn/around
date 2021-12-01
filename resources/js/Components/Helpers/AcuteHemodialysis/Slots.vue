@@ -88,6 +88,7 @@ export default {
             }
 
             let rearrangeSlots = [];
+            // let slot;
             for(let i = slotGroup.length - 1 ; i > 0; i--) {
                 slotGroup[i].forEach((slot) => {
                     rearrangeSlots.push(slot);
@@ -98,8 +99,9 @@ export default {
                             rearrangeSlots.push(slotGroup[1].shift());
                         }
                     } else if (slot.slotColSpan === 2) {
-                        if (slotGroup[2].length > 1) {
-                            rearrangeSlots.push(slotGroup[2].shift());
+                        if (slotGroup[2].length > 2) {
+                            let tmpSlot = slotGroup[2].pop();
+                            rearrangeSlots.push(tmpSlot);
                         } else if (slotGroup[1].length) {
                             rearrangeSlots.push(slotGroup[1].shift());
                             rearrangeSlots.push(slotGroup[1].shift());

@@ -36,6 +36,19 @@ class PatientRecentlyAdmissionController extends Controller
             ];
         }
 
+        $stay = app()->make(PatientAPI::class)?->stayRecently($hn);
+        if ($admission['admission']->dismissed_at && ($stay['found'] ?? false)) {
+            return [
+                'found' => false,
+                'hn' => $admission['admission']->patient->hn,
+                'name' => $admission['admission']->patient->full_name,
+                'gender' => $admission['admission']->patient->gender,
+                'age' => $admission['admission']->patient->patient_age_at_encounter_text,
+                'location' => 'แพทย์เวร',
+                'admitted_at' => null,
+            ];
+        }
+
         return [
             'found' => true,
             'an' => $admission['admission']->an,

@@ -18,6 +18,7 @@
                 v-model="form.reservation.an"
                 name="an"
                 label="an"
+                placeholder="No active admission"
                 :readonly="true"
             />
             <FormInput

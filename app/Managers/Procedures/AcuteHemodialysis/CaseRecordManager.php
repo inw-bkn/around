@@ -110,7 +110,13 @@ class CaseRecordManager
         $caseRecord->patient_id = $search['patient']->id;
         $caseRecord->registry_id = Registry::findByName('acute_hd')->id;
         $form = $this->initForm();
-        $form['an'] = $data['an'] ?? null;
+        $form['an'] = null;
+        if ($data['an']) {
+            $admission = Admission::whereAn($data['an'])->first();
+            if (! $admission->dismissed_at) {
+                $form['an'] = $admission->an;
+            }
+        }
         $caseRecord->form = $form;
         $caseRecord->creator_id = Auth::user()->id;
         $caseRecord->updater_id = Auth::user()->id;

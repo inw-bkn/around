@@ -15,6 +15,8 @@
                 Create New Case
             </button>
         </div>
+
+        <!-- table -->
         <div class="bg-white rounded shadow overflow-x-auto hidden md:block">
             <table class="w-full whitespace-nowrap">
                 <tr class="text-left font-semibold">
@@ -53,6 +55,8 @@
                 </tr>
             </table>
         </div>
+
+        <!-- card -->
         <div class="md:hidden">
             <div
                 class="bg-white rounded shadow my-4 p-4"

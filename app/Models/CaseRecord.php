@@ -5,16 +5,19 @@ namespace App\Models;
 use App\Models\Resources\Patient;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CaseRecord extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $guarded = [];
 
     protected $casts = [
         'form' => 'array',
-        'date_note' => 'datetime',
+        'meta' => 'array',
+        'dismissed_at' => 'datetime',
+        'archived_at' => 'datetime',
     ];
 
     public function patient()

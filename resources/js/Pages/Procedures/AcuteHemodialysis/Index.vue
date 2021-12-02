@@ -144,9 +144,14 @@
 import Icon from '@/Components/Helpers/Icon';
 import Admission from '@/Components/Forms/Admission';
 import SearchIndex from '@/Components/Helpers/SearchIndex';
-import { ref } from '@vue/reactivity';
+import { reactive, ref } from '@vue/reactivity';
 import { useForm } from '@inertiajs/inertia-vue3';
 import { Link } from '@inertiajs/inertia-vue3';
+import pick from 'lodash/pick';
+import pickBy from 'lodash/pickBy';
+import debounce from 'lodash/debounce';
+import { watch } from '@vue/runtime-core';
+import { Inertia } from '@inertiajs/inertia';
 const props = defineProps({
     cases: { type: Object, required: true },
     filters: { type: Object, required: true },
@@ -157,10 +162,23 @@ const newCase = useForm({
     hn: null,
     an: null
 });
-const searchForm = useForm({
+const searchForm = reactive({
     search: props.filters.search,
     scope: props.filters.scope,
 });
+watch(
+    () => searchForm,
+    debounce(function () {
+        let filters = pickBy(searchForm);
+        let query = Object.keys(filters)
+            .filter(key => filters[key])
+            .map(key => `${key}=${filters[key]}`)
+            .join('&');
+        query = '?' + (query ? query : 'remember=forget');
+        Inertia.visit(window.route('procedures.acute-hemodialysis.index') + query, { preserveState: true });
+    }, 400),
+    {deep: true}
+);
 
 const confirmed = (admission) => {
     newCase.hn = admission.hn;

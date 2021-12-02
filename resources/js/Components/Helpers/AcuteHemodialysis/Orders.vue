@@ -53,13 +53,15 @@
                     <p class="text-thick-theme-light font-semibold">
                         {{ order.date_dialyze }}
                     </p>
-                    <p>{{ order.dialysis_type }}</p>
+                    <p class="italic">
+                        {{ order.dialysis_type }}
+                    </p>
                     <p class="font-semibold text-bitter-theme-light flex items-center">
                         <Icon
                             name="user-md"
                             class="h-3 w-3 mr-1"
                         />
-                        <span class="block italic truncate">{{ order.md }}</span>
+                        <span class="block truncate">{{ order.md }}</span>
                     </p>
                 </div>
                 <div class="flex items-center p-2 rounded bg-gray-100">

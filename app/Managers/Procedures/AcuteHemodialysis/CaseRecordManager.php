@@ -16,7 +16,7 @@ use Illuminate\Support\Str;
 class CaseRecordManager
 {
     // index methods
-    public function getIndexData()
+    public function getIndexData($filters)
     {
         // if avatar mode JUST call API
         return [
@@ -31,7 +31,15 @@ class CaseRecordManager
             ],
             'cases' => CaseRecord::whereRegistryId(Registry::findByName('acute_hd')->id)
                                 ->with(['patient', 'latestAcuteOrder' => fn ($q) => $q->withAuthorUsername()])
-                                ->paginate()
+                                ->when($filters['search'] ?? null, function ($query, $search) {
+                                    $query->where('meta->name', 'like', $search.'%')
+                                            ->orWhere('meta->hn', 'like', $search.'%');
+                                })->orderByDesc(
+                                    Note::select('date_note')
+                                    ->whereColumn('notes.case_record_id', 'case_records.id')
+                                    ->latest('date_note')
+                                    ->take(1)
+                                )->paginate(10)
                                 ->withQueryString()
                                 ->through(fn ($case) => [
                                     'slug' => $case->slug,
@@ -114,13 +122,17 @@ class CaseRecordManager
         $caseRecord->registry_id = Registry::findByName('acute_hd')->id;
         $form = $this->initForm();
         $form['an'] = null;
-        if ($data['an']) {
+        if ($data['an'] ?? null) {
             $admission = Admission::whereAn($data['an'])->first();
             if (! $admission->dismissed_at) {
                 $form['an'] = $admission->an;
             }
         }
         $caseRecord->form = $form;
+        $caseRecord->meta = [
+            'hn' => $search['patient']->hn,
+            'name' => $search['patient']->first_name,
+        ];
         $caseRecord->creator_id = Auth::user()->id;
         $caseRecord->updater_id = Auth::user()->id;
         $caseRecord->save();

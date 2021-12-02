@@ -72,32 +72,43 @@
                             HN: {{ caseRecord.hn }} {{ caseRecord.patient_name }}
                         </div>
                         <div class="my-2 p-2 bg-gray-100 rounded space-y-2">
-                            <div class="flex items-center justify-between">
-                                <p class="text-xs italic text-thick-theme-light font-semibold">
-                                    Latest
-                                </p>
-                                <p class="font-semibold text-bitter-theme-light text-xs flex items-center">
-                                    <Icon
-                                        name="user-md"
-                                        class="h-3 w-3 mr-1"
-                                    />
-                                    <span class="block italic truncate">{{ caseRecord.md }}</span>
+                            <div
+                                v-if="!caseRecord.md"
+                                class="flex justfy-center items-center h-12"
+                            >
+                                <p class="italic text-center w-full">
+                                    No orders
                                 </p>
                             </div>
-                            <div class="flex items-center justify-between">
-                                <p>
-                                    Dialyze : <span
-                                        class="text-dark-theme-light font-semibold"
-                                        v-text="caseRecord.date_dialyze"
-                                    />
-                                </p>
-                                <p>
-                                    Ordered : <span
-                                        class="text-dark-theme-light font-semibold"
-                                        v-text="caseRecord.date_reserved"
-                                    />
-                                </p>
-                            </div>
+                            <template v-else>
+                                <div class="flex items-center justify-between">
+                                    <p class="text-xs italic text-thick-theme-light font-semibold">
+                                        Latest
+                                    </p>
+                                    <p class="font-semibold text-bitter-theme-light text-xs flex items-center">
+                                        <Icon
+                                            name="user-md"
+                                            class="h-3 w-3 mr-1"
+                                        />
+                                        <span class="block italic truncate">{{ caseRecord.md }}</span>
+                                    </p>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <p>
+                                        Dialyze : <span
+                                            class="text-dark-theme-light font-semibold"
+                                            v-text="caseRecord.date_dialyze"
+                                        />
+                                    </p>
+                                    <p>
+                                        Ordered : <span
+                                            class="text-dark-theme-light font-semibold"
+                                            v-text="caseRecord.date_reserved"
+                                        />
+                                    </p>
+                                </div>
+                                <template />
+                            </template>
                         </div>
                     </div>
                     <icon

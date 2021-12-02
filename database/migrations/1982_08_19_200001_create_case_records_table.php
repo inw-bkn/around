@@ -19,6 +19,10 @@ class CreateCaseRecordsTable extends Migration
             $table->foreignId('patient_id')->constrained('patients')->onDelete('cascade');
             $table->unsignedSmallInteger('registry_id')->constrained('registies')->onDelete('cascade');
             $table->json('form');
+            $table->json('meta');
+            $table->unsignedTinyInteger('status')->default(1)->index();
+            $table->dateTime('dismissed_at')->nullable()->index();
+            $table->dateTime('archived_at')->nullable()->index();
             $table->foreignId('creator_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('updater_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->softDeletes();

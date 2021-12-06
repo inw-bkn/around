@@ -435,8 +435,8 @@
                 />
             </div>
         </div>
-        <template v-if="order.dialysis_at && order.dialysis_type">
-            <transition name="slide-fade">
+        <transition name="slide-fade">
+            <div v-if="order.dialysis_at && order.dialysis_type">
                 <div class="grid xl:grid-cols-2 gap-2 md:gap-4 lg:gap-6">
                     <FormDatetime
                         label="required date"
@@ -446,23 +446,24 @@
                     />
                     <transition name="slide-fade">
                         <InUnitSlot
-                            :reserved-slots="reservedSlots"
+                            :reserved-slots="reservedSlots.slots"
                             v-if="order.date_note"
                         />
                     </transition>
                 </div>
-            </transition>
-            <div class="mt-2 lg:mt-0 md:pt-4">
-                <SpinnerButton
-                    class="block w-full text-center btn btn-bitter"
-                    @click="reserve"
-                    :spin="order.processing"
-                    :disabled="reserveButtonDisable"
-                >
-                    RESERVE
-                </SpinnerButton>
+
+                <div class="mt-2 lg:mt-0 md:pt-4">
+                    <SpinnerButton
+                        class="block w-full text-center btn btn-bitter"
+                        @click="reserve"
+                        :spin="order.processing"
+                        :disabled="reserveButtonDisable"
+                    >
+                        RESERVE
+                    </SpinnerButton>
+                </div>
             </div>
-        </template>
+        </transition>
     </div>
     <FormSelectOther
         :placeholder="selectOther.placeholder"
@@ -625,7 +626,9 @@ watch (
                 dialysis_at: order.dialysis_at,
                 date_note: order.date_note,
             })).then(response => {
-                reservedSlots.value = response.data;
+                reservedSlots.slots = response.data.slots;
+                reservedSlots.available = response.data.available;
+                reservedSlots.reply = response.data.reply;
             });
     }
 );
@@ -639,9 +642,13 @@ watch (
     }
 );
 
-const reservedSlots = ref([]);
+const reservedSlots = reactive({
+    slots: [],
+    available: false,
+    reply: '',
+});
 const reserveButtonDisable = computed(() => {
-    return !order.dialysis_at || !order.date_note || !order.dialysis_type || !order.patient_type || !order.attending_staff;
+    return !order.dialysis_at || !order.date_note || !order.dialysis_type || !order.patient_type || !order.attending_staff || !reservedSlots.available;
 });
 
 const reserve = () => {

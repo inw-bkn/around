@@ -421,7 +421,8 @@
                 label="dialysis type"
                 name="order_dialysis_type"
                 v-model="order.dialysis_type"
-                :options="configs.dialysis_types"
+                :options="order.dialysis_at && order.dialysis_at.startsWith('ไตเทียม') ? configs.in_unit_dialysis_types : configs.out_unit_dialysis_types"
+                :disabled="!order.dialysis_at"
             />
             <div>
                 <label class="form-label">patient type</label>
@@ -434,28 +435,34 @@
                 />
             </div>
         </div>
-        <div class="grid md:grid-cols-2 gap-2 lg:gap-6">
-            <FormDatetime
-                label="required date"
-                name="date_note"
-                v-model="order.date_note"
-                :options="{ enable: configs.availableDates, onDayCreate: onDayCreate, inline: true }"
-            />
-            <Slots
-                :reserved-slots="reservedSlots"
-                v-if="order.date_note"
-            />
-        </div>
-        <div class="mt-2 lg:mt-0 md:pt-4">
-            <SpinnerButton
-                class="block w-full text-center btn btn-bitter"
-                @click="reserve"
-                :spin="order.processing"
-                :disabled="reserveButtonDisable"
-            >
-                RESERVE
-            </SpinnerButton>
-        </div>
+        <template v-if="order.dialysis_at && order.dialysis_type">
+            <transition name="slide-fade">
+                <div class="grid xl:grid-cols-2 gap-2 md:gap-4 lg:gap-6">
+                    <FormDatetime
+                        label="required date"
+                        name="date_note"
+                        v-model="order.date_note"
+                        :options="{ enable: configs.availableDates, onDayCreate: onDayCreate, inline: true }"
+                    />
+                    <transition name="slide-fade">
+                        <InUnitSlot
+                            :reserved-slots="reservedSlots"
+                            v-if="order.date_note"
+                        />
+                    </transition>
+                </div>
+            </transition>
+            <div class="mt-2 lg:mt-0 md:pt-4">
+                <SpinnerButton
+                    class="block w-full text-center btn btn-bitter"
+                    @click="reserve"
+                    :spin="order.processing"
+                    :disabled="reserveButtonDisable"
+                >
+                    RESERVE
+                </SpinnerButton>
+            </div>
+        </template>
     </div>
     <FormSelectOther
         :placeholder="selectOther.placeholder"
@@ -474,7 +481,7 @@ import FormRadio from '@/Components/Controls/FormRadio';
 import FormSelectOther from '@/Components/Controls/FormSelectOther';
 import SpinnerButton from '@/Components/Controls/SpinnerButton';
 import ImageUploader from '@/Components/Controls/ImageUploader';
-import Slots from '@/Components/Helpers/AcuteHemodialysis/Slots';
+import InUnitSlot from '@/Components/Helpers/AcuteHemodialysis/InUnitSlot';
 import Orders from '@/Components/Helpers/AcuteHemodialysis/Orders';
 import { useForm } from '@inertiajs/inertia-vue3';
 import { reactive, ref } from '@vue/reactivity';
@@ -491,8 +498,6 @@ const form = useForm({...props.caseRecordForm});
 
 const reset = {
     previous_crrt: true,
-    // renal_diagnosis_aki: true,
-    // renal_diagnosis_ckd: true
 };
 watch (
     () => form,
@@ -504,33 +509,6 @@ watch (
         } else if (val.previous_crrt) {
             reset.previous_crrt = false;
         }
-
-        // if (!val.renal_diagnosis_aki.check && !reset.renal_diagnosis_aki) {
-        //     val.renal_diagnosis_aki.sepsis = false;
-        //     val.renal_diagnosis_aki.chf = false;
-        //     val.renal_diagnosis_aki.acs = false;
-        //     val.renal_diagnosis_aki.other_cardiac_cause = false;
-        //     val.renal_diagnosis_aki.glomerulonephritis = false;
-        //     val.renal_diagnosis_aki.acute_interstitial_nephritis = false;
-        //     val.renal_diagnosis_aki.contrast_induced_nephropathy = false;
-        //     val.renal_diagnosis_aki.acute_tubular_necrosis = false;
-        //     val.renal_diagnosis_aki.drug_induced_aki = false;
-        //     val.renal_diagnosis_aki.other = null;
-        //     reset.renal_diagnosis_aki = true;
-        // } else if (val.renal_diagnosis_aki.check) {
-        //     reset.renal_diagnosis_aki = false;
-        // }
-
-        // if (!val.renal_diagnosis_ckd.check && !reset.renal_diagnosis_ckd) {
-        //     val.renal_diagnosis_ckd.check = false;
-        //     val.renal_diagnosis_ckd.dn = false;
-        //     val.renal_diagnosis_ckd.ht = false;
-        //     val.renal_diagnosis_ckd.glomerular_disease = false;
-        //     val.renal_diagnosis_ckd.chronic_tubulointerstitial_nephritis = false;
-        //     val.renal_diagnosis_ckd.other = null;
-        // } else if (val.renal_diagnosis_ckd.check) {
-        //     reset.renal_diagnosis_ckd = false;
-        // }
 
         let data = val.data();
         delete data.admission;
@@ -638,9 +616,15 @@ const onDayCreate = (dObj, dStr, fp, dayElem) => {
 watch (
     () => order.date_note,
     (val) => {
+        if (!val) {
+            return;
+        }
         window.axios
-            .get(window.route('resources.api.acute-hemodialysis-slot-available', val))
-            .then(response => {
+            .get(window.route('resources.api.acute-hemodialysis-slot-available', {
+                dialysis_type: order.dialysis_type,
+                dialysis_at: order.dialysis_at,
+                date_note: order.date_note,
+            })).then(response => {
                 reservedSlots.value = response.data;
             });
     }

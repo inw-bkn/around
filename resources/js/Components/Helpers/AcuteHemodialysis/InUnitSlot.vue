@@ -48,75 +48,54 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import Icon from '@/Components/Helpers/Icon';
 import { computed } from '@vue/runtime-core';
 import { Link } from '@inertiajs/inertia-vue3';
-export default {
-    components: { Icon, Link },
-    props: {
-        reservedSlots: { type: Array, required: true }
-    },
-    setup (props) {
-        const slotColSpan = (typeName) => {
-            if (typeName === 'SLEDD') {
-                return 4;
-            } if (typeName.startsWith('HD+TPE')) {
-                return 3;
-            } else if (typeName.indexOf('4') !== -1 || typeName.indexOf('3') !== -1) {
-                return 2;
-            } else {
-                return 1;
+
+const props = defineProps({
+    reservedSlots: { type: Array, required: true }
+});
+
+const slots = computed(() => {
+    let slotGroup = [[], [], [], [], []];
+    let unavailableSlotsCount = 0;
+
+    props.reservedSlots.forEach(s => {
+        s.slotColSpan = s.slot_count;
+        s.type = s.type.split(' ')[0];
+        s.available = false;
+        slotGroup[s.slotColSpan].push(s);
+        unavailableSlotsCount += s.slotColSpan;
+    });
+
+    let availableSlotsCount = 32 - unavailableSlotsCount;
+    for(let i = 1;  i <= availableSlotsCount; i++) {
+        slotGroup[1].push({ slotColSpan: 1, available: true });
+    }
+
+    let rearrangeSlots = [];
+    for(let i = slotGroup.length - 1 ; i > 0; i--) {
+        slotGroup[i].forEach((slot) => {
+            rearrangeSlots.push(slot);
+            if (slot.slotColSpan === 4) {
+                return;
+            } else if (slot.slotColSpan === 3) {
+                if (slotGroup[1].length) {
+                    rearrangeSlots.push(slotGroup[1].shift());
+                }
+            } else if (slot.slotColSpan === 2) {
+                if (slotGroup[2].length > 2) {
+                    let tmpSlot = slotGroup[2].pop();
+                    rearrangeSlots.push(tmpSlot);
+                } else if (slotGroup[1].length) {
+                    rearrangeSlots.push(slotGroup[1].shift());
+                    rearrangeSlots.push(slotGroup[1].shift());
+                }
             }
-        };
-
-        const slots = computed(() => {
-            let slotGroup = [[], [], [], [], []];
-            let unavailableSlotsCount = 0;
-
-            props.reservedSlots.forEach(s => {
-                s.slotColSpan = slotColSpan(s.type);
-                s.type = s.type.split(' ')[0];
-                s.available = false;
-                slotGroup[s.slotColSpan].push(s);
-                unavailableSlotsCount += s.slotColSpan;
-            });
-
-            let availableSlotsCount = 32 - unavailableSlotsCount;
-            for(let i = 1;  i <= availableSlotsCount; i++) {
-                slotGroup[1].push({ slotColSpan: 1, available: true });
-            }
-
-            let rearrangeSlots = [];
-            // let slot;
-            for(let i = slotGroup.length - 1 ; i > 0; i--) {
-                slotGroup[i].forEach((slot) => {
-                    rearrangeSlots.push(slot);
-                    if (slot.slotColSpan === 4) {
-                        return;
-                    } else if (slot.slotColSpan === 3) {
-                        if (slotGroup[1].length) {
-                            rearrangeSlots.push(slotGroup[1].shift());
-                        }
-                    } else if (slot.slotColSpan === 2) {
-                        if (slotGroup[2].length > 2) {
-                            let tmpSlot = slotGroup[2].pop();
-                            rearrangeSlots.push(tmpSlot);
-                        } else if (slotGroup[1].length) {
-                            rearrangeSlots.push(slotGroup[1].shift());
-                            rearrangeSlots.push(slotGroup[1].shift());
-                        }
-                    }
-                });
-            }
-
-            return rearrangeSlots.reverse();
         });
+    }
 
-        return {
-            slotColSpan,
-            slots
-        };
-    },
-};
+    return rearrangeSlots.reverse();
+});
 </script>

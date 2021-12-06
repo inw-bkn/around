@@ -182,10 +182,9 @@ class CaseRecordManager
         return [
             'availableDates' => $availableDates,
             'disableDates' => [
-                // 'January 31, 2021',
                 'August 13, 2021',
             ],
-            'dialysis_types' => [
+            'in_unit_dialysis_types' => [
                 'HD 2 hrs.',
                 'HD 3 hrs.',
                 'HD 4 hrs.',
@@ -193,27 +192,16 @@ class CaseRecordManager
                 'HD+TPE 6 hrs.',
                 'HF 2 hrs.',
                 'TPE 2 hrs.',
+            ],
+            'out_unit_dialysis_types' => [
+                'HD 2 hrs.',
+                'HD 3 hrs.',
+                'HD 4 hrs.',
+                'HD+HF 4 hrs.',
+                'HF 2 hrs.',
                 'SLEDD',
             ],
-            // 'wards' => ['ไตเทียม', 'ICU 3', 'ICU 7', 'CCU', 'ICCU', 'ICU ตั้งตรงจิต', 'ICU สลาด สำอางค์', 'ICU สยามมินทร์', 'ICU ประสาทศัลยศาสตร์', 'ICU ศูนย์โรคหัวใจชั้น 5', 'ICU premium', 'ICU อุบัติเหตุ', 'Burn unit', 'RCU'],
             'renal_diagnosis' => ['AKI', 'AKI ontop CKD', 'ESRD', 'Post KT'],
-            // 'renal_diagnosis_aki' => [
-            //     ['name' => 'sepsis', 'label' => 'Sepsis'],
-            //     ['name' => 'chf', 'label' => 'CHF'],
-            //     ['name' => 'acs', 'label' => 'ACS'],
-            //     ['name' => 'other_cardiac_cause', 'label' => 'Other cardiac cause'],
-            //     ['name' => 'glomerulonephritis', 'label' => 'Glomerulonephritis'],
-            //     ['name' => 'acute_interstitial_nephritis', 'label' => 'Acute interstitial nephritis'],
-            //     ['name' => 'contrast_induced_nephropathy', 'label' => 'Contrast induced nephropathy'],
-            //     ['name' => 'acute_tubular_necrosis', 'label' => 'Acute tubular necrosis'],
-            //     ['name' => 'drug_induced_aki', 'label' => 'Drug induced AKI'],
-            // ],
-            // 'renal_diagnosis_ckd' => [
-            //     ['name' => 'dn', 'label' => 'DN'],
-            //     ['name' => 'ht', 'label' => 'HT'],
-            //     ['name' => 'glomerular_disease', 'label' => 'Glomerular disease'],
-            //     ['name' => 'chronic_tubulointerstitial_nephritis', 'label' => 'Chronic tubulointerstitial nephritis'],
-            // ],
             'comorbidities' => [
                 ['name' => 'DM', 'label' => 'DM'],
                 ['name' => 'HT', 'label' => 'HT'],

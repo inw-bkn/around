@@ -165,15 +165,6 @@ class OrderManager
                 ['name' => 'observe_chest_pain', 'label' => 'Observe chest pain'],
                 ['name' => 'observe_neuro_sign', 'label' => 'Observe neuro sign'],
             ],
-            // 'ekgOptions' => ['No', 'Monitoring'],
-            // 'lab_sets' => [
-            //     ['name' => '', 'labs' => ['CBC', 'Hct', 'BUN', 'Cr']],
-            //     ['name' => 'Electrolyte', 'labs' => ['Na', 'K', 'Cl', 'HCO3']],
-            //     ['name' => '', 'labs' => ['Total calcium', 'Phosphate', 'iPTH']],
-            //     ['name' => 'LFT', 'labs' => ['Alb', 'Glob', 'TB', 'DB', 'AST', 'ALT', 'ALP', 'GGT']],
-            //     ['name' => 'Coagulogram', 'labs' => ['PT', 'INR', 'APTT', 'APTT ratio', 'Anti Xa']],
-            //     ['name' => '', 'labs' => ['Iron study', 'Ferritin']],
-            // ],
             'validators' => [
                 ['name' => 'sodium', 'min' => 128, 'max' => 145, 'type' => 'integer'],
                 ['name' => 'heparin_loading_dose', 'min' => 250, 'max' => 2000, 'type' => 'integer'],
@@ -185,7 +176,6 @@ class OrderManager
                 ['name' => 'glucose_50_percent_iv_volume', 'min' => 50, 'max' => 100, 'type' => 'interger'],
             ],
             'tpe_dialyzers' => ['Plasmaflo'],
-            // 'albumin' => ['20% albumin 200 ml + NSS 800 ml', '20% albumin 150 ml + NSS 850 ml'],
             'tpe_filtration_pumb_options' => [20, 25, 30, 40],
         ];
     }

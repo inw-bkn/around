@@ -57,7 +57,7 @@ Route::middleware('auth')->name('resources.api.')->group(function () {
          ->name('wards');
     Route::get('staffs', AttendingStaffsController::class)
          ->name('staffs');
-    Route::get('acute-hemodialysis-slot-available/{dateNote}', AcuteHemodialysisSlotAvailableController::class)
+    Route::get('acute-hemodialysis-slot-available', AcuteHemodialysisSlotAvailableController::class)
          ->name('acute-hemodialysis-slot-available');
 });
 

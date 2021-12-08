@@ -10,6 +10,7 @@ use App\Http\Controllers\Resources\APIs\AdmissionsController;
 use App\Http\Controllers\Resources\APIs\AttendingStaffsController;
 use App\Http\Controllers\Resources\APIs\PatientRecentlyAdmissionController;
 use App\Http\Controllers\Resources\APIs\WardsController;
+use App\Http\Controllers\UploadsController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -56,9 +57,17 @@ Route::middleware('auth')->name('resources.api.')->group(function () {
          ->name('wards');
     Route::get('staffs', AttendingStaffsController::class)
          ->name('staffs');
-    Route::get('acute-hemodialysis-slot-available/{dateNote}', AcuteHemodialysisSlotAvailableController::class)
+    Route::get('acute-hemodialysis-slot-available', AcuteHemodialysisSlotAvailableController::class)
          ->name('acute-hemodialysis-slot-available');
 });
+
+// uploads
+Route::post('uploads', [UploadsController::class, 'store'])
+     ->middleware('auth')
+     ->name('uploads.store');
+Route::get('uploads/{path}/{filename}', [UploadsController::class, 'show'])
+     ->middleware('auth')
+     ->name('uploads.show');
 
 // patients
 Route::get('patients', function () {

@@ -18,6 +18,7 @@
                 v-model="form.reservation.an"
                 name="an"
                 label="an"
+                placeholder="No active admission"
                 :readonly="true"
             />
             <FormInput
@@ -59,164 +60,180 @@
             @autosave="autosave"
         />
 
-        <hr class="border border-dashed my-2 md:my-4 xl:my-8">
-        <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
-            <div>
-                <label class="form-label">inotrope</label>
-                <FormRadio
-                    class="grid grid-cols-2 gap-x-2"
-                    v-model="form.inotrope"
-                    name="inotrope"
-                    :options="['Yes', 'No']"
+        <h2
+            class="mt-6 md:mt-12 xl:mt-24 form-label italic text-xl text-thick-theme-light"
+            id="predialysis๘evaluation"
+        >
+            predialysis evaluation
+        </h2>
+        <hr class="my-4 border-b border-bitter-theme-light">
+        <label class="form-label">hemodynamic :</label>
+        <FormCheckbox
+            name="hemodynamic_stable"
+            v-model="form.predialysis_evaluations.hemodynamic_stable"
+            label="Stable"
+            :toggler="true"
+        />
+        <transition name="slide-fade">
+            <div
+                v-if="!form.predialysis_evaluations.hemodynamic_stable"
+                class="mt-2 md:mt-4 xl:mt-8 space-y-2 md:space-y-4 lg:space-y-0 lg:grid grid-flow-col grid-cols-2 grid-rows-3 gap-4"
+            >
+                <FormCheckbox
+                    v-for="symptom in configs.hemodynamic_symptoms"
+                    :key="symptom.name"
+                    name="hypotension"
+                    v-model="form.predialysis_evaluations[symptom.name]"
+                    :label="symptom.label"
                 />
             </div>
-            <FormSelect
-                label="o2 rx"
-                v-model="form.o2_rx"
-                name="o2_rx"
-                :options="configs.o2_rx_options"
-            />
-        </div>
-        <hr class="border border-dashed my-2 md:my-4 xl:my-8">
-        <label class="form-label">monitoring :</label>
-        <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
-            <FormCheckbox
-                v-for="(monitor, key) in configs.monitors"
-                :key="key"
-                :label="monitor.label"
-                :name="monitor.name"
-                v-model="form.monitor[monitor.name]"
-            />
-            <FormInput
-                label="other"
-                name="monitoring_other"
-                v-model="form.monitor.other"
-            />
-        </div>
+        </transition>
 
         <hr class="border border-dashed my-2 md:my-4 xl:my-8">
-        <FormInput
-            class="mt-2 md:bt-4 xl:mt-8"
-            label="special order"
-            name="special_order"
-            v-model="form.special_order"
+        <label class="form-label">Respiration :</label>
+        <FormCheckbox
+            name="respiration_stable"
+            v-model="form.predialysis_evaluations.respiration_stable"
+            label="Stable"
+            :toggler="true"
         />
-        <h2
-            class="mt-6 md:mt-12 xl:mt-24 form-label italic text-xl text-thick-theme-light"
-            id="pre-dialysis-labs-request"
-        >
-            Pre-Dialysis Labs Request
-        </h2>
-        <hr class="my-4 border-b border-bitter-theme-light">
-        <div
-            v-for="(labSet, key) in configs.lab_sets"
-            :key="key"
-        >
-            <label
-                class="form-label mb-2 md:mb-4 xl:mb-8"
-                v-if="labSet.name"
-            ><span class=" italic font-extralight text-dark-theme-light">{{ labSet.name }}</span></label>
-            <div class="grid grid-cols-2 gap-2 md:gap-4 xl:gap-8 xl:grid-cols-4">
+        <transition name="slide-fade">
+            <div
+                v-if="!form.predialysis_evaluations.respiration_stable"
+                class="mt-2 md:mt-4 xl:mt-8 space-y-2 md:space-y-4 xl:space-y-4"
+            >
                 <FormCheckbox
-                    v-for="(lab, index) in labSet.labs"
-                    :key="index"
-                    :label="lab"
-                    :name="lab"
-                    v-model="form.labs[lab.replaceAll(' ', '_').toLowerCase()]"
+                    v-for="symptom in configs.raspiration_options"
+                    :key="symptom.name"
+                    name="hypotension"
+                    v-model="form.predialysis_evaluations[symptom.name]"
+                    :label="symptom.label"
                 />
             </div>
-            <hr class="border border-dashed my-2 md:my-4 xl:my-8">
-        </div>
-        <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
-            <FormInput
-                label="crossmatch"
-                name="lab_crossmatch"
-                placeholder="please specify"
-                v-model="form.labs.crossmatch"
-            />
-            <FormInput
-                label="other"
-                name="lab_other"
-                v-model="form.labs.other"
-            />
-        </div>
-        <h2
-            class="mt-6 md:mt-12 xl:mt-24 form-label italic text-xl text-thick-theme-light"
-            id="pre-dialysis-treatments-request"
-        >
-            Pre-Dialysis Treatments Request
-        </h2>
-        <hr class="my-4 border-b border-bitter-theme-light">
-        <FormInput
-            class="mt-2 md:bt-4 xl:mt-8"
-            name="pre_treatments"
-            v-model="form.pre_treatments"
+        </transition>
+
+        <hr class="border border-dashed my-2 md:my-4 xl:my-8">
+        <label class="form-label">Oxygen support :</label>
+        <FormSelect
+            v-model="form.predialysis_evaluations.oxygen_support"
+            name="oxygen_support"
+            :options="configs.oxygen_options"
         />
-        <h2
-            class="mt-6 md:mt-12 xl:mt-24 form-label italic text-xl text-thick-theme-light"
-            id="post-dialysis-treatments-request"
-        >
-            post-Dialysis Treatments Request
-        </h2>
-        <hr class="my-4 border-b border-bitter-theme-light">
-        <div v-if="form.access_type == 'Perm cath' || form.access_type == 'DLC'">
-            <label class="form-label">DLC/PC lock solution</label>
-            <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
-                <FormInput
-                    label="heparin"
-                    name="post_treatment_heparin"
-                    v-model="form.post_treatments.heparin"
-                />
-                <FormInput
-                    label="heparin dose"
-                    name="post_treatment_heparin_dose"
-                    v-model="form.post_treatments.heparin_dose"
-                />
-                <FormInput
-                    label="citrate"
-                    name="post_treatment_citrate"
-                    v-model="form.post_treatments.citrate"
-                />
-                <FormInput
-                    label="citrate dose"
-                    name="post_treatment_citrate_dose"
-                    v-model="form.post_treatments.citrate_dose"
-                />
-                <FormInput
-                    label="antibiotic"
-                    name="post_treatment_antibiotic"
-                    v-model="form.post_treatments.antibiotic"
-                />
-                <FormInput
-                    label="antibiotic dose"
-                    name="post_treatment_antibiotic_dose"
-                    v-model="form.post_treatments.antibiotic_dose"
+
+        <hr class="border border-dashed my-2 md:my-4 xl:my-8">
+        <label class="form-label">Neurological evaluation :</label>
+        <FormCheckbox
+            name="neurological_stable"
+            v-model="form.predialysis_evaluations.neurological_stable"
+            label="Stable"
+            :toggler="true"
+        />
+        <transition name="slide-fade">
+            <div
+                v-if="!form.predialysis_evaluations.neurological_stable"
+                class="mt-2 md:mt-4 xl:mt-8 space-y-2 md:space-y-4 lg:space-y-0 lg:grid grid-flow-col grid-cols-2 grid-rows-1 gap-4"
+            >
+                <FormCheckbox
+                    v-for="symptom in configs.neurological_options"
+                    :key="symptom.name"
+                    name="hypotension"
+                    v-model="form.predialysis_evaluations[symptom.name]"
+                    :label="symptom.label"
                 />
             </div>
-            <hr class="border border-dashed my-2 md:my-4 xl:my-8">
-        </div>
-        <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
-            <FormInput
-                label="ESA"
-                name="post_treatment_ESA"
-                v-model="form.post_treatments.esa"
-            />
-            <FormInput
-                label="ESA dose"
-                name="post_treatment_ESA_dose"
-                v-model="form.post_treatments.esa_dose"
-            />
-            <FormInput
-                label="Iron iv"
-                name="post_treatment_iron_iv"
-                v-model="form.post_treatments.iron_iv"
-            />
-            <FormInput
-                label="Iron iv dose"
-                name="post_treatment_iron_iv_dose"
-                v-model="form.post_treatments.iron_iv_dose"
-            />
-        </div>
+        </transition>
+
+        <hr class="border border-dashed my-2 md:my-4 xl:my-8">
+        <label class="form-label">Life threatening condition in the past 24 hours :</label>
+        <FormCheckbox
+            name="life_threatening_condition"
+            v-model="form.predialysis_evaluations.life_threatening_condition"
+            label="Stable"
+            :toggler="true"
+        />
+        <transition name="slide-fade">
+            <div
+                v-if="!form.predialysis_evaluations.life_threatening_condition"
+                class="mt-2 md:mt-4 xl:mt-8 space-y-2 md:space-y-4 lg:space-y-0 lg:grid grid-flow-col grid-cols-2 grid-rows-3 gap-4"
+            >
+                <FormCheckbox
+                    v-for="symptom in configs.life_threatening_condition_options"
+                    :key="symptom.name"
+                    name="hypotension"
+                    v-model="form.predialysis_evaluations[symptom.name]"
+                    :label="symptom.label"
+                />
+            </div>
+        </transition>
+
+        <h2
+            class="mt-6 md:mt-12 xl:mt-24 form-label italic text-xl text-thick-theme-light"
+            id="predialysis๘evaluation"
+        >
+            monitoring
+        </h2>
+        <hr class="my-4 border-b border-bitter-theme-light">
+        <FormCheckbox
+            name="standard"
+            v-model="form.monitor.standard"
+            label="Standard (MAP ≥ 65 mmHg)"
+            :toggler="true"
+        />
+        <transition name="slide-fade">
+            <div v-if="!form.monitor.standard">
+                <div class="mt-2 md:mt-4 xl:mt-8 space-y-2 md:space-y-4 lg:space-y-0 lg:grid grid-flow-col grid-cols-2 grid-rows-2 gap-4">
+                    <FormCheckbox
+                        v-for="(monitor, key) in configs.monitors"
+                        :key="key"
+                        :label="monitor.label"
+                        :name="monitor.name"
+                        v-model="form.monitor[monitor.name]"
+                    />
+                </div>
+                <FormTextarea
+                    class="mt-2 md:mt-4 xl:mt-8"
+                    label="other"
+                    placeholder="others..."
+                    name="monitoring_other"
+                    v-model="form.monitor.other"
+                />
+            </div>
+        </transition>
+
+        <h2
+            class="mt-6 md:mt-12 xl:mt-24 form-label italic text-xl text-thick-theme-light"
+            id="predialysis๘evaluation"
+        >
+            special orders
+        </h2>
+        <hr class="my-4 border-b border-bitter-theme-light">
+        <FormCheckbox
+            class="mt-2 md:bt-4 xl:mt-8"
+            name="predialysis_labs_request"
+            v-model="form.predialysis_labs_request"
+            label="Predialysis Labs request"
+            :toggler="true"
+        />
+        <FormCheckbox
+            class="mt-2 md:mt-4 xl:mt-8"
+            name="postdialysis_esa"
+            v-model="form.postdialysis_esa"
+            label="Postdialysis ESA"
+            :toggler="true"
+        />
+        <FormCheckbox
+            class="mt-2 md:mt-4 xl:mt-8"
+            name="postdialysis_iron_iv"
+            v-model="form.postdialysis_iron_iv"
+            label="Postdialysis Iron IV"
+            :toggler="true"
+        />
+        <FormTextarea
+            class="mt-2 md:mt-4 xl:mt-8"
+            label="treatments request"
+            name="treatments_request"
+            v-model="form.treatments_request"
+        />
     </div>
 </template>
 
@@ -228,6 +245,7 @@ import TPE from '@/Components/Forms/AcuteHD/TPE';
 import FormInput from '@/Components/Controls/FormInput';
 import FormCheckbox from '@/Components/Controls/FormCheckbox';
 import FormSelect from '@/Components/Controls/FormSelect';
+import FormTextarea from '@/Components/Controls/FormTextarea';
 import FormRadio from '@/Components/Controls/FormRadio';
 import { Link, useForm } from '@inertiajs/inertia-vue3';
 import { reactive } from '@vue/reactivity';

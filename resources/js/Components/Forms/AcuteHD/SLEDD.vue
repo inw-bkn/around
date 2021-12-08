@@ -29,7 +29,7 @@
             v-model="form.access_site_coagulant"
             name="access_site_coagulant"
             :options="(form.access_type && form.access_type.startsWith('AV')) ? configs.av_access_sites : configs.non_av_access_sites"
-            :disabled="!form.access_type"
+            :disabled="!form.access_type || form.access_type === 'รอใส่สาย'"
         />
         <FormSelect
             v-model="form.dialyzer"
@@ -43,27 +43,76 @@
             label="dialysate"
             :options="configs.dialysates"
         />
-        <FormInput
-            v-model:model-value="form.dialysate_flow"
-            v-model:model-checkbox="form.reverse_flow"
-            type="number"
-            pattern="\d*"
-            name="dialysate_flow"
+        <FormSelect
+            v-model="form.blood_flow_rate"
+            name="blood_flow_rate"
+            :options="['200']"
+            label="blood flow rate (ml/min)"
+        />
+        <FormSelect
+            v-model:model-value="form.dialysate_flow_rate"
+            v-model:model-checkbox="form.reverse_dialysate_flow"
+            :options="['300']"
+            name="dialysate_flow_rate"
             label="dialysate flow (ml/min)"
             switch-label="Reverse flow"
         />
-        <FormInput
-            v-model="form.blood_flow"
-            type="number"
-            pattern="\d*"
-            name="blood_flow"
-            label="blood flow (ml/min)"
-        />
-        <FormInput
+        <FormSelect
             v-model="form.dialysate_temperature"
-            type="number"
             name="dialysate_temperature"
+            :options="configs.dialysate_temperatures"
             label="dialysate temperature (℃)"
+        />
+    </div>
+    <hr class="border border-dashed my-2 md:my-4 xl:my-8">
+    <div class="grid md:grid-cols-2 gap-2 xl:gap-8 my-2 md:my-4 xl:mt-8">
+        <div>
+            <FormInput
+                label="sodium"
+                name="sodium"
+                v-model="form.sodium"
+                type="number"
+                pattern="\d*"
+                @autosave="validate('sodium')"
+                :error="errors.sodium"
+                placeholder="[128, 145]"
+            />
+            <FormCheckbox
+                class="mt-2 md:mt-4 xl:mt-8"
+                label="Sodium profile"
+                name="sodium_profile"
+                v-model="form.sodium_profile"
+                :toggler="true"
+            />
+            <transition name="slide-fade">
+                <div
+                    v-if="form.sodium_profile"
+                    class="grid gap-2 md:gap-4 xl:gap-8 mt-2 md:mt-4 xl:mt-8"
+                >
+                    <FormInput
+                        label="start"
+                        name="sodium_profile_start"
+                        v-model="form.sodium_profile_start"
+                        type="number"
+                        pattern="\d*"
+                        :error="errors.sodium_profile_start"
+                    />
+                    <FormInput
+                        label="end"
+                        name="sodium_profile_end"
+                        v-model="form.sodium_profile_end"
+                        type="number"
+                        pattern="\d*"
+                        :error="errors.sodium_profile_end"
+                    />
+                </div>
+            </transition>
+        </div>
+        <FormSelect
+            v-model="form.bicarbonate"
+            name="bicarbonate"
+            label="bicarbonate"
+            :options="configs.bicarbonates"
         />
     </div>
     <hr class="border border-dashed my-2 md:my-4 xl:my-8">
@@ -172,45 +221,64 @@
     </transition>
     <hr class="border border-dashed my-2 md:my-4 xl:my-8">
     <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
-        <FormInput
-            pattern="\d*"
-            label="uf (ml.)"
-            v-model="form.ultrafiltration"
-            name="ultrafiltration"
-            type="number"
-            @autosave="validate('ultrafiltration')"
-            :error="errors.ultrafiltration"
-            placeholder="[0, 4000] ml"
-        />
+        <div>
+            <label
+                for=""
+                class="form-label"
+            >uf (ml.)</label>
+            <div class="grid gap-2 md:grid-cols-2">
+                <FormInput
+                    name="ultrafiltration_min"
+                    v-model="form.ultrafiltration_min"
+                    pattern="\d*"
+                    type="number"
+                    @autosave="validate('ultrafiltration_min')"
+                    :error="errors.ultrafiltration_min"
+                    placeholder="min [0, 5500]"
+                />
+                <FormInput
+                    name="ultrafiltration_max"
+                    v-model="form.ultrafiltration_max"
+                    pattern="\d*"
+                    type="number"
+                    @autosave="validate('ultrafiltration_max')"
+                    :error="errors.ultrafiltration_max"
+                    placeholder="max [0, 5500]"
+                />
+            </div>
+        </div>
         <FormInput
             label="dry weight (kg.)"
             v-model="form.dry_weight"
             name="dry_weight"
             type="number"
         />
-        <FormInput
-            label="50% Glucose IV volume (ml)"
-            v-model="form.glucose_50_percent_iv_volume"
-            name="glucose_50_percent_iv_volume"
-            pattern="\d*"
-            type="number"
-            @autosave="validate('glucose_50_percent_iv_volume')"
-            :error="errors.glucose_50_percent_iv_volume"
-            placeholder="[50, 100] ml"
-        />
-        <FormSelect
-            label="50% glucose iv at"
-            v-model="form.glucose_50_percent_iv_at"
-            name="glucose_50_percent_iv_at"
-            :options="configs.iv_gluclose_options"
-        />
         <div>
-            <label class="form-label">20% albumin prime 100 ml</label>
+            <label class="form-label">50% Glucose IV volume (ml)</label>
             <FormRadio
                 class="grid grid-cols-2 gap-x-2"
-                name="albumin_20_percent_prime_100ml"
-                v-model="form.albumin_20_percent_prime_100ml"
-                :options="['Yes', 'No']"
+                :class="{'grid-cols-3': form.glucose_50_percent_iv_volume}"
+                name="glucose_50_percent_iv_volume"
+                v-model="form.glucose_50_percent_iv_volume"
+                :options="['50', '100']"
+                :allow-reset="true"
+            />
+        </div>
+        <FormSelect
+            v-model="form.glucose_50_percent_iv_at"
+            name="glucose_50_percent_iv_at"
+            label="50% glucose iv (at hour)"
+            :options="[1,2,3,4]"
+        />
+        <div>
+            <label class="form-label">20% albumin prime (ml)</label>
+            <FormRadio
+                class="grid grid-cols-2 gap-x-2"
+                :class="{'grid-cols-3': form.albumin_20_percent_prime}"
+                name="albumin_20_percent_prime"
+                v-model="form.albumin_20_percent_prime"
+                :options="['50', '100']"
+                :allow-reset="true"
             />
         </div>
         <FormInput
@@ -226,6 +294,13 @@
             pattern="\d*"
         />
     </div>
+    <hr class="border border-dashed my-2 md:my-4 xl:my-8">
+    <FormCheckbox
+        label="Post Dialysis BW"
+        name="post_dialysis_bw"
+        v-model="form.post_dialysis_bw"
+        :toggler="true"
+    />
     <hr class="border border-dashed my-2 md:my-4 xl:my-8">
     <label class="form-label">transfustion :</label>
     <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
@@ -254,11 +329,19 @@
             v-model="form.transfusion_other"
         />
     </div>
+    <hr class="border border-dashed my-2 md:my-4 xl:my-8">
+    <FormTextarea
+        class="mt-2 md:mt-4 xl:mt-8"
+        label="note"
+        name="monitoring_other"
+        v-model="form.remark"
+    />
 </template>
 
 <script setup>
 import FormCheckbox from '@/Components/Controls/FormCheckbox';
 import FormInput from '@/Components/Controls/FormInput';
+import FormTextarea from '@/Components/Controls/FormTextarea';
 import FormSelect from '@/Components/Controls/FormSelect';
 import FormRadio from '@/Components/Controls/FormRadio';
 import Alert from '@/Components/Helpers/Alert';

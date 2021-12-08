@@ -34,60 +34,53 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from '@vue/reactivity';
 import { computed, watch } from '@vue/runtime-core';
-export default {
-    emits: ['update:modelValue', 'autosave'],
-    props: {
-        modelValue: { type: [String, Number], default: '' },
-        options: { type: Array, required: true },
-        name: { type: String, required: true },
-        label: { type: String, default: '' },
-        disabled: { type: Boolean },
-        error: { type: String, default: '' },
-        allowReset: { type:Boolean },
-        allowOther: { type:Boolean },
+
+const emits = defineEmits(['update:modelValue', 'autosave']);
+const props = defineProps({
+    modelValue: { type: [String, Number], default: '' },
+    options: { type: Array, required: true },
+    name: { type: String, required: true },
+    label: { type: String, default: '' },
+    disabled: { type: Boolean },
+    error: { type: String, default: '' },
+    allowReset: { type:Boolean },
+    allowOther: { type:Boolean },
+});
+
+const selected = ref(props.modelValue);
+watch (
+    () => selected.value,
+    (val) => {
+        emits('update:modelValue', val);
+        emits('autosave');
     },
-    setup(props, context) {
-        const selected = ref(props.modelValue);
+);
 
-        watch (
-            () => selected.value,
-            (val) => {
-                context.emit('update:modelValue', val);
-                context.emit('autosave');
-            },
-        );
+const computeItems = computed(() => {
+    let options = typeof props.options[0] === 'string'
+        ?   props.options.map( function (option) {
+            return { value: option, label: option };
+        })
+        :   [...props.options];
 
-        const computeItems = computed(() => {
-            let options = typeof props.options[0] === 'string'
-                ?   props.options.map( function (option) {
-                    return { value: option, label: option };
-                })
-                :   [...props.options];
+    if (props.allowOther) {
+        options.push({ label: 'Other', value: 'other' });
+    }
 
-            if (props.allowOther) {
-                options.push({ label: 'Other', value: 'other' });
-            }
+    if (!props.allowReset || selected.value === null) {
+        return options;
+    } else {
+        options.push({ label: 'Remove', value: null });
+        return options;
+    }
+});
 
-            if (!props.allowReset || selected.value === null) {
-                return options;
-            } else {
-                options.push({ label: 'Remove', value: null });
-                return options;
-            }
-        });
-
-        const setOther = (val) => {
-            selected.value = val;
-        };
-
-        return {
-            selected,
-            computeItems,
-            setOther,
-        };
-    },
+const setOther = (val) => {
+    selected.value = val;
 };
+
+defineExpose({ setOther });
 </script>

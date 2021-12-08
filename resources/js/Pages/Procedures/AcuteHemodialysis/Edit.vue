@@ -19,18 +19,7 @@
                 :readonly="true"
                 name="encountered_at_text"
                 v-model="form.admission.an"
-            />
-            <FormInput
-                label="admitted on"
-                :readonly="true"
-                name="encountered_at_text"
-                v-model="form.admission.encountered_at_text"
-            />
-            <FormInput
-                label="discharged on"
-                :readonly="true"
-                name="dismissed_at_text"
-                v-model="form.admission.dismissed_at_text"
+                placeholder="No active admission"
             />
             <FormInput
                 label="first dialysis on"
@@ -44,20 +33,77 @@
                 name="last_dialysis_at"
                 v-model="form.last_dialysis_at"
             />
-            <FormInput
-                label="ward admit"
-                :readonly="true"
-                name="ward_admit"
-                v-model="form.admission.place_name"
-            />
-            <FormAutocomplete
-                label="ward discharge"
-                :endpoint="route('resources.api.wards')"
-                v-model="form.ward_discharge"
-                name="ward_discharge"
-            />
+            <template v-if="form.admission.an">
+                <FormInput
+                    label="admitted on"
+                    :readonly="true"
+                    name="encountered_at_text"
+                    v-model="form.admission.encountered_at_text"
+                />
+                <FormInput
+                    label="discharged on"
+                    :readonly="true"
+                    name="dismissed_at_text"
+                    v-model="form.admission.dismissed_at_text"
+                />
+                <FormInput
+                    label="ward admit"
+                    :readonly="true"
+                    name="ward_admit"
+                    v-model="form.admission.place_name"
+                />
+                <FormAutocomplete
+                    label="ward discharge"
+                    :endpoint="route('resources.api.wards')"
+                    v-model="form.ward_discharge"
+                    name="ward_discharge"
+                />
+            </template>
         </div>
         <hr class="border border-dashed my-2 md:my-4 xl:my-8">
+
+        <h3 class="form-label mt-4 md:mt-8 xl:mt-16">
+            Outcome :
+        </h3>
+        <div class="grid gap-2 md:grid-cols-2 md:gap-4 xl:gap-6">
+            <div>
+                <FormRadio
+                    label="renal outcome"
+                    name="renal_outcome"
+                    v-model="form.renal_outcome"
+                    :options="['Recovery', 'ESRD', 'KT']"
+                />
+                <transition name="slide-fade">
+                    <FormInput
+                        v-if="form.renal_outcome === 'Recovery'"
+                        label="last creatinine before discharge"
+                        class="mt-2 md:mt-t xl:mt-6"
+                        name="cr_before_discharge"
+                        v-model="form.cr_before_discharge"
+                    />
+                </transition>
+            </div>
+            <div>
+                <FormRadio
+                    label="patient outcome"
+                    name="patient_outcome"
+                    v-model="form.patient_outcome"
+                    :options="['Alive', 'Dead']"
+                />
+                <transition name="slide-fade">
+                    <FormInput
+                        v-if="form.patient_outcome === 'Dead'"
+                        label="cause of dead"
+                        class="mt-2 md:mt-t xl:mt-6"
+                        name="cause_of_dead"
+                        v-model="form.cause_of_dead"
+                    />
+                </transition>
+            </div>
+        </div>
+        <hr class="border border-dashed my-2 md:my-4 xl:my-8">
+
+        <!-- previous crrt -->
         <FormCheckbox
             class="mt-4 md:mb-4 md:mt-8 xl:mt-16"
             label="Previous crrt"
@@ -82,10 +128,19 @@
             </div>
         </transition>
         <hr class="border border-dashed my-2 md:my-4 xl:my-8">
+
         <h3 class="form-label mt-4 md:mt-8 xl:mt-16">
             Renal diagnosis :
         </h3>
-        <div class="grid gap-2 md:grid md:gap-4 md:grid-cols-2 xl:gap-8">
+        <FormRadio
+            class="sm:grid grid-cols-2 gap-x-2 lg:grid-cols-4"
+            name="renal_diagnosis"
+            v-model="form.renal_diagnosis"
+            :options="configs.renal_diagnosis"
+        />
+        <!-- <div class="grid gap-2 md:grid md:gap-4 md:grid-cols-2 xl:gap-8">
+        </div> -->
+        <!-- <div class="grid gap-2 md:grid md:gap-4 md:grid-cols-2 xl:gap-8">
             <div>
                 <FormCheckbox
                     class="mt-2 md:mt-4 -mb-1"
@@ -146,18 +201,60 @@
                     </div>
                 </transition>
             </div>
-        </div>
+        </div> -->
         <hr class="border border-dashed my-2 md:my-4 xl:my-8">
-        <h3 class="form-label mt-4 md:mt-8 xl:mt-16">
-            admission diagnosis :
-        </h3>
-        <FormInput
-            name="admission_diagnosis"
-            v-model="form.admission_diagnosis"
-        />
-        <hr class="border border-dashed my-2 md:my-4 xl:my-8">
+
+        <template v-if="form.admission.an">
+            <h3 class="form-label mt-4 md:mt-8 xl:mt-16">
+                admission diagnosis :
+            </h3>
+            <FormInput
+                name="admission_diagnosis"
+                v-model="form.admission_diagnosis"
+            />
+            <hr class="border border-dashed my-2 md:my-4 xl:my-8">
+        </template>
+
         <!-- comorbid and indication -->
-        <div class="grid gap-2 md:grid-cols-2 md:gap-4 xl:gap-6">
+        <div class="sm:hidden">
+            <h3 class="form-label mt-4 md:mt-8 xl:mt-16">
+                Comorbidities :
+            </h3>
+            <div class="mt-2 md:mt-4 xl:mt-6 grid gap-2 md:gap-4 xl:gap-6 2xl:grid-cols-2">
+                <FormCheckbox
+                    v-for="(disease, key) in configs.comorbidities"
+                    :key="key"
+                    :name="disease.name"
+                    :label="disease.label"
+                    v-model="form.comorbidities[disease.name]"
+                />
+            </div>
+            <FormInput
+                class="mt-2 md:mt-4 xl:mt-6 h-auto"
+                name="comorbidities_other"
+                label="Other comorbidities"
+                v-model="form.comorbidities.other"
+            />
+            <h3 class="form-label mt-4 md:mt-8 xl:mt-16">
+                Indication for dialysis :
+            </h3>
+            <div class="mt-2 md:mt-4 xl:mt-6 grid gap-2 md:gap-4 xl:gap-6 2xl:grid-cols-2">
+                <FormCheckbox
+                    v-for="(disease, key) in configs.indications"
+                    :key="key"
+                    :name="disease.name"
+                    :label="disease.label"
+                    v-model="form.indications[disease.name]"
+                />
+            </div>
+            <FormInput
+                class="mt-2 md:mt-4 xl:mt-6 h-auto"
+                name="indications_other"
+                label="Other indications"
+                v-model="form.indications.other"
+            />
+        </div>
+        <div class="hidden sm:grid grid-cols-2 gap-2">
             <div>
                 <h3 class="form-label mt-4 md:mt-8 xl:mt-16">
                     Comorbidities :
@@ -171,12 +268,6 @@
                         v-model="form.comorbidities[disease.name]"
                     />
                 </div>
-                <FormInput
-                    class="mt-2 md:mt-4 xl:mt-6"
-                    name="comorbidities_other"
-                    label="Other comorbidities"
-                    v-model="form.comorbidities.other"
-                />
             </div>
             <div>
                 <h3 class="form-label mt-4 md:mt-8 xl:mt-16">
@@ -191,15 +282,22 @@
                         v-model="form.indications[disease.name]"
                     />
                 </div>
-                <FormInput
-                    class="mt-2 md:mt-4 xl:mt-6"
-                    name="comorbidities_other"
-                    label="Other indications"
-                    v-model="form.indications.other"
-                />
             </div>
+            <FormInput
+                class="mt-2 md:mt-4 xl:mt-6 h-auto"
+                name="comorbidities_other"
+                label="Other comorbidities"
+                v-model="form.comorbidities.other"
+            />
+            <FormInput
+                class="mt-2 md:mt-4 xl:mt-6 h-auto"
+                name="indications_other"
+                label="Other indications"
+                v-model="form.indications.other"
+            />
         </div>
         <hr class="border border-dashed my-2 md:my-4 xl:my-8">
+
         <h3 class="form-label mt-4 md:mt-8 xl:mt-16">
             Serology :
         </h3>
@@ -207,10 +305,10 @@
             <div>
                 <label class="form-label">HBs Ag</label>
                 <FormRadio
-                    class="grid grid-cols-2 gap-x-2"
+                    class="grid lg:grid-cols-2 gap-x-2"
                     name="hbs_ag"
                     v-model="form.hbs_ag"
-                    :options="['Positive', 'Negative']"
+                    :options="['Positive', 'Intermediate', 'Negative']"
                 />
             </div>
             <FormDatetime
@@ -221,10 +319,10 @@
             <div>
                 <label class="form-label">anti hcv</label>
                 <FormRadio
-                    class="grid grid-cols-2 gap-x-2"
+                    class="grid lg:grid-cols-2 gap-x-2"
                     name="anti_hcv"
                     v-model="form.anti_hcv"
-                    :options="['Positive', 'Negative']"
+                    :options="['Positive', 'Intermediate', 'Negative']"
                 />
             </div>
             <FormDatetime
@@ -235,10 +333,10 @@
             <div>
                 <label class="form-label">anti HIV</label>
                 <FormRadio
-                    class="grid grid-cols-2 gap-x-2"
+                    class="grid lg:grid-cols-2 gap-x-2"
                     name="anti_hiv"
                     v-model="form.anti_hiv"
-                    :options="['Positive', 'Negative']"
+                    :options="['Positive', 'Intermediate', 'Negative']"
                 />
             </div>
             <FormDatetime
@@ -250,16 +348,32 @@
 
         <hr class="border border-dashed my-2 md:my-4 xl:my-8">
         <!-- consent signed -->
-        <FormCheckbox
-            class="mt-4 md:mt-8 xl:mt-16"
-            label="Consent signed"
-            name="consent_signed"
-            v-model="form.consent_signed"
-            :toggler="true"
+        <h3 class="form-label mt-4 md:mt-8 xl:mt-16">
+            Consent :
+        </h3>
+        <ImageUploader
+            label="๏ opd consent form"
+            name="opd_consent_form"
+            v-model="form.opd_consent_form"
         />
+        <template v-if="form.admission.an">
+            <ImageUploader
+                class="mt-4 md:mt-6"
+                label="๏ ipd consent form"
+                name="ipd_consent_form"
+                v-model="form.ipd_consent_form"
+            />
+            <FormCheckbox
+                class="mt-4 md:mt-6"
+                label="Use same form"
+                name="same_consent_form"
+                v-model="form.same_consent_form"
+                :toggler="true"
+            />
+        </template>
         <hr class="border border-dashed my-2 md:my-4 xl:my-8">
         <h3 class="form-label mt-4 md:mt-8 xl:mt-16">
-            Insurance :
+            Medical scheme :
         </h3>
         <FormRadio
             name="insurance"
@@ -269,46 +383,6 @@
             :allow-other="true"
             ref="insurance"
         />
-        <hr class="border border-dashed my-2 md:my-4 xl:my-8">
-        <h3 class="form-label mt-4 md:mt-8 xl:mt-16">
-            Outcome :
-        </h3>
-        <div class="grid gap-2 md:grid-cols-2 md:gap-4 xl:gap-6">
-            <div>
-                <FormRadio
-                    label="renal outcome"
-                    name="renal_outcome"
-                    v-model="form.renal_outcome"
-                    :options="['Recovery', 'ESRD', 'KT']"
-                />
-                <transition name="slide-fade">
-                    <FormInput
-                        v-if="form.renal_outcome === 'Recovery'"
-                        label="last creatinine before discharge"
-                        class="mt-2 md:mt-t xl:mt-6"
-                        name="cr_before_discharge"
-                        v-model="form.cr_before_discharge"
-                    />
-                </transition>
-            </div>
-            <div>
-                <FormRadio
-                    label="patient outcome"
-                    name="patient_outcome"
-                    v-model="form.patient_outcome"
-                    :options="['Alive', 'Dead']"
-                />
-                <transition name="slide-fade">
-                    <FormInput
-                        v-if="form.patient_outcome === 'Dead'"
-                        label="cause of dead"
-                        class="mt-2 md:mt-t xl:mt-6"
-                        name="cause_of_dead"
-                        v-model="form.cause_of_dead"
-                    />
-                </transition>
-            </div>
-        </div>
 
         <h2
             class="mt-6 md:mt-12 xl:mt-24 form-label italic text-xl text-thick-theme-light"
@@ -327,7 +401,7 @@
         </h2>
         <hr class="my-4 border-b border-bitter-theme-light">
 
-        <div class="md:grid grid-cols-2 gap-2 lg:gap-6">
+        <div class="grid md:grid-cols-2 gap-2 lg:gap-6">
             <FormAutocomplete
                 label="dialysis at"
                 name="dialysis_at"
@@ -347,7 +421,8 @@
                 label="dialysis type"
                 name="order_dialysis_type"
                 v-model="order.dialysis_type"
-                :options="configs.dialysis_types"
+                :options="order.dialysis_at && order.dialysis_at.startsWith('ไตเทียม') ? configs.in_unit_dialysis_types : configs.out_unit_dialysis_types"
+                :disabled="!order.dialysis_at"
             />
             <div>
                 <label class="form-label">patient type</label>
@@ -356,31 +431,39 @@
                     name="patient_type"
                     v-model="order.patient_type"
                     :options="['Acute', 'Chronic']"
+                    ref="patientTypeInput"
                 />
             </div>
         </div>
-        <div class="md:grid grid-cols-2 gap-2 lg:gap-6">
-            <FormDatetime
-                label="required date"
-                name="date_note"
-                v-model="order.date_note"
-                :options="{ enable: configs.availableDates, onDayCreate: onDayCreate, inline: true }"
-            />
-            <Slots
-                :reserved-slots="reservedSlots"
-                v-if="order.date_note"
-            />
-        </div>
-        <div class="mt-2 lg:mt-0 md:pt-4">
-            <SpinnerButton
-                class="block w-full text-center btn btn-bitter"
-                @click="reserve"
-                :spin="order.processing"
-                :disabled="reserveButtonDisable"
-            >
-                RESERVE
-            </SpinnerButton>
-        </div>
+        <transition name="slide-fade">
+            <div v-if="order.dialysis_at && order.dialysis_type">
+                <div class="grid xl:grid-cols-2 gap-2 md:gap-4 lg:gap-6">
+                    <FormDatetime
+                        label="required date"
+                        name="date_note"
+                        v-model="order.date_note"
+                        :options="{ enable: configs.availableDates, onDayCreate: onDayCreate, inline: true }"
+                    />
+                    <transition name="slide-fade">
+                        <InUnitSlot
+                            :reserved-slots="reservedSlots.slots"
+                            v-if="order.date_note"
+                        />
+                    </transition>
+                </div>
+
+                <div class="mt-2 lg:mt-0 md:pt-4">
+                    <SpinnerButton
+                        class="block w-full text-center btn btn-bitter"
+                        @click="reserve"
+                        :spin="order.processing"
+                        :disabled="reserveButtonDisable"
+                    >
+                        RESERVE
+                    </SpinnerButton>
+                </div>
+            </div>
+        </transition>
     </div>
     <FormSelectOther
         :placeholder="selectOther.placeholder"
@@ -398,7 +481,8 @@ import FormCheckbox from '@/Components/Controls/FormCheckbox';
 import FormRadio from '@/Components/Controls/FormRadio';
 import FormSelectOther from '@/Components/Controls/FormSelectOther';
 import SpinnerButton from '@/Components/Controls/SpinnerButton';
-import Slots from '@/Components/Helpers/AcuteHemodialysis/Slots';
+import ImageUploader from '@/Components/Controls/ImageUploader';
+import InUnitSlot from '@/Components/Helpers/AcuteHemodialysis/InUnitSlot';
 import Orders from '@/Components/Helpers/AcuteHemodialysis/Orders';
 import { useForm } from '@inertiajs/inertia-vue3';
 import { reactive, ref } from '@vue/reactivity';
@@ -412,10 +496,9 @@ const props = defineProps({
 });
 
 const form = useForm({...props.caseRecordForm});
+
 const reset = {
     previous_crrt: true,
-    renal_diagnosis_aki: true,
-    renal_diagnosis_ckd: true
 };
 watch (
     () => form,
@@ -428,39 +511,42 @@ watch (
             reset.previous_crrt = false;
         }
 
-        if (!val.renal_diagnosis_aki.check && !reset.renal_diagnosis_aki) {
-            val.renal_diagnosis_aki.sepsis = false;
-            val.renal_diagnosis_aki.chf = false;
-            val.renal_diagnosis_aki.acs = false;
-            val.renal_diagnosis_aki.other_cardiac_cause = false;
-            val.renal_diagnosis_aki.glomerulonephritis = false;
-            val.renal_diagnosis_aki.acute_interstitial_nephritis = false;
-            val.renal_diagnosis_aki.contrast_induced_nephropathy = false;
-            val.renal_diagnosis_aki.acute_tubular_necrosis = false;
-            val.renal_diagnosis_aki.drug_induced_aki = false;
-            val.renal_diagnosis_aki.other = null;
-            reset.renal_diagnosis_aki = true;
-        } else if (val.renal_diagnosis_aki.check) {
-            reset.renal_diagnosis_aki = false;
-        }
-
-        if (!val.renal_diagnosis_ckd.check && !reset.renal_diagnosis_ckd) {
-            val.renal_diagnosis_ckd.check = false;
-            val.renal_diagnosis_ckd.dn = false;
-            val.renal_diagnosis_ckd.ht = false;
-            val.renal_diagnosis_ckd.glomerular_disease = false;
-            val.renal_diagnosis_ckd.chronic_tubulointerstitial_nephritis = false;
-            val.renal_diagnosis_ckd.other = null;
-        } else if (val.renal_diagnosis_ckd.check) {
-            reset.renal_diagnosis_ckd = false;
-        }
-
         let data = val.data();
         delete data.admission;
         delete data.record;
         autosave(window.route('procedures.acute-hemodialysis.update', form.record.slug), data);
     },
     { deep: true }
+);
+
+watch(
+    () => form.indications.initiate_chronic_hd,
+    (val) => {
+        if (val) {
+            form.indications.maintain_chronic_hd = false;
+            form.indications.change_from_pd = false;
+        }
+    }
+);
+
+watch(
+    () => form.indications.maintain_chronic_hd,
+    (val) => {
+        if (val) {
+            form.indications.initiate_chronic_hd = false;
+            form.indications.change_from_pd = false;
+        }
+    }
+);
+
+watch(
+    () => form.indications.change_from_pd,
+    (val) => {
+        if (val) {
+            form.indications.initiate_chronic_hd = false;
+            form.indications.maintain_chronic_hd = false;
+        }
+    }
 );
 
 const autosave = debounce(function (url, data) {
@@ -480,6 +566,8 @@ const order = useForm({
     case_record_id: form.record.id,
     patient_id: form.record.patient_id,
 });
+const patientTypeInput = ref(null);
+
 const configs = reactive({...props.formConfigs});
 
 const dateFirstDialysis = ref(props.orders.length ? props.orders[0].date_note : null);
@@ -529,22 +617,42 @@ const onDayCreate = (dObj, dStr, fp, dayElem) => {
 watch (
     () => order.date_note,
     (val) => {
+        if (!val) {
+            return;
+        }
         window.axios
-            .get(window.route('resources.api.acute-hemodialysis-slot-available', val))
-            .then(response => {
-                reservedSlots.value = response.data;
+            .get(window.route('resources.api.acute-hemodialysis-slot-available', {
+                dialysis_type: order.dialysis_type,
+                dialysis_at: order.dialysis_at,
+                date_note: order.date_note,
+            })).then(response => {
+                reservedSlots.slots = response.data.slots;
+                reservedSlots.available = response.data.available;
+                reservedSlots.reply = response.data.reply;
             });
     }
 );
 
-const reservedSlots = ref([]);
+watch (
+    () => order.dialysis_type,
+    () => {
+        if (!order.patient_type && (form.indications.initiate_chronic_hd || form.indications.maintain_chronic_hd)) {
+            patientTypeInput.value.setOther('Chronic');
+        }
+    }
+);
+
+const reservedSlots = reactive({
+    slots: [],
+    available: false,
+    reply: '',
+});
 const reserveButtonDisable = computed(() => {
-    return !order.dialysis_at || !order.date_note || !order.dialysis_type || !order.patient_type || !order.attending_staff;
+    return !order.dialysis_at || !order.date_note || !order.dialysis_type || !order.patient_type || !order.attending_staff || !reservedSlots.available;
 });
 
 const reserve = () => {
     order.post(window.route('procedures.acute-hemodialysis.orders.store'), {
-        preserveScroll: true,
         onFinish: () => order.processing = false,
     });
 };

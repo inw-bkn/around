@@ -17,7 +17,7 @@
                 name="login"
                 v-model="form.login"
                 :error="form.errors.login"
-                ref="login_input"
+                ref="loginInput"
             />
             <FormInput
                 class="mt-2"
@@ -47,9 +47,13 @@ import { useCheckSessionTimeout } from '@/Functions/useCheckSessionTimeout';
 import { nextTick, onMounted, ref } from '@vue/runtime-core';
 import { Head } from '@inertiajs/inertia-vue3';
 useCheckSessionTimeout();
-const login_input = ref(null);
+const loginInput = ref(null);
+
 onMounted(() => {
-    nextTick(() => login_input.value.focus());
+    nextTick(() => {
+        console.log(loginInput.value.focus);
+        loginInput.value.focus();
+    });
 });
 const form = useForm({
     login: null,

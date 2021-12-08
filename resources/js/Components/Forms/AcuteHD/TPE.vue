@@ -18,7 +18,7 @@
             v-model="form.access_site_coagulant"
             name="access_site_coagulant"
             :options="(form.access_type && form.access_type.startsWith('AV')) ? configs.av_access_sites : configs.non_av_access_sites"
-            :disabled="!form.access_type"
+            :disabled="!form.access_type || form.access_type === 'รอใส่สาย'"
         />
         <FormSelect
             v-model="form.dialyzer"
@@ -28,26 +28,53 @@
         />
     </div>
     <hr class="border border-dashed my-2 md:my-4 xl:my-8">
-    <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
-        <FormSelect
-            v-model="form.replacement_fluid_albumin"
-            name="replacement_fluid_albumin"
-            label="albumin"
-            :options="configs.albumin"
-        />
+    <label class="form-label">replacement</label>
+    <FormCheckbox
+        v-model="form.replacement_fluid_albumin"
+        name="replacement_fluid_albumin"
+        label="Albumin"
+        class="mt-2 md:mt-4"
+        :toggler="true"
+    />
+    <transition name="slide-fade">
+        <div
+            v-if="form.replacement_fluid_albumin"
+            class="grid gap-2 md:grid-cols-2 md:gap-4 xl:gap-8"
+        >
+            <div>
+                <label class="form-label">concentrated (%)</label>
+                <FormRadio
+                    v-model="form.replacement_fluid_albumin"
+                    name="replacement_fluid_albumin_concentrated"
+                    class="grid grid-cols-2 gap-2 md:gap-4"
+                    :options="['3', '4']"
+                />
+            </div>
+            <FormInput
+                v-model="form.replacement_fluid_albumin_volume"
+                type="tel"
+                name="replacement_fluid_albumin_volume"
+                label="volume (ml)"
+            />
+        </div>
+    </transition>
+    <FormCheckbox
+        v-model="form.replacement_fluid_ffp"
+        name="replacement_fluid_ffp"
+        label="FFP"
+        class="mt-2 md:mt-4"
+        :toggler="true"
+    />
+    <transition name="slide-fade">
         <FormInput
+            v-if="form.replacement_fluid_ffp"
             v-model="form.replacement_fluid_albumin_volume"
             type="tel"
             name="replacement_fluid_albumin_volume"
-            label="albumin volume (ml)"
+            label="volume (ml)"
         />
-        <FormInput
-            v-model="form.replacement_fluid_ffp_volume"
-            type="tel"
-            name="replacement_fluid_ffp_volume"
-            label="ffp volume (ml)"
-        />
-    </div>
+    </transition>
+
     <Alert
         class="my-2 md:my-4 xl:my-8"
         title="Volume of exchange (l)"
@@ -55,23 +82,23 @@
     />
     <hr class="border border-dashed my-2 md:my-4 xl:my-8">
     <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
-        <FormInput
+        <FormSelect
             v-model="form.blood_pumb"
-            type="tel"
             name="blood_pumb"
             label="blood pumb (ml/min)"
+            :options="['150', '200']"
         />
-        <FormInput
+        <FormSelect
             v-model="form.filtration_pumb"
-            type="tel"
             name="filtration_pumb"
             label="filtration pumb (%)"
+            :options="configs.tpe_filtration_pumb_options"
         />
-        <FormInput
+        <FormSelect
             v-model="form.replacement_pumb"
-            type="tel"
             name="replacement_pumb"
             label="replacement pumb (%)"
+            :options="configs.tpe_filtration_pumb_options"
         />
         <FormInput
             v-model="form.drain_pumb"
@@ -79,132 +106,35 @@
             name="drain_pumb"
             label="drain pumb (%)"
         />
-        <FormInput
-            v-model="form.dialysate_temperature"
-            type="number"
-            name="dialysate_temperature"
-            label="dialysate temperature (℃)"
-        />
     </div>
     <hr class="border border-dashed my-2 md:my-4 xl:my-8">
     <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4">
-        <FormInput
-            v-model="form.calcium_gluconate_10_percent_volume"
-            type="tel"
-            name="calcium_gluconate_10_percent_volume"
-            label="10% calcium gluconate volume (ml)"
-        />
-        <FormInput
-            v-model="form.calcium_gluconate_10_percent_timing"
-            type="number"
-            name="calcium_gluconate_10_percent_timing"
-            label="10% calcium gluconate timing (at hour)"
-        />
+        <div>
+            <label class="form-label">10% calcium gluconate volume (ml)</label>
+            <FormRadio
+                v-model="form.calcium_gluconate_10_percent_volume"
+                class="grid gap-2 md:gap-4"
+                :class="{
+                    'grid-cols-3': !form.calcium_gluconate_10_percent_volume,
+                    'grid-cols-2 sm:grid-cols-4': form.calcium_gluconate_10_percent_volume
+                }"
+                name="calcium_gluconate_10_percent_volume"
+                :options="['10','20','30']"
+                :allow-reset="true"
+            />
+        </div>
+        <div>
+            <label class="form-label">10% calcium gluconate timing (at hour)</label>
+            <FormRadio
+                v-model="form.calcium_gluconate_10_percent_timing"
+                name="calcium_gluconate_10_percent_timing"
+                :options="['1' , '2']"
+                :allow-reset="true"
+                class="grid gap-2 md:gap-4 grid-cols-2"
+                :class="{'grid-cols-3': form.calcium_gluconate_10_percent_timing}"
+            />
+        </div>
     </div>
-    <hr class="border border-dashed my-2 md:my-4 xl:my-8">
-    <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4 my-2 md:my-4 xl:my-8">
-        <FormSelect
-            v-model="form.anticoagulant"
-            name="anticoagulant"
-            label="anticoagulant"
-            :options="configs.anticoagulants"
-        />
-    </div>
-    <transition name="slide-fade">
-        <div
-            class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4 my-2 md:my-4 xl:my-8"
-            v-if="form.anticoagulant == 'None'"
-        >
-            <FormCheckbox
-                label="anticoagulant drip via peripheral IV"
-                name="anticoagulant_none_drip_via_peripheral_iv"
-                v-model="form.anticoagulant_none_drip_via_peripheral_iv"
-            />
-            <FormCheckbox
-                label="NSS 200 ml flush q 1 hour"
-                name="anticoagulant_none_nss_200ml_flush_q_hour"
-                v-model="form.anticoagulant_none_nss_200ml_flush_q_hour"
-            />
-        </div>
-        <div v-else-if="form.anticoagulant == 'Heparin'">
-            <div class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4 my-2 md:my-4 xl:my-8">
-                <FormInput
-                    label="loading dose (iu)"
-                    name="heparin_loading_dose"
-                    v-model="form.heparin_loading_dose"
-                    type="number"
-                    pattern="\d*"
-                    @autosave="validate('heparin_loading_dose')"
-                    :error="errors.heparin_loading_dose"
-                    placeholder="[250, 2000] IU"
-                />
-                <FormInput
-                    label="maintenance dose (iu/hour)"
-                    name="heparin_maintenance_dose"
-                    v-model="form.heparin_maintenance_dose"
-                    type="number"
-                    pattern="\d*"
-                    @autosave="validate('heparin_maintenance_dose')"
-                    :error="errors.heparin_maintenance_dose"
-                    placeholder="[0, 1500] IU/Hour"
-                />
-            </div>
-            <Alert
-                title="Duration of maintenance (hours)"
-                message="DLC/PC uses duration of dialysis. AVF/AVG uses duration of dialysis - 1."
-            />
-        </div>
-        <div
-            class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4 my-2 md:my-4 xl:my-8"
-            v-else-if="form.anticoagulant == 'Enoxaparin'"
-        >
-            <FormInput
-                label="dose (ml)"
-                name="enoxaparin_dose"
-                v-model="form.enoxaparin_dose"
-                type="number"
-                @autosave="validate('enoxaparin_dose')"
-                :error="errors.enoxaparin_dose"
-                placeholder="[0.3, 0.8] ml"
-            />
-        </div>
-        <div
-            class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4 my-2 md:my-4 xl:my-8"
-            v-else-if="form.anticoagulant == 'Fondaparinux'"
-        >
-            <FormSelect
-                label="bolus dose (iu)"
-                name="fondaparinux_bolus_dose"
-                v-model="form.fondaparinux_bolus_dose"
-                :options="['500', '750']"
-            />
-        </div>
-        <div
-            class="grid gap-2 md:gap-4 md:grid-cols-2 xl:gap-8 2xl:grid-cols-4 my-2 md:my-4 xl:my-8"
-            v-else-if="form.anticoagulant == 'Tinzaparin'"
-        >
-            <FormInput
-                label="dose (iu)"
-                name="tinzaparin_dose"
-                v-model="form.tinzaparin_dose"
-                type="number"
-                pattern="\d*"
-                @autosave="validate('tinzaparin_dose')"
-                :error="errors.tinzaparin_dose"
-                placeholder="[1500, 3500] IU"
-            />
-        </div>
-        <div
-            class="grid gap-2 md:gap-4 xl:gap-8 my-2 md:my-4 xl:my-8"
-            v-else-if="form.anticoagulant == 'Other'"
-        >
-            <FormInput
-                name="anticoagulant_other"
-                v-model="form.anticoagulant_other"
-                placeholder="please specify"
-            />
-        </div>
-    </transition>
 </template>
 
 <script setup>

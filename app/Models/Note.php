@@ -6,6 +6,7 @@ use App\Models\Resources\Division;
 use App\Models\Resources\Patient;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Note extends Model
 {
@@ -31,6 +32,27 @@ class Note extends Model
     public function author()
     {
         return $this->belongsTo('App\Models\User', 'user_id', 'id');
+    }
+
+    public function scopeWithAuthorUsername($query)
+    {
+        $query->addSelect([
+            'author_username' => User::select('name')
+                    ->whereColumn('id', 'notes.user_id')
+                    ->limit(1)
+                    ->latest(),
+        ]);
+    }
+
+    public function scopeWithPlaceName($query, $placeName)
+    {
+        $query->addSelect([
+            'place_name' => DB::table($placeName)
+                    ->select('name')
+                    ->whereColumn('id', 'notes.place_id')
+                    ->limit(1)
+                    ->latest(),
+        ]);
     }
 
     /**

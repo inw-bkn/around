@@ -78,6 +78,11 @@ class Patient extends Model
         ]);
     }
 
+    public function getFirstNameAttribute()
+    {
+        return $this->profile['first_name'];
+    }
+
     public function getAgeInYearsAttribute()
     {
         if (! $this->dob) {

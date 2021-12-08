@@ -19,7 +19,7 @@ class CaseRecordsController extends Controller
 
     public function index()
     {
-        $data = $this->manager->getIndexData();
+        $data = $this->manager->getIndexData(Request::all());
         // if want JSON then return data
 
         $this->manager->setFlash($data['flash']);

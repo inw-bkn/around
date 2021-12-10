@@ -122,7 +122,7 @@
                 <label class="inline-flex items-center">
                     <input
                         type="checkbox"
-                        class="shadow-xs h-6 w-6 transition-all duration-200 ease-in-out appearance-none color inline-block align-middle border border-gray-400 select-none flex-shrink-0 rounded cursor-pointer focus:outline-none"
+                        class="shadow-xs h-6 w-6 transition-all duration-200 ease-in-out appearance-none color inline-block align-middle border border-gray-400 select-none shrink-0 rounded cursor-pointer focus:outline-none"
                         :checked="modelCheckbox"
                         @change="check"
                     >

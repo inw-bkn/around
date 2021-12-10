@@ -18,7 +18,7 @@
                 <input
                     :id="item.value+'-'+name"
                     type="radio"
-                    class="shadow-sm h-5 w-5 transition-all duration-200 ease-in-out appearance-none inline-block align-middle rounded-full border border-dark-theme-light select-none flex-shrink-0 cursor-pointer focus:outline-none"
+                    class="shadow-sm h-5 w-5 transition-all duration-200 ease-in-out appearance-none inline-block align-middle rounded-full border border-dark-theme-light select-none shrink-0 cursor-pointer focus:outline-none"
                     :value="item.value"
                     :name="name"
                     v-model="selected"

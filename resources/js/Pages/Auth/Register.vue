@@ -10,7 +10,7 @@
                 alt="around logo"
             >
         </div>
-        <div class="mt-4 px-4 py-8 w-80 lg:w-96 bg-white rounded shadow transform -translate-y-20">
+        <div class="mt-4 px-4 py-8 w-80 lg:w-96 bg-white rounded shadow -translate-y-20">
             <span class="block font-semibold text-xl text-bitter-theme-light mt-12 text-center">Register</span>
             <div
                 class="mt-4"

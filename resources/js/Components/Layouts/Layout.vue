@@ -6,9 +6,9 @@
     <!-- main contailner, flex makes its childs extend full h -->
     <div class="md:h-screen md:flex md:flex-col">
         <!-- this is navbar, with no shrink (fixed width) -->
-        <header class="md:flex md:flex-shrink-0 sticky top-0 z-30">
+        <header class="md:flex md:shrink-0 sticky top-0 z-30">
             <!-- left navbar on desktop and full bar on mobile -->
-            <div class="bg-dark-theme-light text-white md:flex-shrink-0 md:w-56 xl:w-64 px-4 py-2 flex items-center justify-between md:justify-center">
+            <div class="bg-dark-theme-light text-white md:shrink-0 md:w-56 xl:w-64 px-4 py-2 flex items-center justify-between md:justify-center">
                 <!-- the logo -->
                 <Link
                     class=" inline-block"
@@ -90,7 +90,7 @@
             </div>
             <!-- menu on mobile -->
             <div
-                class="h-4/5 mx-1 md:hidden block fixed bottom-0 inset-x-0 overflow-y-scroll text-soft-theme-light bg-thick-theme-light rounded-tl-xl rounded-tr-xl transition-transform transform duration-300 ease-in-out"
+                class="h-4/5 mx-1 md:hidden block fixed bottom-0 inset-x-0 overflow-y-scroll text-soft-theme-light bg-thick-theme-light rounded-tl-xl rounded-tr-xl transition-transform  duration-300 ease-in-out"
                 :class="{ 'translate-y-full': !mobileMenuVisible }"
             >
                 <div class="p-4">
@@ -127,7 +127,7 @@
         <!-- this is content -->
         <main class="md:flex md:flex-grow md:overflow-hidden">
             <!-- this is sidebar menu on desktop -->
-            <aside class="hidden md:block bg-thick-theme-light flex-shrink-0 w-56 xl:w-64 py-12 px-6 overflow-y-auto">
+            <aside class="hidden md:block bg-thick-theme-light shrink-0 w-56 xl:w-64 py-12 px-6 overflow-y-auto">
                 <MainMenu />
                 <ActionMenu @action-clicked="actionClicked" />
             </aside>

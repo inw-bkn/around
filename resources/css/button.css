@@ -3,17 +3,9 @@
 }
 
 .btn-bitter {
-    @apply bg-bitter-theme-light active:bg-alt-theme-light hover:bg-alt-theme-light hover:text-bitter-theme-light;
-}
-
-.btn-bitter:disabled {
-    @apply text-white bg-bitter-theme-light;
+    @apply bg-bitter-theme-light active:bg-alt-theme-light hover:bg-alt-theme-light hover:text-bitter-theme-light disabled:text-white disabled:bg-bitter-theme-light;
 }
 
 .btn-dark {
-    @apply bg-dark-theme-light active:bg-thick-theme-light hover:bg-alt-theme-light hover:text-dark-theme-light;
-}
-
-.btn-dark:disabled {
-    @apply text-white bg-dark-theme-light;
+    @apply bg-dark-theme-light active:bg-thick-theme-light hover:bg-alt-theme-light hover:text-dark-theme-light disabled:text-white disabled:bg-dark-theme-light;
 }

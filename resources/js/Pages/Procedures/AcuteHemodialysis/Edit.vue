@@ -435,14 +435,14 @@
                 />
             </div>
         </div>
-        <transition name="slide-fade">
+        <transition name="slide-fade" >
             <div v-if="order.dialysis_at && order.dialysis_type">
                 <div class="grid xl:grid-cols-2 gap-2 md:gap-4 lg:gap-6">
                     <FormDatetime
                         label="required date"
                         name="date_note"
                         v-model="order.date_note"
-                        :options="{ enable: configs.availableDates, onDayCreate: onDayCreate, inline: true }"
+                        :options="{ enable: configs.reserve_available_dates, onDayCreate: onDayCreate, inline: true }"
                     />
                     <transition name="slide-fade">
                         <InUnitSlot

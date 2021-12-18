@@ -435,7 +435,7 @@
                 />
             </div>
         </div>
-        <transition name="slide-fade" >
+        <transition name="slide-fade">
             <div v-if="order.dialysis_at && order.dialysis_type">
                 <div class="grid xl:grid-cols-2 gap-2 md:gap-4 lg:gap-6">
                     <FormDatetime

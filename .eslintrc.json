@@ -1,7 +1,8 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "vue/setup-compiler-macros": true
     },
     "extends": [
         "eslint:recommended",
@@ -15,13 +16,17 @@
         "vue"
     ],
     "rules": {
-        "vue/html-indent": ["error", 4, {
-            "attribute": 1,
-            "baseIndent": 1,
-            "closeBracket": 0,
-            "alignAttributesVertically": true,
-            "ignores": []
-        }],
+        "vue/html-indent": [
+            "error",
+            4,
+            {
+                "attribute": 1,
+                "baseIndent": 1,
+                "closeBracket": 0,
+                "alignAttributesVertically": true,
+                "ignores": []
+            }
+        ],
         "indent": [
             "error",
             4

@@ -15,6 +15,8 @@ use Illuminate\Support\Str;
 
 class CaseRecordManager
 {
+    protected $LIMIT_ADVANCE_DAYS = 3;
+
     // index methods
     public function getIndexData($filters)
     {
@@ -169,21 +171,19 @@ class CaseRecordManager
     protected function getFormConfigs()
     {
         $availableDates = [];
-        $today = now()->tz('asia/bangkok');
+        $start = now()->tz(7)->addDay();
         $count = 0;
         do {
-            if (! $today->isSunday()) {
-                $availableDates[] = $today->format('Y-m-d');
+            if (! $start->isSunday()) {
+                $availableDates[] = $start->format('Y-m-d');
             }
-            $today->addDay();
+            $start->addDay();
             $count++;
-        } while ($count <= 7);
+        } while ($count <= $this->LIMIT_ADVANCE_DAYS);
 
         return [
-            'availableDates' => $availableDates,
-            'disableDates' => [
-                'August 13, 2021',
-            ],
+            'reserve_available_dates' => $availableDates,
+            'reserve_disable_dates' => [], // 'August 13, 2021',
             'in_unit_dialysis_types' => [
                 'HD 2 hrs.',
                 'HD 3 hrs.',

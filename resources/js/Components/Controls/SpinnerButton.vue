@@ -1,7 +1,6 @@
 <template>
     <button
-        type="button"
-        class="inline-flex justify-center items-center btn"
+        class="btn inline-flex justify-center items-center"
         @click="$emit('click')"
         :disabled="disabled || spin"
     >
@@ -30,12 +29,12 @@
     </button>
 </template>
 
-<script>
-export default {
-    emits: ['click'],
-    props: {
-        disabled: { type: Boolean },
-        spin: { type: Boolean }
-    }
-};
+<script setup>
+defineEmits(['click']);
+
+defineProps({
+    disabled: { type: Boolean },
+    spin: { type: Boolean }
+});
+
 </script>

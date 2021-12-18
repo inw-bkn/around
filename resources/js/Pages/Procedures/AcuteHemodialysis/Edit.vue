@@ -442,7 +442,7 @@
                         label="required date"
                         name="date_note"
                         v-model="order.date_note"
-                        :options="{ enable: configs.availableDates, onDayCreate: onDayCreate, inline: true }"
+                        :options="{ enable: configs.reserve_available_dates, onDayCreate: onDayCreate, inline: true }"
                     />
                     <transition name="slide-fade">
                         <InUnitSlot

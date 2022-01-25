@@ -607,9 +607,9 @@ const selectOtherClosed = (val) => {
 };
 
 const onDayCreate = (dObj, dStr, fp, dayElem) => {
-    if (!configs.disableDates.length) return;
-    for (let i = 0; i < configs.disableDates.length; i++) {
-        if (dayElem.getAttribute('aria-label') == configs.disableDates[i]) {
+    if (!configs.reserve_disable_dates.length) return;
+    for (let i = 0; i < configs.reserve_disable_dates.length; i++) {
+        if (dayElem.getAttribute('aria-label') == configs.reserve_disable_dates[i]) {
             dayElem.innerHTML += '<span class="calendar-event busy"></span>';
         }
     }

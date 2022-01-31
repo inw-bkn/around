@@ -444,11 +444,15 @@
                         v-model="order.date_note"
                         :options="{ enable: configs.reserve_available_dates, onDayCreate: onDayCreate, inline: true }"
                     />
-                    <transition name="slide-fade">
-                        <InUnitSlot
+                    <transition
+                        name="slide-fade"
+                        v-if="order.date_note && order.dialysis_at"
+                    >
+                        <HDUnitSlot
                             :reserved-slots="reservedSlots.slots"
-                            v-if="order.date_note"
+                            v-if="order.dialysis_at.indexOf('Hemo') !== -1"
                         />
+                        <WardSlot v-else />
                     </transition>
                 </div>
 
@@ -482,7 +486,8 @@ import FormRadio from '@/Components/Controls/FormRadio';
 import FormSelectOther from '@/Components/Controls/FormSelectOther';
 import SpinnerButton from '@/Components/Controls/SpinnerButton';
 import ImageUploader from '@/Components/Controls/ImageUploader';
-import InUnitSlot from '@/Components/Helpers/AcuteHemodialysis/InUnitSlot';
+import HDUnitSlot from '@/Components/Helpers/AcuteHemodialysis/HDUnitSlot';
+import WardSlot from '@/Components/Helpers/AcuteHemodialysis/WardSlot';
 import Orders from '@/Components/Helpers/AcuteHemodialysis/Orders';
 import { useForm } from '@inertiajs/inertia-vue3';
 import { reactive, ref } from '@vue/reactivity';

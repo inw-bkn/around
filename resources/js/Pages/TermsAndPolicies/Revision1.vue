@@ -1,7 +1,7 @@
 <template>
-    <InertiaHead>
+    <Head>
         <title>Policies and Terms</title>
-    </InertiaHead>
+    </Head>
     <div class=" bg-soft-theme-light w-full p-12">
         <h1 class=" font-semibold text-xl text-dark-theme-light">
             นโยบายความเป็นส่วนตัว
@@ -68,10 +68,11 @@
 </template>
 
 <script setup>
+import { Head } from '@inertiajs/inertia-vue3';
 import { useCheckSessionTimeout } from '@/Functions/useCheckSessionTimeout';
+defineProps({
+    // eslint-disable-next-line vue/require-default-prop
+    layout: null,
+});
 useCheckSessionTimeout();
-</script>
-<script>
-import Plain from '@/Components/Layouts/Plain';
-export default { layout: Plain };
 </script>

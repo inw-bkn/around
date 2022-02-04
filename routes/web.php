@@ -12,7 +12,6 @@ use App\Http\Controllers\Resources\APIs\PatientRecentlyAdmissionController;
 use App\Http\Controllers\Resources\APIs\WardsController;
 use App\Http\Controllers\UploadsController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 // Auth
 Route::get('login', [AuthenticatedSessionController::class, 'create'])

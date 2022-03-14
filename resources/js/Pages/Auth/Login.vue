@@ -46,6 +46,10 @@ import SpinnerButton from '@/Components/Controls/SpinnerButton';
 import { useCheckSessionTimeout } from '@/Functions/useCheckSessionTimeout';
 import { nextTick, onMounted, ref } from '@vue/runtime-core';
 import { Head } from '@inertiajs/inertia-vue3';
+defineProps({
+    // eslint-disable-next-line vue/require-default-prop
+    layout: null,
+});
 useCheckSessionTimeout();
 const loginInput = ref(null);
 
@@ -96,7 +100,3 @@ const login = () => {
         }
     }
 </style>
-<script>
-import Plain from '@/Components/Layouts/Plain';
-export default { layout: Plain };
-</script>

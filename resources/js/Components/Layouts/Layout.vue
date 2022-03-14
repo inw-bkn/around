@@ -150,7 +150,7 @@ import Icon from '@/Components/Helpers/Icon';
 import MainMenu from '@/Components/Helpers/MainMenu';
 import ActionMenu from '@/Components/Helpers/ActionMenu';
 import { useCheckSessionTimeout } from '@/Functions/useCheckSessionTimeout';
-import { nextTick, ref } from 'vue';
+import { nextTick, onMounted, ref } from 'vue';
 import { Head, Link, usePage } from '@inertiajs/inertia-vue3';
 useCheckSessionTimeout();
 
@@ -176,6 +176,12 @@ const scaleFont = (mode) => {
         fontScaleIndex = 0;
     }
 
-    document.querySelector('body').style.fontSize = fontScales[fontScaleIndex] + '%';
+    document.querySelector('html').style.fontSize = fontScales[fontScaleIndex] + '%';
 };
+onMounted(() => {
+    let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    if (vw >= 768) { // md breakpoint
+        document.querySelector('html').style.fontSize = fontScales[fontScaleIndex] + '%';
+    }
+});
 </script>

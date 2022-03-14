@@ -85,6 +85,8 @@ import { computed, nextTick, onMounted, ref } from '@vue/runtime-core';
 import { Head } from '@inertiajs/inertia-vue3';
 
 const props = defineProps({
+    // eslint-disable-next-line vue/require-default-prop
+    layout: null,
     profile: { type: Object, required: true }
 });
 
@@ -126,8 +128,4 @@ const register = () => {
         onFinish: () => form.processing = false,
     });
 };
-</script>
-<script>
-import Plain from '@/Components/Layouts/Plain';
-export default { layout: Plain };
 </script>

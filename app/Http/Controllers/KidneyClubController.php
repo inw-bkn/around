@@ -100,13 +100,13 @@ class KidneyClubController extends Controller
         $serie = '';
         if (in_array($slug, $slugs['journal-club'])) {
             $asset .= "journal-club/{$slug}.mp4";
-            $serie = 'journal-club';
+            $serie = 'Journal Club';
         } elseif (in_array($slug, $slugs['lecture'])) {
             $asset .= "lecture/{$slug}.mp4";
-            $serie = 'lecture';
+            $serie = 'Lecture';
         } elseif (in_array($slug, $slugs['topic-review'])) {
             $asset .= "topic-review/{$slug}.mp4";
-            $serie = 'topic-review';
+            $serie = 'Topic Review';
         } else {
             abort(404);
         }

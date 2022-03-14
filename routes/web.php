@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\KidneyClubController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\PreferencesController;
 use App\Http\Controllers\Resources\APIs\AcuteHemodialysisSlotAvailableController;
@@ -76,6 +77,14 @@ Route::get('patients', function () {
 Route::get('clinics', function () {
     return 'clinics';
 })->middleware('auth')->name('clinics');
+
+// kideney club
+Route::get('kidney-club', [KidneyClubController::class, 'index'])
+     ->middleware('auth')
+     ->name('kidney-club');
+Route::get('kidney-club/{slug}', [KidneyClubController::class, 'show'])
+     ->middleware('auth')
+     ->name('kidney-club.show');
 
 require __DIR__.'/procedures.php';
 

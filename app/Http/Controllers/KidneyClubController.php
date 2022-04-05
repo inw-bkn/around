@@ -75,14 +75,14 @@ class KidneyClubController extends Controller
         ]);
 
         $slugs = [
-            // 'journal-club' => [
-            //     '211207-outcomes-at-3-years-posttransplant-in-imlifidase-desensitized-kt-mathanaporn',
-            //     '211130-high-dose-coupled-plsma-filtration-sumawadee',
-            //     '211123-chlorhalidone-for-hypertension-in-advanced-ckd-dechathorn',
-            //     '211109-b-cell-depletion-with-obinutuzumab-mathanaporn',
-            //     '211026-apq1-promoter-variant-water-transport-and-outcome-in-pd-anuyut',
-            //     '211012-a-randomized-trial-of-albumin-infusions-salinthip',
-            // ],
+            'journal-club' => [
+                // '211207-outcomes-at-3-years-posttransplant-in-imlifidase-desensitized-kt-mathanaporn',
+                // '211130-high-dose-coupled-plsma-filtration-sumawadee',
+                // '211123-chlorhalidone-for-hypertension-in-advanced-ckd-dechathorn',
+                // '211109-b-cell-depletion-with-obinutuzumab-mathanaporn',
+                // '211026-apq1-promoter-variant-water-transport-and-outcome-in-pd-anuyut',
+                // '211012-a-randomized-trial-of-albumin-infusions-salinthip',
+            ],
             'lecture' => [
                 'aki-2022-kornchanok',
                 'ckd-2022-attapong',
@@ -92,12 +92,12 @@ class KidneyClubController extends Controller
                 'nephrolithiasis-for-internist-2022-suchai',
                 'pd-orientation-2022-thatsapan',
             ],
-            // 'topic-review' => [
-            //     '211217-anca-associated-vasculitis',
-            //     '211203-mcd-and-fsgs-salinthip',
-            //     '211105-mpgn-david',
-            //     '211029-combination-of-albumin-and-loop-diuretic-yanarin',
-            // ],
+            'topic-review' => [
+                // '211217-anca-associated-vasculitis',
+                // '211203-mcd-and-fsgs-salinthip',
+                // '211105-mpgn-david',
+                // '211029-combination-of-albumin-and-loop-diuretic-yanarin',
+            ],
         ];
 
         // $asset = 'https://temp-nephron-videos.s3.ap-southeast-1.amazonaws.com/demo/';

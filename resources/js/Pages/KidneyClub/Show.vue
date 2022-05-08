@@ -2,6 +2,16 @@
     <h1 class="text-lg text-center font-semibold text-thick-theme-light mb-5">
         {{ episode.name }}
     </h1>
+    <div
+        class="text-center text-blue-400 mb-4"
+        v-if="episode.attach !== undefinded"
+    >
+        <a
+            :href="encodeURI(`${baseUrl}${episode.attach}`)"
+            target="_blank"
+            rel="noopener noreferrer"
+        >Download Slide</a>
+    </div>
 
     <video
         id="player"
@@ -39,6 +49,7 @@ import Plyr from 'plyr';
 import 'plyr/dist/plyr.css';
 defineProps({
     asset: { type: String, required: true },
+    baseUrl: { type: String, required: true },
     episode: { type: Object, required: true },
 });
 

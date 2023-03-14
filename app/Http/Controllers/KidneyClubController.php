@@ -27,12 +27,12 @@ class KidneyClubController extends Controller
                 'name' => 'Lecture',
                 'episodes' => [
                     ['name' => 'Acute Kidney Injury', 'speaker' => 'Kornchanok Vareesangthip, M.D., Assistant Professor', 'date' => '2022', 'slug' => 'aki-2022-kornchanok'],
-                    ['name' => 'CKD', 'speaker' => 'Attapong Vongwiwatana, M.D., Associate Professor', 'date' => '2022', 'slug' => 'ckd-2022-attapong'],
+                    ['name' => 'Chronic Kidney Disease', 'speaker' => 'Attapong Vongwiwatana, M.D., Associate Professor', 'date' => '2022', 'slug' => 'ckd-2022-attapong'],
                     ['name' => 'Hyperkalemia', 'speaker' => 'Nalinee Premasathian, M.D.', 'date' => '2022', 'slug' => 'hyperkalemia-2022-nalinee'],
                     ['name' => 'Important point in acid-base disorders', 'speaker' => 'Chairat Shayakul, M.D., Professor', 'date' => '2022', 'slug' => 'important-point-in-acid-base-disorders-2022-chairat'],
-                    ['name' => 'Metabolic Alkadosis', 'speaker' => 'Thawee Chanchairujira, M.D., Associate Professor', 'date' => '2022', 'slug' => 'metabolic-alkadosis-2022-tawee'],
+                    ['name' => 'Metabolic Alkalosis', 'speaker' => 'Thawee Chanchairujira, M.D., Associate Professor', 'date' => '2022', 'slug' => 'metabolic-alkadosis-2022-tawee'],
                     ['name' => 'Nephrolithiasis for internist', 'speaker' => 'Suchai Sritippayawan, M.D.', 'date' => '2022', 'slug' => 'nephrolithiasis-for-internist-2022-suchai'],
-                    ['name' => 'PD Orientation', 'speaker' => 'Thatsaphan Srithongkul, M.D.', 'date' => '2022', 'slug' => 'pd-orientation-2022-thatsapan'],
+                    ['name' => 'Peritoneal Dialysis Orientation', 'speaker' => 'Thatsaphan Srithongkul, M.D.', 'date' => '2022', 'slug' => 'pd-orientation-2022-thatsapan'],
                 ],
             ],
             // [

@@ -143,6 +143,7 @@ class KidneyClubController extends Controller
                 'metabolic-alkadosis-2022-tawee',
                 'nephrolithiasis-for-internist-2022-suchai',
                 'pd-orientation-2022-thatsapan',
+                'rational-drug-use-for-nephrologist-2025-chairat',
             ],
             'topic-review' => [
                 // '211217-anca-associated-vasculitis',

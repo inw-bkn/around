@@ -33,6 +33,7 @@ class KidneyClubController extends Controller
                     ['name' => 'Metabolic Alkalosis', 'speaker' => 'Thawee Chanchairujira, M.D., Associate Professor', 'date' => '2022', 'slug' => 'metabolic-alkadosis-2022-tawee'],
                     ['name' => 'Nephrolithiasis for internist', 'speaker' => 'Suchai Sritippayawan, M.D.', 'date' => '2022', 'slug' => 'nephrolithiasis-for-internist-2022-suchai'],
                     ['name' => 'Peritoneal Dialysis Orientation', 'speaker' => 'Thatsaphan Srithongkul, M.D.', 'date' => '2022', 'slug' => 'pd-orientation-2022-thatsapan'],
+                    ['name' => 'Rational Drug Use for Nephrologist', 'speaker' => 'Chairat Shayakul, M.D., Professor', 'date' => '2025', 'slug' => 'retional-drug-use-for-nephrologist-2025-chairat'],
                 ],
             ],
             // [
